@@ -1,4 +1,5 @@
 // components/rooms/RoomCard/RoomCard.tsx
+import { Button } from '@/components/ui/button';
 import { Room, RoomType } from '../../../types/hotel';
 import { formatCurrency } from '../../../utils/FormatCurrency';
 import { getStatusColor } from '../../../utils/GetStatusColor';
@@ -35,7 +36,7 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
         </div>
       </div>
       <div>
-        <button className="bg-primary text-white px-4 py-2 rounded-lg">Đặt phòng</button>
+        <Button>Đặt phòng</Button>
       </div>
     </div>
   );
