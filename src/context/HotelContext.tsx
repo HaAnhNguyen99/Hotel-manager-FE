@@ -1,7 +1,10 @@
 // src/context/HotelContext.tsx
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { fetchRooms } from '../services/hotelService';
-import { Room, RoomType } from '../types/hotel';
+import { Room } from '../types/hotel';
+import { UseFormReturn, useForm } from 'react-hook-form';
+import { BookingFormData } from '@/types/booking';
+import { formatDate } from '@/utils/FormatDate';
 
 // Define the context type
 type HotelContextType = {
@@ -12,6 +15,9 @@ type HotelContextType = {
   setSelectedRoom: (room: Room | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
+  reloadRooms: () => Promise<void>;
+  setRooms: (rooms: Room[]) => void;
+  bookingForm: UseFormReturn<BookingFormData>; // Sử dụng toàn bộ UseFormReturn
 };
 
 // Create the context
@@ -25,20 +31,49 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const loadRooms = async () => {
-      try {
-        const data = await fetchRooms();
-        setRooms(data.data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Sử dụng useForm để quản lý form state
+  const bookingForm = useForm<BookingFormData>({
+    defaultValues: {
+      guestName: '',
+      cccd: '',
+      prepayment: null,
+      reduction: null,
+      checkinDate: null,
+      checkoutDate: null,
+      booking_date: new Date().toISOString(),
+    },
+  });
 
-    loadRooms();
+  // Hàm reloadRooms để fetch lại danh sách phòng
+  const reloadRooms = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await fetchRooms();
+      setRooms(data.data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Fetch danh sách phòng khi component mount
+  useEffect(() => {
+    reloadRooms();
+  }, [reloadRooms]);
+
+  useEffect(() => {
+    console.log(selectedRoom);
+    if (selectedRoom) {
+      bookingForm.setValue('guestName', selectedRoom.bookings[0]?.guest_name || '');
+      bookingForm.setValue('cccd', selectedRoom.bookings[0]?.cccd || '');
+      bookingForm.setValue('prepayment', selectedRoom.bookings[0]?.prepayment ?? null);
+      bookingForm.setValue('reduction', selectedRoom.bookings[0]?.reduction ?? null);
+      bookingForm.setValue('checkinDate', selectedRoom.bookings[0]?.checkin ? formatDate(selectedRoom.bookings[0]?.checkin) : null);
+      bookingForm.setValue('checkoutDate', selectedRoom.bookings[0]?.checkout ? formatDate(selectedRoom.bookings[0]?.checkout) : null);
+    }
+  }, [selectedRoom, bookingForm.setValue]);
 
   return (
     <HotelContext.Provider
@@ -50,6 +85,9 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
         setSelectedRoom,
         isModalOpen,
         setIsModalOpen,
+        reloadRooms,
+        setRooms,
+        bookingForm,
       }}>
       {children}
     </HotelContext.Provider>

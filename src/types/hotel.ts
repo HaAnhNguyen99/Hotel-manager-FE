@@ -1,3 +1,5 @@
+import { BookingType } from './booking';
+
 export type RoomStatus = 'Available' | 'Occupied' | 'Cleaning';
 
 export type RoomImage = {
@@ -123,16 +125,17 @@ export type Room = {
   img: Image;
   payments: string[];
   service_usages: string[];
+  bookings: BookingType[];
 };
 
-type Pagination = {
+export type Pagination = {
   page: number;
   pageSize: number;
   pageCount: number;
   total: number;
 };
 
-type Meta = {
+export type Meta = {
   pagination: Pagination;
 };
 
