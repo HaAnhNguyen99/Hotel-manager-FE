@@ -1,6 +1,6 @@
 // components/rooms/RoomModal/RoomModal.tsx
 import { useHotelContext } from '../../../context/HotelContext';
-import { formatCurrency } from '../../../utils/format';
+import { formatCurrency } from '../../../utils/FormatDateTime_hhMM.ts';
 
 const RoomModal = () => {
   const { selectedRoom, isModalOpen, setIsModalOpen } = useHotelContext();

@@ -6,16 +6,19 @@ import { BookingFormData } from '@/types/booking';
 import { useHotelContext } from '@/context/HotelContext';
 import { BookingType } from '@/types/booking';
 import { formatDate } from '@/utils/FormatDate';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type GuestFormSectionProps = {
   control: Control<BookingFormData>;
   bookingData: BookingType | null;
+  setCheckoutTime: React.Dispatch<React.SetStateAction<string | null>>;
+  setCheckinDate: React.Dispatch<React.SetStateAction<string | null>>;
+  setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps) => {
+export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setCheckinDate, setPrePayment, setReduction }: GuestFormSectionProps) => {
   const { bookingForm } = useHotelContext();
-  const { setValue, register } = bookingForm;
+  const { setValue } = bookingForm;
 
   useEffect(() => {
     if (bookingData) {
@@ -34,11 +37,15 @@ export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps
       <div className="flex gap-2">
         <div className="flex flex-col gap-3 w-3/5">
           <Label>Họ tên</Label>
-          <Controller name="guestName" control={control} render={({ field }) => <Input {...field} placeholder="Họ tên" value={field.value} />} />
+          <Controller
+            name="guestName"
+            control={control}
+            render={({ field }) => <Input {...field} placeholder="Họ tên" value={field.value || ''} />}
+          />
         </div>
         <div className="flex flex-col gap-3 w-2/5">
           <Label>CCCD</Label>
-          <Controller name="cccd" control={control} render={({ field }) => <Input {...field} placeholder="Nhập CCCD" value={field.value} />} />
+          <Controller name="cccd" control={control} render={({ field }) => <Input {...field} placeholder="Nhập CCCD" value={field.value || ''} />} />
         </div>
       </div>
 
@@ -52,9 +59,12 @@ export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps
               <Input
                 type="number"
                 {...field}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                onChange={(e) => {
+                  field.onChange(Number(e.target.value));
+                  setPrePayment(Number(e.target.value));
+                }}
                 placeholder="Nhập số tiền trả trước"
-                value={field.value}
+                value={field.value ? field.value.toString() : ''}
               />
             )}
           />
@@ -64,7 +74,17 @@ export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps
           <Controller
             name="reduction"
             control={control}
-            render={({ field }) => <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />}
+            render={({ field }) => (
+              <Input
+                type="number"
+                {...field}
+                onChange={(e) => {
+                  field.onChange(Number(e.target.value));
+                  setReduction(Number(e.target.value));
+                }}
+                value={field.value ? field.value.toString() : ''}
+              />
+            )}
           />
         </div>
       </div>
@@ -72,11 +92,35 @@ export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps
       <div className="flex gap-2 my-4">
         <div className="flex flex-col gap-3 w-1/2">
           <Label>Thời gian đặt phòng</Label>
-          <Controller name="checkinDate" control={control} render={({ field }) => <DateTimePicker date={field.value} setDate={field.onChange} />} />
+          <Controller
+            name="checkinDate"
+            control={control}
+            render={({ field }) => (
+              <DateTimePicker
+                date={field.value ? new Date(field.value) : null}
+                setDate={(date) => {
+                  field.onChange(date ? date.toISOString() : null);
+                  setCheckinDate(date);
+                }}
+              />
+            )}
+          />
         </div>
         <div className="flex flex-col gap-3 w-1/2">
           <Label>Thời gian trả phòng</Label>
-          <Controller name="checkoutDate" control={control} render={({ field }) => <DateTimePicker date={field.value} setDate={field.onChange} />} />
+          <Controller
+            name="checkoutDate"
+            control={control}
+            render={({ field }) => (
+              <DateTimePicker
+                date={field.value ? new Date(field.value) : null}
+                setDate={(date) => {
+                  field.onChange(date ? date.toISOString() : null);
+                  setCheckoutTime(date ? date.toISOString() : null);
+                }}
+              />
+            )}
+          />
         </div>
       </div>
     </>

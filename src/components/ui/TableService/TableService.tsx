@@ -12,7 +12,6 @@ export const TableService = ({ bookingId, isLoading }: { bookingId: string; isLo
     const fetchData = async () => {
       const data = await getServiceUsage(bookingId);
       setData(data);
-      console.log(data);
     };
     fetchData();
   }, [bookingId, isLoading]);
