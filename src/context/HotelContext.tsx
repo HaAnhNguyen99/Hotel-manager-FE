@@ -4,7 +4,6 @@ import { fetchRooms } from '../services/hotelService';
 import { Room } from '../types/hotel';
 import { UseFormReturn, useForm } from 'react-hook-form';
 import { BookingFormData } from '@/types/booking';
-import { formatDate } from '@/utils/FormatDate';
 
 // Define the context type
 type HotelContextType = {
@@ -17,7 +16,7 @@ type HotelContextType = {
   setIsModalOpen: (open: boolean) => void;
   reloadRooms: () => Promise<void>;
   setRooms: (rooms: Room[]) => void;
-  bookingForm: UseFormReturn<BookingFormData>; // Sử dụng toàn bộ UseFormReturn
+  bookingForm: UseFormReturn<BookingFormData>;
 };
 
 // Create the context
@@ -62,18 +61,6 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     reloadRooms();
   }, [reloadRooms]);
-
-  useEffect(() => {
-    console.log(selectedRoom);
-    if (selectedRoom) {
-      bookingForm.setValue('guestName', selectedRoom.bookings[0]?.guest_name || '');
-      bookingForm.setValue('cccd', selectedRoom.bookings[0]?.cccd || '');
-      bookingForm.setValue('prepayment', selectedRoom.bookings[0]?.prepayment ?? null);
-      bookingForm.setValue('reduction', selectedRoom.bookings[0]?.reduction ?? null);
-      bookingForm.setValue('checkinDate', selectedRoom.bookings[0]?.checkin ? formatDate(selectedRoom.bookings[0]?.checkin) : null);
-      bookingForm.setValue('checkoutDate', selectedRoom.bookings[0]?.checkout ? formatDate(selectedRoom.bookings[0]?.checkout) : null);
-    }
-  }, [selectedRoom, bookingForm.setValue]);
 
   return (
     <HotelContext.Provider

@@ -51,5 +51,5 @@ export interface BookingFormData {
   reduction: number | null;
   checkinDate: string | null;
   checkoutDate: string | null;
-  booking_date: string;
+  booking_date: string | null;
 }

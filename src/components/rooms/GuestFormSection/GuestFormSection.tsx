@@ -1,13 +1,32 @@
-import { Controller } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { DateTimePicker } from '../../ui/DateTimePicker24h/DateTimePicker24h';
 import { BookingFormData } from '@/types/booking';
 import { useHotelContext } from '@/context/HotelContext';
+import { BookingType } from '@/types/booking';
+import { formatDate } from '@/utils/FormatDate';
+import { useEffect } from 'react';
 
-export const GuestFormSection = ({ control }: { control: Control<BookingFormData> }) => {
+type GuestFormSectionProps = {
+  control: Control<BookingFormData>;
+  bookingData: BookingType | null;
+};
+
+export const GuestFormSection = ({ control, bookingData }: GuestFormSectionProps) => {
   const { bookingForm } = useHotelContext();
-  const { setValue } = bookingForm;
+  const { setValue, register } = bookingForm;
+
+  useEffect(() => {
+    if (bookingData) {
+      setValue('guestName', bookingData.guest_name || '');
+      setValue('cccd', bookingData.cccd || '');
+      setValue('prepayment', bookingData.prepayment || null);
+      setValue('reduction', bookingData.reduction || null);
+      setValue('checkinDate', bookingData.checkin ? formatDate(bookingData.checkin) : null);
+      setValue('checkoutDate', bookingData.checkout ? formatDate(bookingData.checkout) : null);
+    }
+  }, [bookingData]);
 
   return (
     <>
@@ -15,11 +34,11 @@ export const GuestFormSection = ({ control }: { control: Control<BookingFormData
       <div className="flex gap-2">
         <div className="flex flex-col gap-3 w-3/5">
           <Label>Họ tên</Label>
-          <Controller name="guestName" control={control} render={({ field }) => <Input {...field} placeholder="Họ tên" />} />
+          <Controller name="guestName" control={control} render={({ field }) => <Input {...field} placeholder="Họ tên" value={field.value} />} />
         </div>
         <div className="flex flex-col gap-3 w-2/5">
           <Label>CCCD</Label>
-          <Controller name="cccd" control={control} render={({ field }) => <Input {...field} placeholder="Nhập CCCD" />} />
+          <Controller name="cccd" control={control} render={({ field }) => <Input {...field} placeholder="Nhập CCCD" value={field.value} />} />
         </div>
       </div>
 
@@ -30,7 +49,13 @@ export const GuestFormSection = ({ control }: { control: Control<BookingFormData
             name="prepayment"
             control={control}
             render={({ field }) => (
-              <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} placeholder="Nhập số tiền trả trước" />
+              <Input
+                type="number"
+                {...field}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                placeholder="Nhập số tiền trả trước"
+                value={field.value}
+              />
             )}
           />
         </div>
@@ -39,7 +64,7 @@ export const GuestFormSection = ({ control }: { control: Control<BookingFormData
           <Controller
             name="reduction"
             control={control}
-            render={({ field }) => <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />}
+            render={({ field }) => <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />}
           />
         </div>
       </div>

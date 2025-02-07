@@ -16,6 +16,8 @@ import { toast } from 'sonner';
 import { useHotelContext } from '@/context/HotelContext';
 import { RoomStatus } from '@/types/room';
 import { GuestFormSection } from '@/components/rooms/GuestFormSection/GuestFormSection';
+import { RoomDetails } from '@/components/rooms/RoomDetail/RoomDetail';
+import { BookingType } from '@/types/booking';
 
 export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => void }) => {
   const [checkinDate, setCheckinDate] = React.useState<Date | null | undefined>(new Date());
@@ -28,22 +30,16 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
   const [isLoading, setIsLoading] = useState(false);
   const [guestCCCD, setGuestCCCD] = useState<string>('');
   const { reloadRooms, rooms, setRooms, bookingForm } = useHotelContext();
-
+  const [bookingData, setBookingData] = useState<BookingType | null>(null);
   const { control, handleSubmit, reset } = bookingForm;
 
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
     if (room.bookings.length > 0) {
+      setBookingData(room.bookings[0]);
       setIsOpen(true);
-      // console.log(room.bookings[0]);
-      // setBookingID(room.bookings[0].documentId);
-      // setGuestName(room.bookings[0].guest_name || '');
-      // setCheckinDate(formatDate(room.bookings[0].checkin));
-      // setCheckoutDate(room.bookings[0].checkout ? formatDate(room.bookings[0].checkout) : null);
-      // setPrepayment(room.bookings[0].prepayment || null);
-      // setReduction(room.bookings[0].reduction || null);
-      // setIsLoading(false);
-      // setGuestCCCD(room.bookings[0].cccd || '');
+      setBookingID(room.bookings[0].documentId);
+      setIsLoading(false);
     } else {
       try {
         const payload = {
@@ -93,6 +89,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
         cccd: guestCCCD,
       },
     };
+    console.log(`payload: ${JSON.stringify(payload)}`);
     const originalRooms = [...rooms];
 
     try {
@@ -163,6 +160,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
             <img src={room.img.url} alt={`Room ${room.room_number}`} className="w-full h-64 object-cover shadow-md mt-2 rounded-lg mb-4" />
           </DialogDescription>
         </DialogHeader>
+
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
             <Spinner />
@@ -171,28 +169,14 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
           <div>
             <div>
               <div className="grid grid-cols-3 gap-4 py-4">
-                <div>
-                  <h3 className=" mb-2 text-xl font-bold">Chi tiết phòng</h3>
-                  <p>
-                    Trạng thái: <span className="font-bold">{ConvertRoomStatus(room.room_status)}</span>
-                  </p>
-                  <p>
-                    Tầng: <span className="font-bold">{room.floor}</span>
-                  </p>
-                  <p>
-                    Giá giờ đầu: <span className="font-bold">{room.first_hourly_price} đ/giờ</span>
-                  </p>
-                  <p>
-                    Giá giờ tiếp theo: <span className="font-bold">{room.after_hour_price} đ/giờ</span>
-                  </p>
-                </div>
+                <RoomDetails room={room} />
                 <div className="col-span-2">
                   <form onSubmit={handleUpdateBooking} id={bookingID}>
-                    <GuestFormSection control={control} />
+                    <GuestFormSection control={control} bookingData={bookingData} />
                   </form>
                   <Separator className="my-4" />
                   <h3>Dịch vụ</h3>
-                  <SelectService roomId={room.documentId} bookingId={bookingID} guestName={guestName} />
+                  <SelectService bookingId={bookingID} />
                 </div>
               </div>
               <DialogFooter>

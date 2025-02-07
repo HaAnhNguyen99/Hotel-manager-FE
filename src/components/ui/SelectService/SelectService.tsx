@@ -9,8 +9,6 @@ import { CreateServiceUsagePayload } from '@/types/service';
 import { Spinner } from '@/components/common/Spinner/Spinner';
 
 interface ServiceType {
-  roomId: string;
-  guestName: string;
   bookingId: string;
 }
 
@@ -21,7 +19,7 @@ interface Service {
   price: string;
 }
 
-export const SelectService = ({ roomId, guestName, bookingId }: ServiceType) => {
+export const SelectService = ({ bookingId }: ServiceType) => {
   const [serviceId, setServiceId] = React.useState<string>('');
   const [quantity, setQuantity] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
