@@ -16,13 +16,13 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
 
   return (
     <div
-      className="bg-card rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105  w-[350px]"
+      className="bg-card rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 w-[350px] flex flex-col"
       //   onMouseEnter={() => setIsHovered(true)}
       //   onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative">
+      <div className="relative flex-1">
         <div className="relative w-full h-full overflow-hidden">
-          <img src={imageUrl} alt={room.room_number} className="object-cover" />
+          <img src={imageUrl} alt={room.room_number} className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-50" />
 
