@@ -1,0 +1,15 @@
+.rooms-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.rooms-card:hover {
+  transform: scale(1.05);
+}
+
+.rooms-card:hover > #create-room-btn {
+  opacity: 1;
+}
+
+.rooms-card:hover > .img-overlay {
+  opacity: 1;
+}

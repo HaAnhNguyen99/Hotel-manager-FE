@@ -1,11 +1,11 @@
 export const getStatusColor = (status: string) => {
   switch (status) {
-    case 'available':
+    case 'Available':
       return 'bg-chart-2 text-white';
-    case 'occupied':
+    case 'Occupied':
       return 'bg-destructive text-white';
-    case 'cleaning':
-      return 'bg-chart-4 text-white';
+    case 'Cleaning':
+      return 'bg-chart-4 text-black';
     default:
       return 'bg-muted text-muted-foreground';
   }

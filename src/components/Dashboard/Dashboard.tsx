@@ -4,11 +4,12 @@ import StatCard from '../common/StatCard/StatCard';
 import { FaBed, FaCheck, FaLock } from 'react-icons/fa';
 import { RoomList } from '../rooms/RoomList/RoomList';
 import { MdCleaningServices } from 'react-icons/md';
+import { Loading } from '../common/Loading/Loading';
 
 export const Dashboard = () => {
   const { rooms, loading, error } = useHotelContext();
 
-  if (loading) return <div>Loading rooms...</div>;
+  if (loading) return <Loading />;
   if (error) return <div>Error: {error}</div>;
 
   const stats = {

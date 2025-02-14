@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { HotelContext } from '../../../context/HotelContext';
 import RoomCard from '../RoomCard/RoomCard';
 
@@ -9,7 +9,6 @@ export const RoomList = () => {
   const filteredRooms = rooms.filter((room) => {
     return filter.status === 'all' || room.room_status === filter.status;
   });
-  console.log(filteredRooms);
 
   return (
     <div>
@@ -21,12 +20,13 @@ export const RoomList = () => {
           <option value="Cleaning">Cleaning</option>
         </select>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredRooms.map((room) => (
           <RoomCard
-            key={room.id}
+            key={room.documentId}
             room={room}
             onClick={() => {
+              console.log(room);
               setSelectedRoom(room);
               setIsModalOpen(true);
             }}

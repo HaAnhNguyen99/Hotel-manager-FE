@@ -1,7 +1,9 @@
 // src/context/HotelContext.tsx
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { fetchRooms } from '../services/hotelService';
-import { Room, RoomType } from '../types/hotel';
+import { Room } from '../types/hotel';
+import { UseFormReturn, useForm } from 'react-hook-form';
+import { BookingFormData } from '@/types/booking';
 
 // Define the context type
 type HotelContextType = {
@@ -12,6 +14,9 @@ type HotelContextType = {
   setSelectedRoom: (room: Room | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
+  reloadRooms: () => Promise<void>;
+  setRooms: (rooms: Room[]) => void;
+  bookingForm: UseFormReturn<BookingFormData>;
 };
 
 // Create the context
@@ -25,8 +30,30 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const bookingForm = useForm<BookingFormData>({
+    defaultValues: {
+      guestName: '',
+      cccd: '',
+      prepayment: null,
+      reduction: null,
+      checkinDate: null,
+      checkoutDate: null,
+      booking_date: new Date().toISOString(),
+    },
+  });
+
+  const reloadRooms = useCallback(async () => {
+    try {
+      const data = await fetchRooms();
+      setRooms(data.data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+    }
+  }, []);
+
   useEffect(() => {
-    const loadRooms = async () => {
+    const fetchData = async () => {
       try {
         const data = await fetchRooms();
         setRooms(data.data);
@@ -36,8 +63,7 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
       }
     };
-
-    loadRooms();
+    fetchData();
   }, []);
 
   return (
@@ -50,6 +76,9 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
         setSelectedRoom,
         isModalOpen,
         setIsModalOpen,
+        reloadRooms,
+        setRooms,
+        bookingForm,
       }}>
       {children}
     </HotelContext.Provider>
