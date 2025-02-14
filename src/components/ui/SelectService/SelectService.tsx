@@ -59,6 +59,7 @@ export const SelectService = ({ bookingId }: ServiceType) => {
 
   return (
     <div>
+      <h3 className="text-lg mb-2 text-center font-bold">Dịch vụ</h3>
       <form onSubmit={handleSubmit} className="flex gap-2">
         {/* Service Select */}
         <Select onValueChange={(value) => setServiceId(value)}>
@@ -81,9 +82,9 @@ export const SelectService = ({ bookingId }: ServiceType) => {
           <SelectTrigger className="w-[48%] mb-2">
             <SelectValue placeholder="Số lượng" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
+          <SelectContent className="shadow-lg">
+            <SelectGroup className="max-h-[150px] overflow-y-auto">
+              {Array.from({ length: 10 }, (_, i) => i + 1).map((number) => (
                 <SelectItem key={number} value={number.toString()}>
                   {number}
                 </SelectItem>
@@ -96,7 +97,6 @@ export const SelectService = ({ bookingId }: ServiceType) => {
           Thêm
         </Button>
       </form>
-
       <div>
         <TableService bookingId={bookingId} isLoading={isLoading} />
       </div>

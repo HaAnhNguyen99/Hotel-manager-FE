@@ -6,9 +6,9 @@
 
 import { CreateServiceUsagePayload } from '@/types/service';
 import axios from 'axios';
-import { CreateBookingData, UpdateBookingData } from '@/types/booking';
+import { BookingStatus, CreateBookingData, UpdateBookingData } from '@/types/booking';
 import { UpdateServiceUsagePayload } from '@/types/service_usage';
-import { FetchRoom, RoomStatus } from '@/types/room';
+import { FetchRoom, RoomBooking, RoomStatus } from '@/types/room';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 /**
@@ -26,6 +26,21 @@ export const fetchRooms = async (): Promise<FetchRoom> => {
   }
 };
 
+/**
+ * Fetches a list of bookings for a given room from the API.
+ *
+ * @param roomId The ID of the room.
+ * @returns A promise that resolves to an array of Booking objects.
+ */
+export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
+  try {
+    const response = await axios.get(`${axios.defaults.baseURL}/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`);
+    return response.data.data[0];
+  } catch (error) {
+    console.error('Error fetching service:', error);
+    throw new Error('Failed to fetch service');
+  }
+};
 const serviceUsageApi = axios.create({
   headers: {
     'Content-Type': 'application/json',
@@ -100,7 +115,7 @@ export const cancelBooking = async (bookingId: string) => {
  */
 export const getServiceUsage = async (bookingId: string) => {
   try {
-    const response = await axios.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`);
+    const response = await axios.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}`);
     return response.data.data;
   } catch (err) {
     console.error('Error canceling booking:', err);
@@ -158,6 +173,19 @@ export const updateBooking = async (bookingId: string, payload: UpdateBookingDat
   }
 };
 
+export const updateBookingStatus = async (bookingId: string) => {
+  try {
+    const response = await BookingApi.put(`/bookings/${bookingId}`, {
+      data: {
+        booking_status: BookingStatus.Completed,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating booking:', error);
+    throw error;
+  }
+};
 /**
  * Updates the status of a room to occupied.
  *

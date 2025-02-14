@@ -4,15 +4,16 @@ import { Label } from '@/components/ui/label';
 import { DateTimePicker } from '../../ui/DateTimePicker24h/DateTimePicker24h';
 import { BookingFormData } from '@/types/booking';
 import { useHotelContext } from '@/context/HotelContext';
-import { BookingType } from '@/types/booking';
-import { formatDate } from '@/utils/FormatDate';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { convertToISO } from '@/utils/ConvertToISO';
+import { RoomBooking } from '@/types/room';
 
 type GuestFormSectionProps = {
   control: Control<BookingFormData>;
-  bookingData: BookingType | null;
+  bookingData: RoomBooking | null;
   setCheckoutTime: React.Dispatch<React.SetStateAction<string | null>>;
   setCheckinDate: React.Dispatch<React.SetStateAction<string | null>>;
+  setReduction: React.Dispatch<React.SetStateAction<number | null>>;
   setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
@@ -22,12 +23,13 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
 
   useEffect(() => {
     if (bookingData) {
+      setPrePayment(bookingData.prepayment || null);
       setValue('guestName', bookingData.guest_name || '');
       setValue('cccd', bookingData.cccd || '');
       setValue('prepayment', bookingData.prepayment || null);
       setValue('reduction', bookingData.reduction || null);
-      setValue('checkinDate', bookingData.checkin ? formatDate(bookingData.checkin) : null);
-      setValue('checkoutDate', bookingData.checkout ? formatDate(bookingData.checkout) : null);
+      setValue('checkoutDate', bookingData.checkout ? convertToISO(bookingData.checkout) : null);
+      setValue('checkinDate', bookingData.checkin ? bookingData.checkin : null);
     }
   }, [bookingData]);
 
@@ -78,7 +80,9 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
               <Input
                 type="number"
                 {...field}
+                placeholder="Nhập số tiền giảm giá"
                 onChange={(e) => {
+                  console.log(e.target.value);
                   field.onChange(Number(e.target.value));
                   setReduction(Number(e.target.value));
                 }}
@@ -99,8 +103,8 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
               <DateTimePicker
                 date={field.value ? new Date(field.value) : null}
                 setDate={(date) => {
-                  field.onChange(date ? date.toISOString() : null);
-                  setCheckinDate(date);
+                  field.onChange(date && date instanceof Date ? convertToISO(date.toString()) : null);
+                  setCheckinDate(date && date instanceof Date ? convertToISO(date.toString()) : null);
                 }}
               />
             )}
@@ -115,8 +119,8 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
               <DateTimePicker
                 date={field.value ? new Date(field.value) : null}
                 setDate={(date) => {
-                  field.onChange(date ? date.toISOString() : null);
-                  setCheckoutTime(date ? date.toISOString() : null);
+                  field.onChange(date && date instanceof Date ? date.toISOString() : null);
+                  setCheckoutTime(date && date instanceof Date ? date.toISOString() : null);
                 }}
               />
             )}

@@ -1,4 +1,5 @@
 // RoomDetails.tsx
+import { Separator } from '@/components/ui/separator';
 import { Room } from '@/types/hotel';
 import { ConvertRoomStatus } from '@/utils/ConvertRoomStatus';
 

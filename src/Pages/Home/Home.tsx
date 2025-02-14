@@ -1,10 +1,10 @@
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
 import { Dashboard } from '../../components/Dashboard/Dashboard';
 export const Home = () => {
   return (
     <div>
-      <Dashboard />
       <Toaster />
+      <Dashboard />
     </div>
   );
 };

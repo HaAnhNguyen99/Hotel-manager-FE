@@ -1,4 +1,4 @@
-// components/rooms/RoomCard/RoomCard.tsx
+import './RoomCard.css';
 import { formatCurrency } from '../../../utils/FormatCurrency';
 import { getStatusColor } from '../../../utils/GetStatusColor';
 import { ConvertRoomStatus } from '../../../utils/ConvertRoomStatus';
@@ -15,13 +15,10 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
   const imageUrl = room.img.url || '/fallback-room-image.jpg';
 
   return (
-    <div
-      className="bg-card rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 w-[350px] flex flex-col"
-      //   onMouseEnter={() => setIsHovered(true)}
-      //   onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="rooms-card bg-card relative rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 w-[350px] flex flex-col ">
       <div className="relative flex-1">
         <div className="relative w-full h-full overflow-hidden">
+          <div className="img-overlay absolute opacity-0 top-0 left-0 w-full h-full backdrop-brightness-90 bg-black/20 z-1 "></div>
           <img src={imageUrl} alt={room.room_number} className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-50" />
@@ -40,7 +37,7 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
           </div>
         </div>
       </div>
-      <div>
+      <div id="create-room-btn" className="opacity-0 z-10 absolute top-1/2 left-1/2 -translate-x-1/2 transition-opacity duration-300">
         <CreateRoomBtn room={room} onClick={onClick} />
       </div>
     </div>

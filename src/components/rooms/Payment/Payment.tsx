@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -16,38 +15,46 @@ import { Room } from '@/types/hotel';
 import { Separator } from '@/components/ui/separator';
 import { calculateHours, formatDateTime } from '@/utils/FormatDate';
 import { useEffect, useState } from 'react';
-import { getServiceUsage, updateRoomStatusAvailable } from '@/services/hotelService';
+import { getServiceUsage, updateBookingStatus, updateRoomStatusAvailable } from '@/services/hotelService';
 import { calculateTotal } from '@/utils/calculateTotal';
+import { ServiceData } from '@/types/service';
+import { BookingStatus } from '@/types/booking';
 
 type PaymentProps = {
   room: Room;
   bookingId: string;
-  checkinTime: string;
+  checkinTime: string | null;
   checkoutTime: string | null;
   prePayment: number | null;
+  reduction: number | null;
 };
-export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment }: PaymentProps) {
-  const [serviceUsage, setServiceUsage] = useState<ServiceUsage[]>([]);
+export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment, reduction }: PaymentProps) {
+  const [serviceUsage, setServiceUsage] = useState<ServiceData[]>([]);
+  const [open, setOpen] = useState(false);
 
-  const hours = calculateHours(checkinTime, checkoutTime);
-  const totalPrice = (hours - 1) * Number(room.after_hour_price) + Number(room.first_hourly_price);
-  const totalServicePrice = calculateTotal(serviceUsage);
+  const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
+  const RoomPrice = (hours - 1) * Number(room.after_hour_price) + Number(room.first_hourly_price);
+  const ServicePrice = calculateTotal(serviceUsage);
+  const totalGeneral = RoomPrice + ServicePrice;
+  const totalWithReduction = reduction ? totalGeneral - reduction : totalGeneral;
+  const Total = prePayment ? prePayment - totalWithReduction : totalWithReduction;
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getServiceUsage(bookingId);
-      console.log(data);
       setServiceUsage(data);
     };
     fetchData();
   }, [bookingId]);
 
-  const handleUpdateRoomStatus = async () => {
-    const res = await updateRoomStatusAvailable(room.documentId);
-    console.log(res);
+  const handleDonePayment = async () => {
+    await updateRoomStatusAvailable(room.documentId);
+    await updateBookingStatus(bookingId);
+    setOpen(false);
   };
+
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline">Thanh toán</Button>
       </DrawerTrigger>
@@ -99,38 +106,48 @@ export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment
 
                 <Separator className="my-3" />
 
-                <h3 className="text-base text-center mb-2 font-bold">Chi tiết giá cả</h3>
+                <h3 className="text-base text-center mb-2 font-bold">Chi tiết</h3>
                 <p className="flex items-center justify-between">
                   <span className="text-[#737373]">Số giờ</span>
-                  <span className="font-bold">{hours}</span>
+                  <span className="font-bold">{hours} tiếng</span>
                 </p>
 
                 <p className="flex items-center justify-between">
                   <span className="text-[#737373]">Trả trước</span>
-                  <span className="font-bold">{}</span>
+                  <span className="font-bold">{prePayment ? prePayment.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : '0 đ'}</span>
                 </p>
 
                 <p className="flex items-center justify-between">
                   <span className="text-[#737373]">Tiền dịch vụ</span>
-                  <span className="font-bold"> {totalServicePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                  <span className="font-bold"> {ServicePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
                 </p>
 
                 <p className="flex items-center justify-between">
                   <span className="text-[#737373]">Tiền phòng</span>
-                  <span className="font-bold"> {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                  <span className="font-bold"> {RoomPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
                 </p>
+
+                <p className="flex items-center justify-between">
+                  <span className="text-[#737373]">Giảm giá</span>
+                  <span className="font-bold"> {reduction ? reduction.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : '0 đ'}</span>
+                </p>
+
                 <Separator className="my-4" />
+
                 <div className="flex items-center justify-between">
                   <p className="text-[#737373]">Tổng cộng </p>
                   <span className="text-2xl font-bold">
-                    {(totalPrice + totalServicePrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                    {Total.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    })}
                   </span>
                 </div>
               </div>
             </div>
           </div>
           <DrawerFooter>
-            <Button onClick={handleUpdateRoomStatus}>Hoàn tất</Button>
+            <Button onClick={handleDonePayment}>Hoàn tất</Button>
             <DrawerClose asChild>
               <Button variant="outline">Huỷ</Button>
             </DrawerClose>

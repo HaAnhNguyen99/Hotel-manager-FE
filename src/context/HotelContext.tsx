@@ -30,7 +30,6 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Sử dụng useForm để quản lý form state
   const bookingForm = useForm<BookingFormData>({
     defaultValues: {
       guestName: '',
@@ -43,24 +42,29 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
     },
   });
 
-  // Hàm reloadRooms để fetch lại danh sách phòng
   const reloadRooms = useCallback(async () => {
-    setLoading(true);
     try {
       const data = await fetchRooms();
       setRooms(data.data);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
-    } finally {
-      setLoading(false);
     }
   }, []);
 
-  // Fetch danh sách phòng khi component mount
   useEffect(() => {
-    reloadRooms();
-  }, [reloadRooms]);
+    const fetchData = async () => {
+      try {
+        const data = await fetchRooms();
+        setRooms(data.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <HotelContext.Provider
