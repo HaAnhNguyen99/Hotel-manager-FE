@@ -1,5 +1,3 @@
-import { Room } from './hotel';
-
 export interface BookingType {
   documentId: string;
   room: string;

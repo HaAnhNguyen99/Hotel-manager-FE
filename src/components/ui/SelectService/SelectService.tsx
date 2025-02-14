@@ -27,7 +27,11 @@ export const SelectService = ({ bookingId }: ServiceType) => {
   const { data, loading, error } = useService();
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="w-full flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {

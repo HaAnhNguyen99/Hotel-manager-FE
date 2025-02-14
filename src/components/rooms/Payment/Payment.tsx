@@ -18,7 +18,6 @@ import { useEffect, useState } from 'react';
 import { getServiceUsage, updateBookingStatus, updateRoomStatusAvailable } from '@/services/hotelService';
 import { calculateTotal } from '@/utils/calculateTotal';
 import { ServiceData } from '@/types/service';
-import { BookingStatus } from '@/types/booking';
 
 type PaymentProps = {
   room: Room;
@@ -27,8 +26,9 @@ type PaymentProps = {
   checkoutTime: string | null;
   prePayment: number | null;
   reduction: number | null;
+  setIsOpen: (open: boolean) => Promise<void>;
 };
-export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment, reduction }: PaymentProps) {
+export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment, reduction, setIsOpen }: PaymentProps) {
   const [serviceUsage, setServiceUsage] = useState<ServiceData[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -51,6 +51,7 @@ export function Payment({ room, checkinTime, checkoutTime, bookingId, prePayment
     await updateRoomStatusAvailable(room.documentId);
     await updateBookingStatus(bookingId);
     setOpen(false);
+    await setIsOpen(false);
   };
 
   return (

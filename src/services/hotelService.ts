@@ -35,7 +35,10 @@ export const fetchRooms = async (): Promise<FetchRoom> => {
 export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
   try {
     const response = await axios.get(`${axios.defaults.baseURL}/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`);
-    return response.data.data[0];
+    const data = response.data.data.filter((item: RoomBooking) => {
+      return item.booking_status === BookingStatus.Pending;
+    });
+    return data[0];
   } catch (error) {
     console.error('Error fetching service:', error);
     throw new Error('Failed to fetch service');
@@ -115,7 +118,7 @@ export const cancelBooking = async (bookingId: string) => {
  */
 export const getServiceUsage = async (bookingId: string) => {
   try {
-    const response = await axios.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}`);
+    const response = await axios.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`);
     return response.data.data;
   } catch (err) {
     console.error('Error canceling booking:', err);

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Room } from '@/types/hotel';
 import { SelectService } from '../SelectService/SelectService';
 import { Separator } from '@/components/ui/separator';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   cancelBooking,
   createBooking,
@@ -23,6 +23,7 @@ import { GuestFormSection } from '@/components/rooms/GuestFormSection/GuestFormS
 import { RoomDetails } from '@/components/rooms/RoomDetail/RoomDetail';
 import { BookingFormData, BookingStatus } from '@/types/booking';
 import { convertToISO } from '@/utils/ConvertToISO';
+import CancelBookingPopover from '@/components/rooms/CancelBookingPopover/CancelBookingPopover';
 
 export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => void }) => {
   const [reduction, setReduction] = useState<number | null>(null);
@@ -39,7 +40,6 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
     const roomBooking = await getRoomBooking(room.documentId);
-
     if (roomBooking) {
       setBookingData(roomBooking);
       setIsOpen(true);
@@ -149,6 +149,10 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
     }
   };
 
+  const cancelBookingPopover = () => {
+    return <CancelBookingPopover handleCancelBooking={handleCancelBooking} />;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
@@ -218,6 +222,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
                     checkoutTime={checkoutTime}
                     prePayment={prePayment}
                     reduction={reduction}
+                    setIsOpen={handleOpenChange}
                   />
                 )}
               </DialogFooter>

@@ -4,14 +4,19 @@ import { formatISODate } from '@/utils/FormatISOString';
 import { useEffect, useState } from 'react';
 import { ComboboxPopover } from '@/components/rooms/TableService/ComboboxPopover/ComboboxPopover';
 import { UpdateServiceUsagePayload } from '@/types/service_usage';
+import { Spinner } from '@/components/common/Spinner/Spinner';
 
 export const TableService = ({ bookingId, isLoading }: { bookingId: string; isLoading: boolean }) => {
   const [data, setData] = useState<UpdateServiceUsagePayload[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getServiceUsage(bookingId);
-      setData(data);
+      try {
+        const data = await getServiceUsage(bookingId);
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching service usage:', error);
+      }
     };
     fetchData();
   }, [bookingId, isLoading]);
@@ -36,7 +41,15 @@ export const TableService = ({ bookingId, isLoading }: { bookingId: string; isLo
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Array.isArray(data) && data.length > 0 ? (
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                <div className="flex justify-center items-center w-full">
+                  <Spinner />
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : Array.isArray(data) && data.length > 0 ? (
             data.map((item) => (
               <TableRow key={item.id}>
                 <TableCell className="font-medium">{item.service.name}</TableCell>
