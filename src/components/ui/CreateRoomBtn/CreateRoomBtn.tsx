@@ -1,10 +1,17 @@
-import { Dialog } from '../dialog';
-import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Room } from '@/types/hotel';
-import { SelectService } from '../SelectService/SelectService';
-import { Separator } from '@/components/ui/separator';
-import { useState } from 'react';
+import { Dialog } from "../dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Room } from "@/types/hotel";
+import { SelectService } from "../SelectService/SelectService";
+import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import {
   cancelBooking,
   createBooking,
@@ -12,23 +19,29 @@ import {
   updateBooking,
   updateRoomStatusAvailable,
   updateRoomStatusOccupied,
-} from '@/services/hotelService';
-import { Spinner } from '@/components/common/Spinner/Spinner';
-import { DialogClose } from '@radix-ui/react-dialog';
-import { Payment } from '@/components/rooms/Payment/Payment';
-import { toast } from 'sonner';
-import { useHotelContext } from '@/context/HotelContext';
-import { RoomBooking, RoomStatus } from '@/types/room';
-import { GuestFormSection } from '@/components/rooms/GuestFormSection/GuestFormSection';
-import { RoomDetails } from '@/components/rooms/RoomDetail/RoomDetail';
-import { BookingFormData, BookingStatus } from '@/types/booking';
-import { convertToISO } from '@/utils/ConvertToISO';
-import CancelBookingPopover from '@/components/rooms/CancelBookingPopover/CancelBookingPopover';
+} from "@/services/hotelService";
+import { Spinner } from "@/components/common/Spinner/Spinner";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { Payment } from "@/components/rooms/Payment/Payment";
+import { toast } from "sonner";
+import { useHotelContext } from "@/context/HotelContext";
+import { RoomBooking, RoomStatus } from "@/types/room";
+import { GuestFormSection } from "@/components/rooms/GuestFormSection/GuestFormSection";
+import { RoomDetails } from "@/components/rooms/RoomDetail/RoomDetail";
+import { BookingFormData, BookingStatus } from "@/types/booking";
+import { convertToISO } from "@/utils/ConvertToISO";
+import CancelBookingPopover from "@/components/rooms/CancelBookingPopover/CancelBookingPopover";
 
-export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => void }) => {
+export const CreateRoomBtn = ({
+  room,
+  onClick,
+}: {
+  room: Room;
+  onClick: () => void;
+}) => {
   const [reduction, setReduction] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [bookingID, setBookingID] = useState<string>('');
+  const [bookingID, setBookingID] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [prePayment, setPrePayment] = useState<number | null>(null);
   const { reloadRooms, bookingForm } = useHotelContext();
@@ -62,7 +75,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
           booking_date: new Date().toISOString(),
           checkin: new Date().toISOString(),
           booking_status: BookingStatus.Pending,
-          guest_name: 'Vô danh',
+          guest_name: "Vô danh",
           prepayment: 0,
           reduction: 0,
         },
@@ -71,13 +84,13 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
       const res = await createBooking(payload);
 
       setBookingID(res.data.documentId);
-      setValue('checkinDate', payload.data.checkin);
-      setValue('guestName', payload.data.guest_name);
-      setValue('prepayment', payload.data.prepayment);
-      setValue('reduction', payload.data.reduction);
-      toast.success('Đã đặt phòng thành công');
+      setValue("checkinDate", payload.data.checkin);
+      setValue("guestName", payload.data.guest_name);
+      setValue("prepayment", payload.data.prepayment);
+      setValue("reduction", payload.data.reduction);
+      toast.success("Đã đặt phòng thành công");
     } catch (error) {
-      console.error('Error creating booking:', error);
+      console.error("Error creating booking:", error);
     } finally {
       setIsLoading(false);
       await updateRoomStatusOccupied(room.documentId);
@@ -89,7 +102,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
       await updateRoomStatusOccupied(room.documentId);
       setIsOpen(false);
     } catch (error) {
-      console.error('Error updating room status:', error);
+      console.error("Error updating room status:", error);
     }
   };
 
@@ -100,8 +113,12 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
         guest_name: data.guestName,
         booking_date: new Date().toISOString(),
         reduction: data.reduction,
-        checkin: data.checkinDate ? convertToISO(data.checkinDate.toString()) : null,
-        checkout: data.checkoutDate ? convertToISO(data.checkoutDate.toString()) : null,
+        checkin: data.checkinDate
+          ? convertToISO(data.checkinDate.toString())
+          : null,
+        checkout: data.checkoutDate
+          ? convertToISO(data.checkoutDate.toString())
+          : null,
         prepayment: data.prepayment,
         cccd: data.cccd,
       },
@@ -112,9 +129,9 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
       console.log(res);
       handleUpdateRoomStatus(room);
 
-      toast.success('Đã cập nhật phòng !');
+      toast.success("Đã cập nhật phòng !");
     } catch (error) {
-      console.error('Error creating booking:', error);
+      console.error("Error creating booking:", error);
     }
   };
 
@@ -125,7 +142,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
       try {
         await reloadRooms();
       } catch (error) {
-        console.error('Error canceling booking:', error);
+        console.error("Error canceling booking:", error);
       } finally {
         setIsLoading(false);
       }
@@ -135,7 +152,7 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
   const handleCancelBooking = async () => {
     try {
       setIsLoading(true);
-      setBookingID('');
+      setBookingID("");
       await cancelBooking(bookingID);
       await updateRoomStatusAvailable(room.documentId);
       await reloadRooms();
@@ -143,14 +160,10 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
       setPrePayment(null);
       setReduction(null);
     } catch (error) {
-      console.error('Error canceling booking:', error);
+      console.error("Error canceling booking:", error);
     } finally {
       setIsOpen(false);
     }
-  };
-
-  const cancelBookingPopover = () => {
-    return <CancelBookingPopover handleCancelBooking={handleCancelBooking} />;
   };
 
   return (
@@ -163,12 +176,16 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
             onClick();
             handleBooking(room);
           }}>
-          {room.room_status === RoomStatus.Occupied ? 'Xem chi tiết' : 'Đặt phòng'}
+          {room.room_status === RoomStatus.Occupied
+            ? "Xem chi tiết"
+            : "Đặt phòng"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar ">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-bold">Phòng {room.room_number}</DialogTitle>
+          <DialogTitle className="text-center text-2xl font-bold">
+            Phòng {room.room_number}
+          </DialogTitle>
           <DialogDescription>
             <img
               src={room.img.url}
@@ -190,7 +207,9 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
                 <RoomDetails room={room} />
 
                 <div className="col-span-2">
-                  <form onSubmit={handleSubmit(handleUpdateBooking)} id={bookingID}>
+                  <form
+                    onSubmit={handleSubmit(handleUpdateBooking)}
+                    id={bookingID}>
                     <GuestFormSection
                       control={control}
                       bookingData={bookingData}
@@ -207,12 +226,14 @@ export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => vo
 
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="secondary" disabled={isLoading} onClick={handleCancelBooking}>
-                    Hủy
-                  </Button>
+                  <CancelBookingPopover
+                    handleCancelBooking={handleCancelBooking}
+                  />
                 </DialogClose>
                 <Button type="submit" form={bookingID} disabled={isLoading}>
-                  {room.room_status === RoomStatus.Occupied ? 'Cập nhật' : 'Đặt phòng'}
+                  {room.room_status === RoomStatus.Occupied
+                    ? "Cập nhật"
+                    : "Đặt phòng"}
                 </Button>
                 {room.room_status === RoomStatus.Occupied && (
                   <Payment
