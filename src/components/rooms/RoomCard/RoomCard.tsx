@@ -20,7 +20,7 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
         <div className="relative w-full h-full overflow-hidden">
           <div
             id="img-overlay"
-            className="absolute opacity-0 top-0 left-0 w-full h-full backdrop-brightness-90 bg-black/20 z-1 "></div>
+            className="absolute opacity-0 top-0 left-0 w-full h-full backdrop-brightness-90 bg-black/20 z-10"></div>
           <img
             src={imageUrl}
             alt={room.room_number}

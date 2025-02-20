@@ -125,13 +125,18 @@ export const CreateRoomBtn = ({
     };
 
     try {
-      const res = await updateBooking(bookingID, payload);
-      console.log(res);
-      handleUpdateRoomStatus(room);
+      setIsLoading(true);
+      await Promise.all([
+        updateBooking(bookingID, payload),
+        handleUpdateRoomStatus(room),
+      ]);
 
       toast.success("Đã cập nhật phòng !");
     } catch (error) {
       console.error("Error creating booking:", error);
+    } finally {
+      setIsLoading(false);
+      await reloadRooms();
     }
   };
 
@@ -243,7 +248,7 @@ export const CreateRoomBtn = ({
                     checkoutTime={checkoutTime}
                     prePayment={prePayment}
                     reduction={reduction}
-                    setIsOpen={handleOpenChange}
+                    setCardOpen={handleOpenChange}
                   />
                 )}
               </DialogFooter>
