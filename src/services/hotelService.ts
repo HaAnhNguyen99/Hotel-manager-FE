@@ -4,11 +4,16 @@
  * and updating room status.
  */
 
-import { CreateServiceUsagePayload } from '@/types/service';
-import axios from 'axios';
-import { BookingStatus, CreateBookingData, UpdateBookingData } from '@/types/booking';
-import { UpdateServiceUsagePayload } from '@/types/service_usage';
-import { FetchRoom, RoomBooking, RoomStatus } from '@/types/room';
+import { CreateServiceUsagePayload } from "@/types/service";
+import axios from "axios";
+import {
+  BookingStatus,
+  CreateBookingData,
+  UpdateBookingData,
+} from "@/types/booking";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
+import { FetchRoom, RoomBooking, RoomStatus } from "@/types/room";
+import { CreatePaymentPayload } from "@/types/payment";
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 /**
@@ -18,11 +23,13 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL;
  */
 export const fetchRooms = async (): Promise<FetchRoom> => {
   try {
-    const response = await axios.get(`${axios.defaults.baseURL}/rooms?sort[0]=room_number&populate=*`);
+    const response = await axios.get(
+      `${axios.defaults.baseURL}/rooms?sort[0]=room_number&populate=*`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching service:', error);
-    throw new Error('Failed to fetch service');
+    console.error("Error fetching service:", error);
+    throw new Error("Failed to fetch service");
   }
 };
 
@@ -34,31 +41,39 @@ export const fetchRooms = async (): Promise<FetchRoom> => {
  */
 export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
   try {
-    const response = await axios.get(`${axios.defaults.baseURL}/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`);
+    const response = await axios.get(
+      `${axios.defaults.baseURL}/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`
+    );
     const data = response.data.data.filter((item: RoomBooking) => {
       return item.booking_status === BookingStatus.Pending;
     });
     return data[0];
   } catch (error) {
-    console.error('Error fetching service:', error);
-    throw new Error('Failed to fetch service');
+    console.error("Error fetching service:", error);
+    throw new Error("Failed to fetch service");
   }
 };
 const serviceUsageApi = axios.create({
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 const BookingApi = axios.create({
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 const RoomApi = axios.create({
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
+  },
+});
+
+const ReservationApi = axios.create({
+  headers: {
+    "Content-Type": "application/json",
   },
 });
 
@@ -68,12 +83,14 @@ const RoomApi = axios.create({
  * @param payload The payload for the new service usage.
  * @returns A promise that resolves to the created service usage data.
  */
-export const createServiceUsage = async (payload: CreateServiceUsagePayload) => {
+export const createServiceUsage = async (
+  payload: CreateServiceUsagePayload
+) => {
   try {
-    const response = await serviceUsageApi.post('/service-usages', payload);
+    const response = await serviceUsageApi.post("/service-usages", payload);
     return response.data;
   } catch (error) {
-    console.error('Error creating service usage:', error);
+    console.error("Error creating service usage:", error);
     throw error;
   }
 };
@@ -86,10 +103,10 @@ export const createServiceUsage = async (payload: CreateServiceUsagePayload) => 
  */
 export const createBooking = async (payload: CreateBookingData) => {
   try {
-    const response = await BookingApi.post('/bookings', payload);
+    const response = await BookingApi.post("/bookings", payload);
     return response.data;
   } catch (error) {
-    console.error('Error creating service usage:', error);
+    console.error("Error creating service usage:", error);
     throw error;
   }
 };
@@ -105,7 +122,7 @@ export const cancelBooking = async (bookingId: string) => {
     const response = await BookingApi.delete(`/bookings/${bookingId}`);
     return response.data;
   } catch (error) {
-    console.error('Error canceling booking:', error);
+    console.error("Error canceling booking:", error);
     throw error;
   }
 };
@@ -118,10 +135,12 @@ export const cancelBooking = async (bookingId: string) => {
  */
 export const getServiceUsage = async (bookingId: string) => {
   try {
-    const response = await axios.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`);
+    const response = await axios.get(
+      `/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`
+    );
     return response.data.data;
   } catch (err) {
-    console.error('Error canceling booking:', err);
+    console.error("Error canceling booking:", err);
     throw err;
   }
 };
@@ -133,12 +152,18 @@ export const getServiceUsage = async (bookingId: string) => {
  * @param payload The payload for the update.
  * @returns A promise that resolves to the updated service usage data.
  */
-export const updateServiceUsage = async (serviceUsageId: string, payload: UpdateServiceUsagePayload) => {
+export const updateServiceUsage = async (
+  serviceUsageId: string,
+  payload: UpdateServiceUsagePayload
+) => {
   try {
-    const response = await serviceUsageApi.put(`/service-usages/${serviceUsageId}`, payload);
+    const response = await serviceUsageApi.put(
+      `/service-usages/${serviceUsageId}`,
+      payload
+    );
     return response.data;
   } catch (error) {
-    console.error('Error updating service usage:', error);
+    console.error("Error updating service usage:", error);
     throw error;
   }
 };
@@ -151,10 +176,12 @@ export const updateServiceUsage = async (serviceUsageId: string, payload: Update
  */
 export const deleteServiceUsage = async (serviceUsageId: string) => {
   try {
-    const response = await serviceUsageApi.delete(`/service-usages/${serviceUsageId}`);
+    const response = await serviceUsageApi.delete(
+      `/service-usages/${serviceUsageId}`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error updating service usage:', error);
+    console.error("Error updating service usage:", error);
     throw error;
   }
 };
@@ -166,12 +193,15 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
  * @param payload The payload for the update.
  * @returns A promise that resolves to the updated booking data.
  */
-export const updateBooking = async (bookingId: string, payload: UpdateBookingData) => {
+export const updateBooking = async (
+  bookingId: string,
+  payload: UpdateBookingData
+) => {
   try {
     const response = await BookingApi.put(`/bookings/${bookingId}`, payload);
     return response.data;
   } catch (error) {
-    console.error('Error updating booking:', error);
+    console.error("Error updating booking:", error);
     throw error;
   }
 };
@@ -185,7 +215,7 @@ export const updateBookingStatus = async (bookingId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating booking:', error);
+    console.error("Error updating booking:", error);
     throw error;
   }
 };
@@ -204,7 +234,7 @@ export const updateRoomStatusOccupied = async (roomId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating room status:', error);
+    console.error("Error updating room status:", error);
     throw error;
   }
 };
@@ -224,7 +254,23 @@ export const updateRoomStatusAvailable = async (roomId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating room status:', error);
+    console.error("Error updating room status:", error);
+    throw error;
+  }
+};
+
+/**
+ * Creates a new payment record.
+ *
+ * @param payload The payload for the new payment.
+ * @returns A promise that resolves to the created payment data.
+ */
+export const createPayment = async (payload: CreatePaymentPayload) => {
+  try {
+    const response = await ReservationApi.post(`/reservations`, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating payment:", error);
     throw error;
   }
 };
