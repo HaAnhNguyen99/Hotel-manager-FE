@@ -14,7 +14,7 @@ import {
   updateServiceUsage,
 } from "@/services/hotelService";
 import { formatISODate } from "@/utils/FormatISOString";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ComboboxPopover } from "@/components/rooms/TableService/ComboboxPopover/ComboboxPopover";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { Spinner } from "@/components/common/Spinner/Spinner";

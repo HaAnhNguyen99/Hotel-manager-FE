@@ -30,11 +30,13 @@ import { GuestFormSection } from "@/components/rooms/GuestFormSection/GuestFormS
 import { RoomDetails } from "@/components/rooms/RoomDetail/RoomDetail";
 import {
   BookingFormData,
+  BookingStatus,
   CreateBookingPayload,
   RoomType,
 } from "@/types/booking";
 import { convertToISO } from "@/utils/ConvertToISO";
 import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
+import LoadingText from "@/components/common/LoadingText/LoadingText";
 
 export const CreateRoomBtn = ({
   room,
@@ -66,18 +68,18 @@ export const CreateRoomBtn = ({
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
     const roomBooking = await getRoomBooking(room.documentId);
-    // if (roomBooking) {
-    //   setBookingData(roomBooking);
-    //   setIsOpen(true);
-    //   setBookingID(roomBooking.documentId);
-    //   setCheckinTime(roomBooking.checkin);
-    //   setCheckoutTime(roomBooking.checkout);
-    //   setPrePayment(roomBooking.prepayment);
-    //   setReduction(roomBooking.reduction);
-    //   setIsLoading(false);
-    // } else {
-    //   handleCreateBooking(room);
-    // }
+    if (roomBooking) {
+      setBookingData(roomBooking);
+      setIsOpen(true);
+      setBookingID(roomBooking.documentId);
+      setCheckinTime(roomBooking.checkin);
+      setCheckoutTime(roomBooking.checkout);
+      setPrePayment(roomBooking.prepayment);
+      setReduction(roomBooking.reduction);
+      setIsLoading(false);
+    } else {
+      handleCreateBooking(room);
+    }
   };
 
   const handleCreateBooking = async (room: Room) => {
@@ -85,6 +87,7 @@ export const CreateRoomBtn = ({
       ...payloadData,
       type: RoomType.Hour,
       booking_date: new Date().toISOString(),
+      booking_status: BookingStatus.Pending,
     };
     try {
       const payload = {

@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";
+import { useEffect, useState } from "react";
 
 type Status = {
   value: string;
@@ -28,10 +29,7 @@ type Status = {
 
 interface ComboboxPopoverProps {
   currentStatus: string;
-  handleUpdateServiceUsage: (
-    serviceUsageId: string,
-    payload: UpdateServiceUsagePayload
-  ) => void;
+  handleUpdateServiceUsage: (serviceUsageId: string) => Promise<void>;
   setData: React.Dispatch<React.SetStateAction<UpdateServiceUsagePayload[]>>;
   data: UpdateServiceUsagePayload[];
   serviceUsageId: string;
@@ -57,10 +55,11 @@ export function ComboboxPopover({
   data,
   serviceUsageId,
 }: ComboboxPopoverProps) {
-  const [open, setOpen] = React.useState(false);
-  const [selectedStatus, setSelectedStatus] = React.useState<Status>(
-    statues.find((status) => status.label === currentStatus) || statues[0]
+  const [open, setOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<Status>(
+    statues.find((status) => status.label === currentStatus) || statues[1]
   );
+
   return (
     <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
@@ -90,15 +89,16 @@ export function ComboboxPopover({
                     key={status.value}
                     value={status.value}
                     onSelect={(value) => {
+                      console.log(value);
                       setSelectedStatus(
-                        statues.find((s) => s.value === value) || statues[0]
+                        statues.find((s) => s.label === value) || statues[0]
                       );
                       setOpen(false);
                       setData((prevData) => ({
                         ...prevData,
                         service_status: value,
                       }));
-                      //   handleUpdateServiceUsage(serviceUsageId, { ...data, service_status: value });
+                      handleUpdateServiceUsage(serviceUsageId);
                     }}>
                     <status.icon
                       className={cn(
@@ -106,7 +106,7 @@ export function ComboboxPopover({
                         status.value === selectedStatus?.value
                           ? "opacity-100"
                           : "opacity-40"
-                      )}
+                      )} 
                     />
                     <span>{status.label}</span>
                   </CommandItem>
