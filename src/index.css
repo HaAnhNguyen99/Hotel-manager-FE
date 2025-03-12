@@ -18,3 +18,9 @@
     scrollbar-width: none;
   }
 }
+
+@layer components {
+  .payment-card {
+    @apply drop-shadow bg-white border border-white shadow-slate-800 rounded-xl p-3;
+  }
+}

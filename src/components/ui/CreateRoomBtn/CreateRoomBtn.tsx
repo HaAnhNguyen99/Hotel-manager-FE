@@ -28,9 +28,13 @@ import { useHotelContext } from "@/context/HotelContext";
 import { RoomBooking, RoomStatus } from "@/types/room";
 import { GuestFormSection } from "@/components/rooms/GuestFormSection/GuestFormSection";
 import { RoomDetails } from "@/components/rooms/RoomDetail/RoomDetail";
-import { BookingFormData, BookingStatus } from "@/types/booking";
+import {
+  BookingFormData,
+  CreateBookingPayload,
+  RoomType,
+} from "@/types/booking";
 import { convertToISO } from "@/utils/ConvertToISO";
-import CancelBookingPopover from "@/components/rooms/CancelBookingPopover/CancelBookingPopover";
+import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
 
 export const CreateRoomBtn = ({
   room,
@@ -49,45 +53,52 @@ export const CreateRoomBtn = ({
   const [checkinTime, setCheckinTime] = useState<string | null>(null);
   const [checkoutTime, setCheckoutTime] = useState<string | null>(null);
   const { setValue, control, handleSubmit, reset } = bookingForm;
+  const [payloadData, setPayloadData] = useState<CreateBookingPayload>({
+    room: room.documentId,
+    checkin: new Date().toISOString(),
+    checkout: null,
+    guest_name: "Vô danh",
+    prepayment: 0,
+    reduction: 0,
+    cccd: "",
+  });
 
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
     const roomBooking = await getRoomBooking(room.documentId);
-    if (roomBooking) {
-      setBookingData(roomBooking);
-      setIsOpen(true);
-      setBookingID(roomBooking.documentId);
-      setCheckinTime(roomBooking.checkin);
-      setCheckoutTime(roomBooking.checkout);
-      setPrePayment(roomBooking.prepayment);
-      setReduction(roomBooking.reduction);
-      setIsLoading(false);
-    } else {
-      handleCreateBooking(room);
-    }
+    // if (roomBooking) {
+    //   setBookingData(roomBooking);
+    //   setIsOpen(true);
+    //   setBookingID(roomBooking.documentId);
+    //   setCheckinTime(roomBooking.checkin);
+    //   setCheckoutTime(roomBooking.checkout);
+    //   setPrePayment(roomBooking.prepayment);
+    //   setReduction(roomBooking.reduction);
+    //   setIsLoading(false);
+    // } else {
+    //   handleCreateBooking(room);
+    // }
   };
 
   const handleCreateBooking = async (room: Room) => {
+    const newPayloadData = {
+      ...payloadData,
+      type: RoomType.Hour,
+      booking_date: new Date().toISOString(),
+    };
     try {
       const payload = {
-        data: {
-          room: room.documentId,
-          booking_date: new Date().toISOString(),
-          checkin: new Date().toISOString(),
-          booking_status: BookingStatus.Pending,
-          guest_name: "Vô danh",
-          prepayment: 0,
-          reduction: 0,
-        },
+        data: newPayloadData,
       };
-      console.log(payload);
+
       const res = await createBooking(payload);
 
       setBookingID(res.data.documentId);
-      setValue("checkinDate", payload.data.checkin);
-      setValue("guestName", payload.data.guest_name);
-      setValue("prepayment", payload.data.prepayment);
-      setValue("reduction", payload.data.reduction);
+      setValue("checkinDate", res.data.checkin);
+      setValue("guestName", res.data.guest_name);
+      setValue("prepayment", res.data.prepayment);
+      setValue("reduction", res.data.reduction);
+      setCheckinTime(res.data.checkin);
       toast.success("Đã đặt phòng thành công");
     } catch (error) {
       console.error("Error creating booking:", error);
@@ -107,29 +118,32 @@ export const CreateRoomBtn = ({
   };
 
   const handleUpdateBooking = async (data: BookingFormData) => {
+    const bookingData = {
+      room: room.documentId,
+      checkin: data.checkinDate
+        ? convertToISO(data.checkinDate.toString())
+        : null,
+      checkout: data.checkoutDate
+        ? convertToISO(data.checkoutDate.toString())
+        : null,
+      guest_name: data.guestName,
+      prepayment: Number(data.prepayment),
+      reduction: Number(data.reduction),
+      cccd: data.cccd,
+    };
+
     const payload = {
-      data: {
-        room: room.documentId,
-        guest_name: data.guestName,
-        booking_date: new Date().toISOString(),
-        reduction: data.reduction,
-        checkin: data.checkinDate
-          ? convertToISO(data.checkinDate.toString())
-          : null,
-        checkout: data.checkoutDate
-          ? convertToISO(data.checkoutDate.toString())
-          : null,
-        prepayment: data.prepayment,
-        cccd: data.cccd,
-      },
+      data: bookingData,
     };
 
     try {
       setIsLoading(true);
-      await Promise.all([
-        updateBooking(bookingID, payload),
-        handleUpdateRoomStatus(room),
-      ]);
+      // console.log(payloadData);
+      // console.log(bookingData);
+      if (JSON.stringify(payloadData) !== JSON.stringify(bookingData)) {
+        await updateBooking(bookingID, payload);
+      }
+      await handleUpdateRoomStatus(room);
 
       toast.success("Đã cập nhật phòng !");
     } catch (error) {
@@ -137,6 +151,7 @@ export const CreateRoomBtn = ({
     } finally {
       setIsLoading(false);
       await reloadRooms();
+      setIsOpen(false);
     }
   };
 
@@ -188,7 +203,7 @@ export const CreateRoomBtn = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar ">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-bold">
+          <DialogTitle className="text-center text-2xl font-bold sticky -top-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] left-0 bg-[rgb(2,0,36)] bg-[linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(240,128,128,1) 35%, rgba(0,212,255,0) 100%);] z-10 p-2 rounded-lg ">
             Phòng {room.room_number}
           </DialogTitle>
           <DialogDescription>
@@ -231,8 +246,10 @@ export const CreateRoomBtn = ({
 
               <DialogFooter>
                 <DialogClose asChild>
-                  <CancelBookingPopover
-                    handleCancelBooking={handleCancelBooking}
+                  <CancelPopover
+                    cancelFunction={handleCancelBooking}
+                    title="Huỷ đặt phòng"
+                    description="Bạn có chắc chắn muốn huỷ đặt phòng?"
                   />
                 </DialogClose>
                 <Button type="submit" form={bookingID} disabled={isLoading}>

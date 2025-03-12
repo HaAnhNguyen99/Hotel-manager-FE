@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -14,8 +12,6 @@ import {
 import { Room } from "@/types/hotel";
 import { Separator } from "@/components/ui/separator";
 import { calculateHours, formatDateTime } from "@/utils/FormatDate";
-import { IoMdCash } from "react-icons/io";
-import { RiBankFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import {
   getServiceUsage,
@@ -85,16 +81,14 @@ export function Payment({
         },
       };
 
-      await Promise.all([
-        createPayment(payload),
-        updateBookingStatus(bookingId),
-        updateRoomStatusAvailable(room.documentId),
-      ]);
+      await createPayment(payload);
+      await updateBookingStatus(bookingId);
+      await updateRoomStatusAvailable(room.documentId);
     } catch (error) {
       console.error("Error handling payment:", error);
     } finally {
-      // setOpen(false);
-      // setCardOpen(false);
+      setOpen(false);
+      setCardOpen(false);
     }
   };
 

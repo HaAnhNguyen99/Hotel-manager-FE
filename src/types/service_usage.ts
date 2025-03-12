@@ -1,5 +1,5 @@
-import { BookingType } from './booking';
-import { ServiceData } from './service';
+import { BookingType } from "./booking";
+import { ServiceData } from "./service";
 
 export interface UpdateServiceUsagePayload {
   id: number;
@@ -10,4 +10,9 @@ export interface UpdateServiceUsagePayload {
   UsageDate: string;
   booking: BookingType;
   service_status: string;
+}
+
+export enum ServiceStatus {
+  PAYED = "Đã thanh toán",
+  UNPAID = "Chưa thanh toán",
 }

@@ -1,13 +1,24 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { CheckCircle2, XCircle, LucideIcon } from 'lucide-react';
+import * as React from "react";
+import { CheckCircle2, XCircle, LucideIcon } from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { UpdateServiceUsagePayload } from '@/types/service_usage';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
 
 type Status = {
   value: string;
@@ -17,34 +28,47 @@ type Status = {
 
 interface ComboboxPopoverProps {
   currentStatus: string;
-  handleUpdateServiceUsage: (serviceUsageId: string, payload: UpdateServiceUsagePayload) => void;
-  setData: React.Dispatch<React.SetStateAction<any[]>>;
-  data: any[];
-  serviceUsageId: any;
+  handleUpdateServiceUsage: (
+    serviceUsageId: string,
+    payload: UpdateServiceUsagePayload
+  ) => void;
+  setData: React.Dispatch<React.SetStateAction<UpdateServiceUsagePayload[]>>;
+  data: UpdateServiceUsagePayload[];
+  serviceUsageId: string;
 }
 
 const statues: Status[] = [
   {
-    value: 'paid',
-    label: 'Đã thanh toán',
+    value: "paid",
+    label: "Đã thanh toán",
     icon: CheckCircle2,
   },
   {
-    value: 'unpaid',
-    label: 'Chưa thanh toán',
+    value: "unpaid",
+    label: "Chưa thanh toán",
     icon: XCircle,
   },
 ];
 
-export function ComboboxPopover({ currentStatus, handleUpdateServiceUsage, setData, data, serviceUsageId }: ComboboxPopoverProps) {
+export function ComboboxPopover({
+  currentStatus,
+  handleUpdateServiceUsage,
+  setData,
+  data,
+  serviceUsageId,
+}: ComboboxPopoverProps) {
   const [open, setOpen] = React.useState(false);
-  const [selectedStatus, setSelectedStatus] = React.useState<Status>(statues.find((status) => status.label === currentStatus) || statues[0]);
-
+  const [selectedStatus, setSelectedStatus] = React.useState<Status>(
+    statues.find((status) => status.label === currentStatus) || statues[0]
+  );
   return (
     <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className="w-[150px] justify-start">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-[150px] justify-start">
             {selectedStatus ? (
               <>
                 <selectedStatus.icon className=" h-4 w-4 shrink-0" />
@@ -66,7 +90,9 @@ export function ComboboxPopover({ currentStatus, handleUpdateServiceUsage, setDa
                     key={status.value}
                     value={status.value}
                     onSelect={(value) => {
-                      setSelectedStatus(statues.find((s) => s.value === value) || statues[0]);
+                      setSelectedStatus(
+                        statues.find((s) => s.value === value) || statues[0]
+                      );
                       setOpen(false);
                       setData((prevData) => ({
                         ...prevData,
@@ -74,7 +100,14 @@ export function ComboboxPopover({ currentStatus, handleUpdateServiceUsage, setDa
                       }));
                       //   handleUpdateServiceUsage(serviceUsageId, { ...data, service_status: value });
                     }}>
-                    <status.icon className={cn('mr-2 h-4 w-4', status.value === selectedStatus?.value ? 'opacity-100' : 'opacity-40')} />
+                    <status.icon
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        status.value === selectedStatus?.value
+                          ? "opacity-100"
+                          : "opacity-40"
+                      )}
+                    />
                     <span>{status.label}</span>
                   </CommandItem>
                 ))}
