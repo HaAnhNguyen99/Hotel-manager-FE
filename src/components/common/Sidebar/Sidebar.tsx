@@ -14,6 +14,7 @@ import { Home, LayoutDashboard, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NavLink } from "react-router-dom";
 
 function SkeletonSidebarHeader() {
   return (
@@ -26,7 +27,7 @@ function SkeletonSidebarHeader() {
 const items = [
   {
     title: "Phòng",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
@@ -36,7 +37,7 @@ const items = [
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/setting",
     icon: Settings,
   },
 ];
@@ -111,10 +112,16 @@ const AppSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <NavLink
+                      to={item.url}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-primary font-semibold"
+                          : "text-muted-foreground hover:text-primary"
+                      }>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

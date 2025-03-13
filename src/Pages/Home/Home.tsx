@@ -1,12 +1,12 @@
 import { Toaster } from "sonner";
-import { Dashboard } from "../../components/Dashboard/Dashboard";
+import { HotelOverview } from "../../components/HotelOverview/HotelOverview";
 import { HotelProvider } from "@/context/HotelContext";
 export const Home = () => {
   return (
     <div>
       <Toaster />
       <HotelProvider>
-        <Dashboard />
+        <HotelOverview />
       </HotelProvider>
     </div>
   );

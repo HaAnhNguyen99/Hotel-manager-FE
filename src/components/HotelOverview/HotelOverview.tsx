@@ -6,7 +6,7 @@ import { RoomList } from "../rooms/RoomList/RoomList";
 import { MdCleaningServices } from "react-icons/md";
 import LoadingText from "../common/LoadingText/LoadingText";
 
-export const Dashboard = () => {
+export const HotelOverview = () => {
   const { rooms, loading, error } = useHotelContext();
 
   if (loading)
