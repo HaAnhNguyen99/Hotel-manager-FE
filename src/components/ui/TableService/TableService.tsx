@@ -7,12 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  deleteServiceUsage,
-  getServiceUsage,
-  updateServicePayment,
-  updateServiceUsage,
-} from "@/services/hotelService";
+import { deleteServiceUsage, getServiceUsage } from "@/services/hotelService";
 import { formatISODate } from "@/utils/FormatISOString";
 import { useEffect, useState } from "react";
 import { ComboboxPopover } from "@/components/rooms/TableService/ComboboxPopover/ComboboxPopover";
@@ -46,11 +41,6 @@ export const TableService = ({
     };
     fetchData();
   }, [bookingId, isLoading]);
-
-  const handleUpdateServiceUsage = async (serviceUsageId: string) => {
-    const data = await updateServicePayment(serviceUsageId);
-    setData(data);
-  };
 
   const handleDeleteServiceUsage = async (serviceUsageId: string) => {
     const previousData = [...data];
@@ -126,7 +116,6 @@ export const TableService = ({
                 <TableCell>
                   <ComboboxPopover
                     currentStatus={item.service_status}
-                    handleUpdateServiceUsage={handleUpdateServiceUsage}
                     setData={setData}
                     data={data}
                     serviceUsageId={item.documentId}

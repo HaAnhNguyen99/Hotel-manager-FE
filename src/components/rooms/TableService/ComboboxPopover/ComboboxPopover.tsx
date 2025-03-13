@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/popover";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { useEffect, useState } from "react";
+import { updateServicePayment } from "@/services/hotelService";
+import { toast } from "sonner";
 
 type Status = {
   value: string;
@@ -29,13 +31,12 @@ type Status = {
 
 interface ComboboxPopoverProps {
   currentStatus: string;
-  handleUpdateServiceUsage: (serviceUsageId: string) => Promise<void>;
   setData: React.Dispatch<React.SetStateAction<UpdateServiceUsagePayload[]>>;
   data: UpdateServiceUsagePayload[];
   serviceUsageId: string;
 }
 
-const statues: Status[] = [
+const statusArr: Status[] = [
   {
     value: "paid",
     label: "Đã thanh toán",
@@ -50,15 +51,32 @@ const statues: Status[] = [
 
 export function ComboboxPopover({
   currentStatus,
-  handleUpdateServiceUsage,
   setData,
   data,
   serviceUsageId,
 }: ComboboxPopoverProps) {
   const [open, setOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<Status>(
-    statues.find((status) => status.label === currentStatus) || statues[1]
+    statusArr.find((status) => status.label === currentStatus) || statusArr[1]
   );
+
+  const handleSelectStatus = async (value: Status) => {
+    const previousStatus = selectedStatus;
+    try {
+      setSelectedStatus(
+        statusArr.find((s) => s.label === value.label) || statusArr[0]
+      );
+      await updateServicePayment(serviceUsageId, value.label);
+    } catch (error: unknown) {
+      console.log(error);
+      toast.error("Lỗi khi cập nhật trạng thái");
+      setSelectedStatus(previousStatus);
+    }
+  };
+
+  useEffect(() => {
+    console.log(selectedStatus);
+  }, [selectedStatus]);
 
   return (
     <div className="flex items-center space-x-4">
@@ -84,29 +102,18 @@ export function ComboboxPopover({
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {statues.map((status) => (
+                {statusArr.map((status) => (
                   <CommandItem
                     key={status.value}
                     value={status.value}
-                    onSelect={(value) => {
-                      console.log(value);
-                      setSelectedStatus(
-                        statues.find((s) => s.label === value) || statues[0]
-                      );
-                      setOpen(false);
-                      setData((prevData) => ({
-                        ...prevData,
-                        service_status: value,
-                      }));
-                      handleUpdateServiceUsage(serviceUsageId);
-                    }}>
+                    onSelect={() => handleSelectStatus(status)}>
                     <status.icon
                       className={cn(
                         "mr-2 h-4 w-4",
                         status.value === selectedStatus?.value
                           ? "opacity-100"
                           : "opacity-40"
-                      )} 
+                      )}
                     />
                     <span>{status.label}</span>
                   </CommandItem>

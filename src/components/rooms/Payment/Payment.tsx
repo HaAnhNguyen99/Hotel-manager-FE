@@ -18,6 +18,7 @@ import {
   updateBookingStatus,
   createPayment,
   updateRoomStatusAvailable,
+  getServiceUsageStatusPayed,
 } from "@/services/hotelService";
 import { calculateTotal } from "@/utils/calculateTotal";
 import { ServiceData } from "@/types/service";
@@ -55,8 +56,17 @@ export function Payment({
     Number(room.first_hourly_price);
   const ServicePrice = calculateTotal(serviceUsage);
   const totalGeneral = RoomPrice + ServicePrice;
+  if (reduction) {
+    reduction = Number(reduction);
+  }
+
+  if (prePayment) {
+    prePayment = Number(prePayment);
+  }
+
   const totalWithReduction =
     reduction && reduction !== 0 ? totalGeneral - reduction : totalGeneral;
+
   const Total =
     prePayment && prePayment > 0
       ? prePayment - totalWithReduction
@@ -64,11 +74,12 @@ export function Payment({
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getServiceUsage(bookingId);
+      const data = await getServiceUsageStatusPayed(bookingId);
       setServiceUsage(data);
+      console.log(data);
     };
     fetchData();
-  }, [bookingId]);
+  }, [bookingId, open]);
 
   const handleDonePayment = async () => {
     try {

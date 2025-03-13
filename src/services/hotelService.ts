@@ -129,6 +129,24 @@ export const getServiceUsage = async (bookingId: string) => {
 };
 
 /**
+ * Fetches service usage records for a given booking that are paid.
+ *
+ * @param bookingId The ID of the booking.
+ * @returns A promise that resolves to an array of service usage records.
+ */
+export const getServiceUsageStatusPayed = async (bookingId: string) => {
+  try {
+    const response = await api.get(
+      `/service-usages?filters[booking][documentId][$eq]=${bookingId}&filters[service_status][$eq]=Chưa thanh toán&populate=service`
+    );
+    return response.data.data;
+  } catch (err) {
+    console.error("Error fetching service usage:", err);
+    throw err;
+  }
+};
+
+/**
  * Updates a service usage record.
  *
  * @param serviceUsageId The ID of the service usage to update.
@@ -151,17 +169,24 @@ export const updateServiceUsage = async (
   }
 };
 
-export const updateServicePayment = async (serviceUsageId: string) => {
+/**
+ * Updates the status of a service usage record.
+ *
+ * @param serviceUsageId The ID of the service usage to update.
+ * @param service_status The new status of the service usage.
+ * @returns A promise that resolves to the updated service usage data.
+ */
+export const updateServicePayment = async (
+  serviceUsageId: string,
+  service_status: ServiceStatus
+) => {
   try {
-    const response = await api.put(
-      `/service-usages/${serviceUsageId}`,
-      {
-        data: {
-          service_status: ServiceStatus.PAYED,
-        },
-      }
-    );
-    return response.data;
+    await api.put(`/service-usages/${serviceUsageId}`, {
+      data: {
+        service_status,
+      },
+    });
+    return;
   } catch (error) {
     console.error("Error updating service usage:", error);
     throw error;
