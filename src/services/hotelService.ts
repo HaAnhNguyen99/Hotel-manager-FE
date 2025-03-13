@@ -304,3 +304,18 @@ export const createPayment = async (payload: CreatePaymentPayload) => {
     throw error;
   }
 };
+
+/**
+ * Fetches the hotel profile.
+ *
+ * @returns A promise that resolves to the hotel profile data.
+ */
+export const getHotelProfile = async () => {
+  try {
+    const response = await api.get(`/hotels?populate=*`);
+    return response.data.data[0];
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    throw error;
+  }
+};
