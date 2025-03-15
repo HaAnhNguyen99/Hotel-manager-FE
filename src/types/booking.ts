@@ -29,7 +29,7 @@ export interface UpdateBookingData {
   data: {
     room: string;
     guest_name: string | null;
-    booking_date: string | null;
+    booking_date?: string | null;
     reduction: number | null;
     checkin: string | null | undefined;
     checkout: string | null | undefined;
@@ -43,6 +43,7 @@ export interface BookingData {
 }
 
 export interface BookingFormData {
+  room: string | null;
   guestName: string | null;
   cccd: string | null;
   prepayment: number | null;
@@ -52,14 +53,26 @@ export interface BookingFormData {
   booking_date: string | null;
 }
 
+export interface CreateBookingPayload {
+  room: string | null;
+  guest_name: string | null;
+  cccd?: string | null;
+  prepayment?: number | null;
+  reduction?: number | null;
+  checkin: string | null;
+  checkout?: string | null;
+  booking_date?: string | null;
+  type?: RoomType;
+}
+
 export enum RoomType {
-  Hour = 'Giờ',
-  Overnight = 'Qua Đêm',
-  Day = 'Ngày',
+  Hour = "Giờ",
+  Overnight = "Qua Đêm",
+  Day = "Ngày",
 }
 
 export enum BookingStatus {
-  Cancelled = 'Canceled',
-  Completed = 'Completed',
-  Pending = 'Pending',
+  Cancelled = "Canceled",
+  Completed = "Completed",
+  Pending = "Pending",
 }

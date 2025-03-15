@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -14,14 +12,13 @@ import {
 import { Room } from "@/types/hotel";
 import { Separator } from "@/components/ui/separator";
 import { calculateHours, formatDateTime } from "@/utils/FormatDate";
-import { IoMdCash } from "react-icons/io";
-import { RiBankFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import {
   getServiceUsage,
   updateBookingStatus,
   createPayment,
   updateRoomStatusAvailable,
+  getServiceUsageStatusPayed,
 } from "@/services/hotelService";
 import { calculateTotal } from "@/utils/calculateTotal";
 import { ServiceData } from "@/types/service";
@@ -52,6 +49,7 @@ export function Payment({
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>(
     PaymentMethod.Cash
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
   const RoomPrice =
@@ -59,8 +57,17 @@ export function Payment({
     Number(room.first_hourly_price);
   const ServicePrice = calculateTotal(serviceUsage);
   const totalGeneral = RoomPrice + ServicePrice;
+  if (reduction) {
+    reduction = Number(reduction);
+  }
+
+  if (prePayment) {
+    prePayment = Number(prePayment);
+  }
+
   const totalWithReduction =
     reduction && reduction !== 0 ? totalGeneral - reduction : totalGeneral;
+
   const Total =
     prePayment && prePayment > 0
       ? prePayment - totalWithReduction
@@ -68,14 +75,16 @@ export function Payment({
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getServiceUsage(bookingId);
+      const data = await getServiceUsageStatusPayed(bookingId);
       setServiceUsage(data);
+      console.log(data);
     };
     fetchData();
-  }, [bookingId]);
+  }, [bookingId, open]);
 
   const handleDonePayment = async () => {
     try {
+      setIsLoading(true);
       const payload = {
         data: {
           booking: bookingId,
@@ -85,26 +94,27 @@ export function Payment({
         },
       };
 
-      await Promise.all([
-        createPayment(payload),
-        updateBookingStatus(bookingId),
-        updateRoomStatusAvailable(room.documentId),
-      ]);
+      await createPayment(payload);
+      await updateBookingStatus(bookingId);
+      await updateRoomStatusAvailable(room.documentId);
     } catch (error) {
       console.error("Error handling payment:", error);
     } finally {
-      // setOpen(false);
-      // setCardOpen(false);
+      setOpen(false);
+      setCardOpen(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">Thanh toán</Button>
+        <Button variant="destructive" className="bg-blue-500 hover:bg-blue-600">
+          Thanh toán
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-prose `">
+        <div className="mx-auto w-full max-w-prose text-black">
           <DrawerHeader className="flex flex-col gap-2 items-center justify-center">
             <DrawerTitle>Thanh toán</DrawerTitle>
             <DrawerDescription>
@@ -252,9 +262,13 @@ export function Payment({
             </div>
           </div>
           <DrawerFooter>
-            <Button onClick={handleDonePayment}>Hoàn tất</Button>
+            <Button onClick={handleDonePayment} disabled={isLoading}>
+              {isLoading ? "Đang xử lý..." : "Hoàn tất"}
+            </Button>
             <DrawerClose asChild>
-              <Button variant="outline">Huỷ</Button>
+              <Button variant="outline" className="text-black">
+                Huỷ
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
