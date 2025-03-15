@@ -178,7 +178,7 @@ export const updateServiceUsage = async (
  */
 export const updateServicePayment = async (
   serviceUsageId: string,
-  service_status: ServiceStatus
+  service_status: string
 ) => {
   try {
     await api.put(`/service-usages/${serviceUsageId}`, {
@@ -314,6 +314,24 @@ export const getHotelProfile = async () => {
   try {
     const response = await api.get(`/hotels?populate=*`);
     return response.data.data[0];
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    throw error;
+  }
+};
+
+export const getReservationsFromDate = async (
+  date: string,
+  endDate: string
+) => {
+  const params = {
+    "filters[date][$gte]": date,
+    "filters[date][$lte]": endDate,
+  };
+
+  try {
+    const response = await api.get(`/reservations?populate=*`, { params });
+    return response.data;
   } catch (error) {
     console.error("Error creating payment:", error);
     throw error;

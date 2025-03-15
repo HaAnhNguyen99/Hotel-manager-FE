@@ -1,6 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavLink } from "react-router-dom";
+import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
 
 function SkeletonSidebarHeader() {
   return (
@@ -129,6 +131,9 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <ToggleTheme />
+      </SidebarFooter>
     </Sidebar>
   );
 };

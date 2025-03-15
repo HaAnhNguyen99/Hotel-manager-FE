@@ -11,7 +11,7 @@ interface CancelPopoverProps {
   title: string;
   description: string;
   icon?: React.ReactNode;
-  buttonVariant?: "default" | "outline" | "ghost";
+  buttonVariant?: "default" | "outline" | "ghost" | "destructive";
   className?: string;
   loading?: boolean;
 }
@@ -50,7 +50,7 @@ const CancelPopover = ({
           {icon}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-fit text-center p-4">
+      <PopoverContent className="w-fit text-center p-4 ">
         <div className="flex flex-col space-y-2">
           <p className="text-sm font-medium">{description}</p>
           <div className="flex space-x-2">

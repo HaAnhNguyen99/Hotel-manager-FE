@@ -116,8 +116,6 @@ export const TableService = ({
                 <TableCell>
                   <ComboboxPopover
                     currentStatus={item.service_status}
-                    setData={setData}
-                    data={data}
                     serviceUsageId={item.documentId}
                   />
                 </TableCell>
@@ -130,7 +128,7 @@ export const TableService = ({
                     description="Huỷ dịch vụ?"
                     icon={<CircleX className="h-4 w-4" color="red" />}
                     buttonVariant="ghost"
-                    className="p-0"
+                    className="p-0 hover:bg-transparent hover:scale-105"
                     loading={buttonLoading}
                   />
                 </TableCell>

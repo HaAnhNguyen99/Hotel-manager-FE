@@ -18,7 +18,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { useEffect, useState } from "react";
 import { updateServicePayment } from "@/services/hotelService";
 import { toast } from "sonner";
@@ -31,8 +30,6 @@ type Status = {
 
 interface ComboboxPopoverProps {
   currentStatus: string;
-  setData: React.Dispatch<React.SetStateAction<UpdateServiceUsagePayload[]>>;
-  data: UpdateServiceUsagePayload[];
   serviceUsageId: string;
 }
 
@@ -51,8 +48,6 @@ const statusArr: Status[] = [
 
 export function ComboboxPopover({
   currentStatus,
-  setData,
-  data,
   serviceUsageId,
 }: ComboboxPopoverProps) {
   const [open, setOpen] = useState(false);
@@ -85,7 +80,7 @@ export function ComboboxPopover({
           <Button
             variant="outline"
             size="sm"
-            className="w-[150px] justify-start">
+            className="w-[150px] justify-start text-zinc-700">
             {selectedStatus ? (
               <>
                 <selectedStatus.icon className=" h-4 w-4 shrink-0" />

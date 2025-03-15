@@ -1,12 +1,12 @@
-import { Control, Controller } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { DateTimePicker } from '../../ui/DateTimePicker24h/DateTimePicker24h';
-import { BookingFormData } from '@/types/booking';
-import { useHotelContext } from '@/context/HotelContext';
-import { useEffect } from 'react';
-import { convertToISO } from '@/utils/ConvertToISO';
-import { RoomBooking } from '@/types/room';
+import { Control, Controller } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DateTimePicker } from "../../ui/DateTimePicker24h/DateTimePicker24h";
+import { BookingFormData } from "@/types/booking";
+import { useHotelContext } from "@/context/HotelContext";
+import { useEffect } from "react";
+import { convertToISO } from "@/utils/ConvertToISO";
+import { RoomBooking } from "@/types/room";
 
 type GuestFormSectionProps = {
   control: Control<BookingFormData>;
@@ -17,37 +17,72 @@ type GuestFormSectionProps = {
   setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setCheckinDate, setPrePayment, setReduction }: GuestFormSectionProps) => {
+export const GuestFormSection = ({
+  control,
+  bookingData,
+  setCheckoutTime,
+  setCheckinDate,
+  setPrePayment,
+  setReduction,
+}: GuestFormSectionProps) => {
   const { bookingForm } = useHotelContext();
   const { setValue } = bookingForm;
 
   useEffect(() => {
     if (bookingData) {
       setPrePayment(bookingData.prepayment || null);
-      setValue('guestName', bookingData.guest_name || '');
-      setValue('cccd', bookingData.cccd || '');
-      setValue('prepayment', bookingData.prepayment || null);
-      setValue('reduction', bookingData.reduction || null);
-      setValue('checkoutDate', bookingData.checkout ? convertToISO(bookingData.checkout) : null);
-      setValue('checkinDate', bookingData.checkin ? bookingData.checkin : null);
+      setValue("guestName", bookingData.guest_name || "");
+      setValue("cccd", bookingData.cccd || "");
+      setValue("prepayment", bookingData.prepayment || null);
+      setValue("reduction", bookingData.reduction || null);
+      setValue(
+        "checkoutDate",
+        bookingData.checkout ? convertToISO(bookingData.checkout) : null
+      );
+      setValue("checkinDate", bookingData.checkin ? bookingData.checkin : null);
     }
-  }, [bookingData]);
+  }, [
+    bookingData,
+    setValue,
+    setCheckoutTime,
+    setCheckinDate,
+    setPrePayment,
+    setReduction,
+  ]);
 
   return (
     <>
-      <h3 className="text-center mb-2 text-xl font-bold">Thông tin khách hàng</h3>
+      <h3 className="text-center mb-2 text-xl font-bold">
+        Thông tin khách hàng
+      </h3>
       <div className="flex gap-2">
         <div className="flex flex-col gap-3 w-3/5">
           <Label>Họ tên</Label>
           <Controller
             name="guestName"
             control={control}
-            render={({ field }) => <Input {...field} placeholder="Họ tên" value={field.value || ''} />}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Họ tên"
+                value={field.value || ""}
+              />
+            )}
           />
         </div>
         <div className="flex flex-col gap-3 w-2/5">
           <Label>CCCD</Label>
-          <Controller name="cccd" control={control} render={({ field }) => <Input {...field} placeholder="Nhập CCCD" value={field.value || ''} />} />
+          <Controller
+            name="cccd"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Nhập CCCD"
+                value={field.value || ""}
+              />
+            )}
+          />
         </div>
       </div>
 
@@ -66,7 +101,7 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
                   setPrePayment(Number(e.target.value));
                 }}
                 placeholder="Nhập số tiền trả trước"
-                value={field.value ? field.value.toString() : ''}
+                value={field.value ? field.value.toString() : ""}
               />
             )}
           />
@@ -86,7 +121,7 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
                   field.onChange(Number(e.target.value));
                   setReduction(Number(e.target.value));
                 }}
-                value={field.value ? field.value.toString() : ''}
+                value={field.value ? field.value.toString() : ""}
               />
             )}
           />
@@ -103,8 +138,16 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
               <DateTimePicker
                 date={field.value ? new Date(field.value) : null}
                 setDate={(date) => {
-                  field.onChange(date && date instanceof Date ? convertToISO(date.toString()) : null);
-                  setCheckinDate(date && date instanceof Date ? convertToISO(date.toString()) : null);
+                  field.onChange(
+                    date && date instanceof Date
+                      ? convertToISO(date.toString())
+                      : null
+                  );
+                  setCheckinDate(
+                    date && date instanceof Date
+                      ? convertToISO(date.toString())
+                      : null
+                  );
                 }}
               />
             )}
@@ -119,8 +162,12 @@ export const GuestFormSection = ({ control, bookingData, setCheckoutTime, setChe
               <DateTimePicker
                 date={field.value ? new Date(field.value) : null}
                 setDate={(date) => {
-                  field.onChange(date && date instanceof Date ? date.toISOString() : null);
-                  setCheckoutTime(date && date instanceof Date ? date.toISOString() : null);
+                  field.onChange(
+                    date && date instanceof Date ? date.toISOString() : null
+                  );
+                  setCheckoutTime(
+                    date && date instanceof Date ? date.toISOString() : null
+                  );
                 }}
               />
             )}

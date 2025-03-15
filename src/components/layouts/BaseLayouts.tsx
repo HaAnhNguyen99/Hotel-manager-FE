@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { SidebarProvider, SidebarTrigger, useSidebar } from "../ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import AppSidebar from "../common/Sidebar/Sidebar";
 
 export function BaseLayouts({ children }: { children: React.ReactNode }) {

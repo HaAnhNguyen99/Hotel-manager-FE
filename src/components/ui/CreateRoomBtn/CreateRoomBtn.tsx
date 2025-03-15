@@ -36,7 +36,6 @@ import {
 } from "@/types/booking";
 import { convertToISO } from "@/utils/ConvertToISO";
 import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
-import LoadingText from "@/components/common/LoadingText/LoadingText";
 
 export const CreateRoomBtn = ({
   room,
@@ -141,8 +140,6 @@ export const CreateRoomBtn = ({
 
     try {
       setIsLoading(true);
-      // console.log(payloadData);
-      // console.log(bookingData);
       if (JSON.stringify(payloadData) !== JSON.stringify(bookingData)) {
         await updateBooking(bookingID, payload);
       }
@@ -204,7 +201,7 @@ export const CreateRoomBtn = ({
             : "Đặt phòng"}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar ">
+      <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar bg-background">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold sticky -top-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] left-0 bg-[rgb(2,0,36)] bg-[linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(240,128,128,1) 35%, rgba(0,212,255,0) 100%);] z-10 p-2 rounded-lg ">
             Phòng {room.room_number}
@@ -253,6 +250,7 @@ export const CreateRoomBtn = ({
                     cancelFunction={handleCancelBooking}
                     title="Huỷ đặt phòng"
                     description="Bạn có chắc chắn muốn huỷ đặt phòng?"
+                    buttonVariant="destructive"
                   />
                 </DialogClose>
                 <Button type="submit" form={bookingID} disabled={isLoading}>

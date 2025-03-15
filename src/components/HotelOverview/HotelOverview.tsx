@@ -24,31 +24,37 @@ export const HotelOverview = () => {
     cleaning: rooms.filter((room) => room.room_status === "Cleaning").length,
   };
 
+  const statData = [
+    { title: "Tổng số phòng", value: stats.total, icon: <FaBed /> },
+    {
+      title: "Đang sử dụng",
+      value: stats.occupied,
+      color: "destructive",
+      icon: <FaLock />,
+    },
+    {
+      title: "Còn trống",
+      value: stats.available,
+      color: "chart-2",
+      icon: <FaCheck />,
+    },
+    {
+      title: "Đang dọn dẹp",
+      value: stats.cleaning,
+      color: "chart-4",
+      icon: <MdCleaningServices />,
+    },
+  ];
+
   return (
     <div className="p-6 bg-background">
       <h1 className="text-heading font-heading text-foreground mb-6">
         Bảng điều khiển
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <StatCard title="Tổng số phòng" value={stats.total} icon={<FaBed />} />
-        <StatCard
-          title="Đang sử dụng"
-          value={stats.occupied}
-          color="destructive"
-          icon={<FaLock />}
-        />
-        <StatCard
-          title="Còn trống"
-          value={stats.available}
-          color="chart-2"
-          icon={<FaCheck />}
-        />
-        <StatCard
-          title="Đang dọn dẹp"
-          value={stats.cleaning}
-          color="chart-4"
-          icon={<MdCleaningServices />}
-        />
+        {statData.map((stat, index) => (
+          <StatCard key={index} {...stat} color="black" />
+        ))}
       </div>
       <RoomList />
     </div>

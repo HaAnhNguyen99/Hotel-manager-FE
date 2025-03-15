@@ -49,6 +49,7 @@ export function Payment({
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>(
     PaymentMethod.Cash
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
   const RoomPrice =
@@ -83,6 +84,7 @@ export function Payment({
 
   const handleDonePayment = async () => {
     try {
+      setIsLoading(true);
       const payload = {
         data: {
           booking: bookingId,
@@ -100,16 +102,19 @@ export function Payment({
     } finally {
       setOpen(false);
       setCardOpen(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">Thanh toán</Button>
+        <Button variant="destructive" className="bg-blue-500 hover:bg-blue-600">
+          Thanh toán
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-prose `">
+        <div className="mx-auto w-full max-w-prose text-black">
           <DrawerHeader className="flex flex-col gap-2 items-center justify-center">
             <DrawerTitle>Thanh toán</DrawerTitle>
             <DrawerDescription>
@@ -257,9 +262,13 @@ export function Payment({
             </div>
           </div>
           <DrawerFooter>
-            <Button onClick={handleDonePayment}>Hoàn tất</Button>
+            <Button onClick={handleDonePayment} disabled={isLoading}>
+              {isLoading ? "Đang xử lý..." : "Hoàn tất"}
+            </Button>
             <DrawerClose asChild>
-              <Button variant="outline">Huỷ</Button>
+              <Button variant="outline" className="text-black">
+                Huỷ
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
