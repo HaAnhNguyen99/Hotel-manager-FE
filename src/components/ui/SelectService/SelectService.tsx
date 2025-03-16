@@ -1,12 +1,19 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import useService from '@/lib/useService';
-import { Button } from '../button';
-import * as React from 'react';
-import { TableService } from '../TableService/TableService';
-import { createServiceUsage } from '@/services/hotelService';
-import { toast } from 'sonner';
-import { CreateServiceUsagePayload } from '@/types/service';
-import { Spinner } from '@/components/common/Spinner/Spinner';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import useService from "@/lib/useService";
+import { Button } from "../button";
+import * as React from "react";
+import { TableService } from "../TableService/TableService";
+import { createServiceUsage } from "@/services/hotelService";
+import { toast } from "sonner";
+import { CreateServiceUsagePayload } from "@/types/service";
+import { Spinner } from "@/components/common/Spinner/Spinner";
 
 interface ServiceType {
   bookingId: string;
@@ -20,7 +27,7 @@ interface Service {
 }
 
 export const SelectService = ({ bookingId }: ServiceType) => {
-  const [serviceId, setServiceId] = React.useState<string>('');
+  const [serviceId, setServiceId] = React.useState<string>("");
   const [quantity, setQuantity] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -52,10 +59,10 @@ export const SelectService = ({ bookingId }: ServiceType) => {
       };
       const response = await createServiceUsage(payload);
       console.log(response.data);
-      toast.success('Thêm dịch vụ thành công');
+      toast.success("Thêm dịch vụ thành công");
     } catch (error) {
-      console.error('Error creating service usage:', error);
-      toast.error('Thêm dịch vụ thất bại, vui lòng thử lại');
+      console.error("Error creating service usage:", error);
+      toast.error("Thêm dịch vụ thất bại, vui lòng thử lại");
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +104,9 @@ export const SelectService = ({ bookingId }: ServiceType) => {
           </SelectContent>
         </Select>
 
-        <Button className="px-4 py-1 bg-black text-white rounded-lg" type="submit">
+        <Button
+          className="px-4 py-1 bg-black text-white rounded-lg"
+          type="submit">
           Thêm
         </Button>
       </form>
