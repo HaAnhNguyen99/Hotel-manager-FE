@@ -10,7 +10,7 @@ import {
 import { deleteServiceUsage, getServiceUsage } from "@/services/hotelService";
 import { formatISODate } from "@/utils/FormatISOString";
 import { useEffect, useState } from "react";
-import { ComboboxPopover } from "@/components/rooms/TableService/ComboboxPopover/ComboboxPopover";
+import { ServiceStatusCombobox } from "@/components/rooms/TableService/ServiceStatusCombobox/ServiceStatusCombobox";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { Spinner } from "@/components/common/Spinner/Spinner";
 import { CircleX } from "lucide-react";
@@ -114,7 +114,7 @@ export const TableService = ({
                   })}
                 </TableCell>
                 <TableCell>
-                  <ComboboxPopover
+                  <ServiceStatusCombobox
                     currentStatus={item.service_status}
                     serviceUsageId={item.documentId}
                   />
