@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -17,7 +15,6 @@ import { BookingStatus } from "@/types/booking";
 import { PaymentMethod } from "@/types/payment";
 import { RevenueData } from "@/types/reservation";
 import { CircleX } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
 // Hàm định dạng ngày
@@ -61,8 +58,6 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
   handlePagination,
   loading,
 }) => {
-  console.log(pagination);
-
   // Handle cancel button click
   const handleCancel = async (id: string) => {
     const prevData = paymentData ? [...paymentData] : undefined;
@@ -94,6 +89,7 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
             <TableHead className="text-center">Tên</TableHead>
             <TableHead className="text-center">CCCD</TableHead>
             <TableHead className="text-center">Giảm giá</TableHead>
+            <TableHead className="text-center">Loại phòng</TableHead>
             <TableHead className="text-center">Ghi chú</TableHead>
             <TableHead className="text-center">Trạng thái</TableHead>
             <TableHead className="text-center">...</TableHead>
@@ -120,6 +116,7 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
                 <TableCell>{payment.booking.guest_name}</TableCell>
                 <TableCell>{payment.booking.cccd || "Không có"}</TableCell>
                 <TableCell>{payment.booking.reduction}</TableCell>
+                <TableCell>{payment.booking.type}</TableCell>
                 <TableCell>{payment.note || "Không có"}</TableCell>
                 <TableCell className="flex justify-center">
                   <p className="border-green-300 boder bg-green-400 w-fit p-2 rounded-lg text-neutral-100">

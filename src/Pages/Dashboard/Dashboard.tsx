@@ -1,6 +1,5 @@
 import { ChevronsUp, ChevronsDown } from "lucide-react";
 import DashboardCard from "@/components/Dashboard/DashboardCard/DashboardCard";
-import Search from "@/components/Dashboard/Search/Search";
 import { useEffect, useState } from "react";
 import { getCardData } from "./Dashboard.Data";
 import { compareDaily, dailyStat, yearlyStat } from "@/types/reservation";
@@ -10,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   getCompareDailyRevenue,
   getDailyRevenue,
+  getReservationsFromDate,
   getYearlyStat,
 } from "@/services/hotelService";
 import Overview from "@/components/Dashboard/Overview/Overview";
@@ -17,6 +17,7 @@ import HistoryPayment from "@/components/Dashboard/HistoryPayment/HistoryPayment
 import YearPicker from "@/components/Dashboard/YearPicker/YearPicker";
 import { DatePickerWithRange } from "@/components/Dashboard/DateRangePicker/DateRangePicker";
 import { DateRange } from "react-day-picker";
+import DashboardHeader from "@/components/Dashboard/DashboardHeader/DashboardHeader";
 
 interface ChartData {
   date: string;
@@ -82,6 +83,28 @@ const Dashboard = () => {
     fetchRevenueData();
   }, []);
 
+  useEffect(() => {
+    const fetchDailyStat = async () => {
+      if (!date || !date.from || !date.to) {
+        return;
+      }
+
+      const res = await getDailyRevenue(date.from, date.to);
+      setRevenueData(res);
+      console.log(res);
+    };
+    fetchDailyStat();
+  }, [date]);
+
+  useEffect(() => {
+    const fetchYearData = async () => {
+      const res = await getYearlyStat(year);
+      setYearlyStat(res);
+      console.log(res);
+    };
+    fetchYearData();
+  }, [year]);
+
   const { total7Days, totalRooms7Days } = calculateStats(dailyStat);
 
   const cardData = getCardData(
@@ -105,19 +128,11 @@ const Dashboard = () => {
     },
   ];
 
+  console.log(date);
+
   return (
     <div className="p-4 px-10">
-      <header className="flex justify-between items-center font-bigShoulders">
-        <div>
-          <h1 className="text-2xl font-bold font-bigShoulders">
-            Khách sạn Phương Trang
-          </h1>
-          <p className="italic font-thin">
-            53 Lê Vĩnh Hoà, Phường Phú Thọ Hoà, Quận Tân Phú, TP HCM
-          </p>
-        </div>
-        <Search />
-      </header>
+      <DashboardHeader />
       <section>
         <div className="flex gap-2 mt-10">
           <div>
@@ -156,6 +171,8 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+      </section>
+      <section>
         <div className="flex gap-2 justify-around mt-10">
           <div>
             <YearPicker selectedYear={year} onYearChange={setYear} />

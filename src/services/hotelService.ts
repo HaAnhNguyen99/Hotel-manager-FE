@@ -320,16 +320,16 @@ export const getHotelProfile = async () => {
 /**
  * Fetches reservations from a given date to a given end date.
  *
- * @param date The start date.
+ * @param startDate The start date.
  * @param endDate The end date.
  * @returns A promise that resolves to the reservations data.
  */
 export const getReservationsFromDate = async (
-  date: string,
-  endDate: string
+  startDate: string | Date,
+  endDate: string | Date
 ) => {
   const params = {
-    "filters[date][$gte]": date,
+    "filters[date][$gte]": startDate,
     "filters[date][$lte]": endDate,
   };
 
@@ -367,7 +367,9 @@ export const getRevenueData = async () => {
  *
  **/
 
-export const getYearlyStat = async (year?: string): Promise<yearlyStat[]> => {
+export const getYearlyStat = async (
+  year?: string | number
+): Promise<yearlyStat[]> => {
   try {
     const defaultYear = new Date().getFullYear();
     const yearParams = year ? year : defaultYear;
@@ -390,8 +392,8 @@ export const getYearlyStat = async (year?: string): Promise<yearlyStat[]> => {
  */
 
 export const getDailyRevenue = async (
-  startDate: string = "",
-  endDate: string = ""
+  startDate: Date | string = "",
+  endDate: Date | string = ""
 ): Promise<dailyStat[]> => {
   try {
     const response = await api.get(
@@ -451,7 +453,6 @@ export const deleteReservations = async (id: string) => {
     throw error;
   }
 };
-
 
 export const getReservationsPagination = async (
   start: number,

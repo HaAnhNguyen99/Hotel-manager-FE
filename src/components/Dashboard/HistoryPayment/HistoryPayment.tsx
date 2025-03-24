@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import PaymentTable from "../PaymentTable/PaymentTable";
-import {
-  getReservationsPagination,
-  getRevenueData,
-} from "@/services/hotelService";
+import { getReservationsPagination } from "@/services/hotelService";
 import { RevenueData } from "@/types/reservation";
 
 const HistoryPayment: React.FC = () => {
@@ -22,7 +19,6 @@ const HistoryPayment: React.FC = () => {
         const res = await getReservationsPagination(start, pagination.limit);
         setPaymentData(res.data.data);
         setPagination(res.data.meta.pagination);
-        console.log(pagination);
       } catch (error) {
         console.error("Error fetching revenue data:", error);
       } finally {
@@ -37,8 +33,8 @@ const HistoryPayment: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h3 className="text-center">Lịch sử</h3>
+    <div className="mt-10 p-2 px-4 rounded-2xl border border-gray-500 shadow-lg">
+      <h3 className="text-center font-bold text-2xl">Lịch sử</h3>
       <PaymentTable
         paymentData={paymentData}
         setPaymentData={setPaymentData}

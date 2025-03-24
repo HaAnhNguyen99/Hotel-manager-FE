@@ -13,6 +13,7 @@ export interface BookingType {
   publishedAt: string;
   id: number;
   booking_status: BookingStatus;
+  type: RoomType;
 }
 
 export interface CreateBookingData {
