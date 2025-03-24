@@ -39,13 +39,13 @@ export const DailyBarChart: React.FC<DailyBarChartProps> = ({ data }) => {
   const { chartData, options } = chartOption({ data });
 
   return (
-    <div className=" h-full">
+    <div className=" h-full mt-10">
       <Chart
         type="bar"
         data={chartData}
         options={options}
-        width={800} 
-        height={500} 
+        width={800}
+        height={500}
       />
     </div>
   );

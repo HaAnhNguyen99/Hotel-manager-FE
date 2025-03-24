@@ -62,14 +62,24 @@ const BarChart: React.FC<BarChartProps> = ({ yearlyStat }) => {
           display: false,
           text: "Số tiền (VNĐ)",
         },
+        grid: {
+          display: true,
+          lineWidth: 2,
+        },
+        border: {
+          dash: [2, 4],
+        },
         ticks: {
-          maxTicksLimit: 4,
+          maxTicksLimit: 5,
         },
       },
       x: {
         title: {
           display: false,
           text: "Tháng",
+        },
+        grid: {
+          display: false,
         },
       },
     },
