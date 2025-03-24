@@ -116,11 +116,12 @@ const AppSidebar = () => {
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
-                      className={({ isActive }) =>
-                        isActive
+                      className={({ isActive }) => {
+                        console.log(isActive);
+                        return isActive
                           ? "text-primary font-semibold"
-                          : "text-muted-foreground hover:text-primary"
-                      }>
+                          : "text-muted-foreground hover:text-primary";
+                      }}>
                       <item.icon />
                       <span>{item.title}</span>
                     </NavLink>
