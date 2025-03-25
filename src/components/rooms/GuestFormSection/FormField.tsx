@@ -3,22 +3,7 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { LucideProps } from "lucide-react";
-import {
-  CheckCircleIcon,
-  IdCard,
-  LayoutList,
-  MapPinCheckInside,
-  MapPinMinusInside,
-  SquareUserRound,
-  TicketPercent,
-} from "lucide-react";
-import { DateTimePicker } from "../../ui/DateTimePicker24h/DateTimePicker24h";
-import { BookingFormData, RoomType } from "@/types/booking";
-import { RoomBooking } from "@/types/room";
-import { useHotelContext } from "@/context/HotelContext";
-import { useEffect } from "react";
-import { convertToISO } from "@/utils/ConvertToISO";
-import RoomTypePopover from "../RoomType/RoomType";
+import { BookingFormData } from "@/types/booking";
 
 // Typed FieldConfig with more specific typing
 export interface FieldConfig<T extends keyof BookingFormData> {

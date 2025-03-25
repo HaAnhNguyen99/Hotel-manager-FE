@@ -21,7 +21,7 @@ const DetailRow = ({ icon, label, value, isStatus = false }: DetailItem) => (
     <span
       className={`font-bold ${
         isStatus
-          ? "ml-1 p-1 border shadow-md  border-neutral-500 bg-white text-green-900 rounded-lg"
+          ? "ml-1 p-1  shadow-md  bg-white text-green-900 rounded-lg text-[0.8rem] font-normal"
           : ""
       }`}>
       {value}
@@ -31,6 +31,7 @@ const DetailRow = ({ icon, label, value, isStatus = false }: DetailItem) => (
 
 export const RoomDetails = ({ room }: { room: Room }) => {
   // Group related details into arrays for easier mapping
+
   const basicDetails: DetailItem[] = [
     {
       icon: "material-symbols:info-outline-rounded",
@@ -64,18 +65,18 @@ export const RoomDetails = ({ room }: { room: Room }) => {
   ];
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 text-sm">
       <h3 className="text-xl font-bold text-center">Chi tiết phòng</h3>
 
       {/* Basic Info Section */}
-      <div className="p-2 py-4 w-full border border-zinc-400 rounded-2xl space-y-2 shadow-lg shadow-zinc-200">
+      <div className="p-2 py-4 w-full border border-[rgb(228,228,231)] rounded-2xl space-y-2 shadow-lg shadow-zinc-200">
         {basicDetails.map((detail, index) => (
           <DetailRow key={index} {...detail} />
         ))}
       </div>
 
       {/* Pricing Section */}
-      <div className="p-2 py-4 w-full border border-zinc-400 rounded-2xl space-y-2 shadow-lg shadow-zinc-200">
+      <div className="p-2 py-4 w-full border border-[rgb(228,228,231)] rounded-2xl space-y-2 shadow-lg shadow-zinc-200">
         {pricingDetails.map((detail, index) => (
           <DetailRow key={index} {...detail} />
         ))}
