@@ -14,7 +14,6 @@ import { Separator } from "@/components/ui/separator";
 import { calculateHours, formatDateTime } from "@/utils/FormatDate";
 import { useEffect, useState } from "react";
 import {
-  getServiceUsage,
   updateBookingStatus,
   createPayment,
   updateRoomStatusAvailable,
