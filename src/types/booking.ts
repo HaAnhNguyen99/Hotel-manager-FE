@@ -52,6 +52,7 @@ export interface BookingFormData {
   checkinDate: string | null;
   checkoutDate: string | null;
   booking_date: string | null;
+  type: RoomType;
 }
 
 export interface CreateBookingPayload {

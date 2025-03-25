@@ -76,7 +76,6 @@ export function Payment({
     const fetchData = async () => {
       const data = await getServiceUsageStatusPayed(bookingId);
       setServiceUsage(data);
-      console.log(data);
     };
     fetchData();
   }, [bookingId, open]);

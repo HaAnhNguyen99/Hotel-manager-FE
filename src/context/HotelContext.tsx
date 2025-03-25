@@ -1,9 +1,16 @@
 // src/context/HotelContext.tsx
-import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
-import { fetchRooms } from '../services/hotelService';
-import { Room } from '../types/hotel';
-import { UseFormReturn, useForm } from 'react-hook-form';
-import { BookingFormData } from '@/types/booking';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from "react";
+import { fetchRooms } from "../services/hotelService";
+import { Room } from "../types/hotel";
+import { UseFormReturn, useForm } from "react-hook-form";
+import { BookingFormData, RoomType } from "@/types/booking";
 
 // Define the context type
 type HotelContextType = {
@@ -32,13 +39,14 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
 
   const bookingForm = useForm<BookingFormData>({
     defaultValues: {
-      guestName: '',
-      cccd: '',
+      guestName: "",
+      cccd: "",
       prepayment: null,
       reduction: null,
       checkinDate: null,
       checkoutDate: null,
       booking_date: new Date().toISOString(),
+      type: RoomType.Hour,
     },
   });
 
@@ -48,7 +56,7 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
       setRooms(data.data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+      setError(err instanceof Error ? err.message : "Failed to fetch rooms");
     }
   }, []);
 
@@ -58,7 +66,7 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
         const data = await fetchRooms();
         setRooms(data.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch rooms');
+        setError(err instanceof Error ? err.message : "Failed to fetch rooms");
       } finally {
         setLoading(false);
       }

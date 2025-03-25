@@ -1,179 +1,192 @@
 import { Control, Controller } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { LucideProps } from "lucide-react";
+import {
+  CheckCircleIcon,
+  IdCard,
+  LayoutList,
+  MapPinCheckInside,
+  MapPinMinusInside,
+  SquareUserRound,
+  TicketPercent,
+} from "lucide-react";
 import { DateTimePicker } from "../../ui/DateTimePicker24h/DateTimePicker24h";
-import { BookingFormData } from "@/types/booking";
+import { BookingFormData, RoomType } from "@/types/booking";
+import { RoomBooking } from "@/types/room";
 import { useHotelContext } from "@/context/HotelContext";
 import { useEffect } from "react";
 import { convertToISO } from "@/utils/ConvertToISO";
-import { RoomBooking } from "@/types/room";
+import RoomTypePopover from "../RoomType/RoomType";
+import FormField, { FieldConfig } from "./FormField";
 
-type GuestFormSectionProps = {
-  control: Control<BookingFormData>;
-  bookingData: RoomBooking | null;
-  setCheckoutTime: React.Dispatch<React.SetStateAction<string | null>>;
-  setCheckinDate: React.Dispatch<React.SetStateAction<string | null>>;
-  setReduction: React.Dispatch<React.SetStateAction<number | null>>;
-  setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
-};
+// Typed FieldConfig with more specific typing
 
 export const GuestFormSection = ({
   control,
   bookingData,
   setCheckoutTime,
   setCheckinDate,
-  setPrePayment,
   setReduction,
-}: GuestFormSectionProps) => {
+  setPrePayment,
+}: {
+  control: Control<BookingFormData>;
+  bookingData: RoomBooking | null;
+  setCheckoutTime: React.Dispatch<React.SetStateAction<string | null>>;
+  setCheckinDate: React.Dispatch<React.SetStateAction<string | null>>;
+  setReduction: React.Dispatch<React.SetStateAction<number | null>>;
+  setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
+}) => {
   const { bookingForm } = useHotelContext();
   const { setValue } = bookingForm;
+
+  // Typed field configurations with customInput for room type
+  const fieldConfigs: Array<FieldConfig<keyof BookingFormData>> = [
+    {
+      name: "guestName",
+      label: "Họ tên",
+      icon: SquareUserRound,
+      placeholder: "Họ tên",
+      width: "w-3/5",
+    },
+    {
+      name: "cccd",
+      label: "CCCD",
+      icon: IdCard,
+      placeholder: "Nhập CCCD",
+      width: "w-2/5",
+    },
+    {
+      name: "prepayment",
+      label: "Trả trước",
+      icon: CheckCircleIcon,
+      placeholder: "Nhập số tiền trả trước",
+      type: "number",
+      width: "w-2/6",
+    },
+    {
+      name: "reduction",
+      label: "Giảm giá",
+      icon: TicketPercent,
+      placeholder: "Nhập số tiền giảm giá",
+      type: "number",
+      width: "w-2/6",
+    },
+    {
+      name: "type",
+      label: "Loại phòng",
+      icon: LayoutList,
+      width: "w-2/6",
+      customInput: (control, { onValueChange }) => (
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <RoomTypePopover
+              selectedRoomType={field.value}
+              setSelectedRoomType={(value) => {
+                field.onChange(value);
+                onValueChange?.(value);
+              }}
+              {...field}
+            />
+          )}
+        />
+      ),
+    },
+    {
+      name: "checkinDate",
+      label: "Thời gian đặt phòng",
+      icon: MapPinCheckInside,
+      width: "w-1/2",
+      renderInput: (field, setValue) => (
+        <DateTimePicker
+          date={field.value ? new Date(field.value) : null}
+          setDate={(date) => {
+            const value =
+              date && date instanceof Date
+                ? convertToISO(date.toString())
+                : null;
+            field.onChange(value);
+            setValue(value);
+          }}
+        />
+      ),
+    },
+    {
+      name: "checkoutDate",
+      label: "Thời gian trả phòng",
+      icon: MapPinMinusInside,
+      width: "w-1/2",
+      renderInput: (field, setValue) => (
+        <DateTimePicker
+          date={field.value ? new Date(field.value) : null}
+          setDate={(date) => {
+            const value =
+              date && date instanceof Date ? date.toISOString() : null;
+            field.onChange(value);
+            setValue(value);
+          }}
+        />
+      ),
+    },
+  ];
 
   useEffect(() => {
     if (bookingData) {
       setPrePayment(bookingData.prepayment || null);
+      setReduction(bookingData.reduction || null);
       setValue("guestName", bookingData.guest_name || "");
       setValue("cccd", bookingData.cccd || "");
       setValue("prepayment", bookingData.prepayment || null);
       setValue("reduction", bookingData.reduction || null);
+      setValue("checkinDate", bookingData.checkin || null);
+      setValue("type", bookingData.type || RoomType.Hour);
       setValue(
         "checkoutDate",
         bookingData.checkout ? convertToISO(bookingData.checkout) : null
       );
-      setValue("checkinDate", bookingData.checkin ? bookingData.checkin : null);
     }
-  }, [
-    bookingData,
-    setValue,
-    setCheckoutTime,
-    setCheckinDate,
-    setPrePayment,
-    setReduction,
-  ]);
+  }, [bookingData, setValue, setPrePayment, setReduction]);
 
   return (
-    <>
-      <h3 className="text-center mb-2 text-xl font-bold">
-        Thông tin khách hàng
-      </h3>
+    <section className="space-y-4">
+      <h3 className="text-center text-xl font-bold">Thông tin khách hàng</h3>
+
       <div className="flex gap-2">
-        <div className="flex flex-col gap-3 w-3/5">
-          <Label>Họ tên</Label>
-          <Controller
-            name="guestName"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Họ tên"
-                value={field.value || ""}
-              />
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-3 w-2/5">
-          <Label>CCCD</Label>
-          <Controller
-            name="cccd"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Nhập CCCD"
-                value={field.value || ""}
-              />
-            )}
-          />
-        </div>
+        <FormField control={control} fieldConfig={fieldConfigs[0]} />
+        <FormField control={control} fieldConfig={fieldConfigs[1]} />
       </div>
 
       <div className="flex gap-2 my-3">
-        <div className="flex flex-col gap-3 w-2/5">
-          <Label>Trả trước</Label>
-          <Controller
-            name="prepayment"
-            control={control}
-            render={({ field }) => (
-              <Input
-                type="number"
-                {...field}
-                onChange={(e) => {
-                  field.onChange(Number(e.target.value));
-                  setPrePayment(Number(e.target.value));
-                }}
-                placeholder="Nhập số tiền trả trước"
-                value={field.value ? field.value.toString() : ""}
-              />
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-3 w-3/5">
-          <Label>Giảm giá</Label>
-          <Controller
-            name="reduction"
-            control={control}
-            render={({ field }) => (
-              <Input
-                type="number"
-                {...field}
-                placeholder="Nhập số tiền giảm giá"
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  field.onChange(Number(e.target.value));
-                  setReduction(Number(e.target.value));
-                }}
-                value={field.value ? field.value.toString() : ""}
-              />
-            )}
-          />
-        </div>
+        <FormField
+          control={control}
+          fieldConfig={fieldConfigs[2]}
+          onValueChange={setPrePayment}
+        />
+        <FormField
+          control={control}
+          fieldConfig={fieldConfigs[3]}
+          onValueChange={setReduction}
+        />
+        <FormField control={control} fieldConfig={fieldConfigs[4]} />
       </div>
 
       <div className="flex gap-2 my-4">
-        <div className="flex flex-col gap-3 w-1/2">
-          <Label>Thời gian đặt phòng</Label>
-          <Controller
-            name="checkinDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                date={field.value ? new Date(field.value) : null}
-                setDate={(date) => {
-                  field.onChange(
-                    date && date instanceof Date
-                      ? convertToISO(date.toString())
-                      : null
-                  );
-                  setCheckinDate(
-                    date && date instanceof Date
-                      ? convertToISO(date.toString())
-                      : null
-                  );
-                }}
-              />
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-3 w-1/2">
-          <Label>Thời gian trả phòng</Label>
-          <Controller
-            name="checkoutDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                date={field.value ? new Date(field.value) : null}
-                setDate={(date) => {
-                  field.onChange(
-                    date && date instanceof Date ? date.toISOString() : null
-                  );
-                  setCheckoutTime(
-                    date && date instanceof Date ? date.toISOString() : null
-                  );
-                }}
-              />
-            )}
-          />
-        </div>
+        <FormField
+          control={control}
+          fieldConfig={fieldConfigs[5]}
+          onValueChange={setCheckinDate}
+        />
+        <FormField
+          control={control}
+          fieldConfig={fieldConfigs[6]}
+          onValueChange={setCheckoutTime}
+        />
       </div>
-    </>
+    </section>
   );
 };
+
+export default GuestFormSection;

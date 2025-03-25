@@ -94,13 +94,15 @@ export const CreateRoomBtn = ({
       };
 
       const res = await createBooking(payload);
-
+      console.log(res.data);
       setBookingID(res.data.documentId);
       setValue("checkinDate", res.data.checkin);
       setValue("guestName", res.data.guest_name);
       setValue("prepayment", res.data.prepayment);
       setValue("reduction", res.data.reduction);
+      setValue("type", res.data.type);
       setCheckinTime(res.data.checkin);
+
       toast.success("Đã đặt phòng thành công");
     } catch (error) {
       console.error("Error creating booking:", error);
@@ -223,7 +225,7 @@ export const CreateRoomBtn = ({
         ) : (
           <div>
             <div>
-              <div className="grid grid-cols-3 gap-4 py-4">
+              <div className="grid grid-cols-3 gap-10 py-4">
                 <RoomDetails room={room} />
 
                 <div className="col-span-2">
