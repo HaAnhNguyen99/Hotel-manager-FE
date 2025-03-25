@@ -53,8 +53,9 @@ export const CreateRoomBtn = ({
   const [bookingData, setBookingData] = useState<RoomBooking | null>(null);
   const [checkinTime, setCheckinTime] = useState<string | null>(null);
   const [checkoutTime, setCheckoutTime] = useState<string | null>(null);
-  const { setValue, control, handleSubmit, reset } = bookingForm;
-  const [payloadData, setPayloadData] = useState<CreateBookingPayload>({
+  const { setValue, control, handleSubmit, reset, getValues } = bookingForm;
+
+  const iniPayloadData: CreateBookingPayload = {
     room: room.documentId,
     checkin: new Date().toISOString(),
     checkout: null,
@@ -62,7 +63,7 @@ export const CreateRoomBtn = ({
     prepayment: 0,
     reduction: 0,
     cccd: "",
-  });
+  };
 
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
@@ -83,7 +84,7 @@ export const CreateRoomBtn = ({
 
   const handleCreateBooking = async (room: Room) => {
     const newPayloadData = {
-      ...payloadData,
+      ...iniPayloadData,
       type: RoomType.Hour,
       booking_date: new Date().toISOString(),
       booking_status: BookingStatus.Pending,
@@ -134,6 +135,7 @@ export const CreateRoomBtn = ({
       prepayment: Number(data.prepayment),
       reduction: Number(data.reduction),
       cccd: data.cccd,
+      type: getValues("type"),
     };
 
     const payload = {
@@ -142,7 +144,7 @@ export const CreateRoomBtn = ({
 
     try {
       setIsLoading(true);
-      if (JSON.stringify(payloadData) !== JSON.stringify(bookingData)) {
+      if (JSON.stringify(iniPayloadData) !== JSON.stringify(bookingData)) {
         await updateBooking(bookingID, payload);
       }
       await handleUpdateRoomStatus(room);
