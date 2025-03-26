@@ -25,13 +25,13 @@ const paymentMethods = [
   },
 ];
 
-export default function PaymentDropdown({
+const PaymentDropdown = ({
   setSelectedMethod,
   selectedMethod,
 }: {
   setSelectedMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>;
   selectedMethod: PaymentMethod;
-}) {
+}) => {
   const [open, setOpen] = useState(false);
 
   const selectedMethodLabel = paymentMethods.find(
@@ -82,4 +82,6 @@ export default function PaymentDropdown({
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export default PaymentDropdown;

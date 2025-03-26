@@ -14,27 +14,21 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import {
   cancelBooking,
-  createBooking,
   getRoomBooking,
   updateRoomStatusAvailable,
   updateRoomStatusOccupied,
 } from "@/services/hotelService";
 import { Spinner } from "@/components/common/Spinner/Spinner";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Payment } from "@/components/rooms/Payment/Payment";
 import { toast } from "sonner";
 import { useHotelContext } from "@/context/HotelContext";
-import { RoomBooking, RoomStatus } from "@/types/room";
+import { RoomStatus } from "@/types/room";
 import { GuestFormSection } from "@/components/rooms/GuestFormSection/GuestFormSection";
 import { RoomDetails } from "@/components/rooms/RoomDetail/RoomDetail";
-import {
-  BookingFormData,
-  BookingStatus,
-  CreateBookingPayload,
-  RoomType,
-} from "@/types/booking";
+import { BookingFormData } from "@/types/booking";
 import { convertToISO } from "@/utils/ConvertToISO";
 import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
+import Payment from "@/components/rooms/Payment/Payment";
 
 export const CreateRoomBtn = ({
   room,

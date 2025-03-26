@@ -23,4 +23,4 @@ export interface CreateServiceUsagePayload {
     UsageDate: string;
     booking: string | null;
   };
-}
+} 

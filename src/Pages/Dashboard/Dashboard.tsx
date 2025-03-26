@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   getCompareDailyRevenue,
   getDailyRevenue,
-  getReservationsFromDate,
   getYearlyStat,
 } from "@/services/hotelService";
 import Overview from "@/components/Dashboard/Overview/Overview";
