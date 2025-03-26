@@ -23,7 +23,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
     <Popover>
       <PopoverTrigger asChild className="mb-10">
         <Button variant="outline" className="w-32 flex justify-around">
-          {/* <YearIcon /> */}
+          <YearIcon />
           {selectedYear !== currentYear ? selectedYear : "Năm"}
         </Button>
       </PopoverTrigger>

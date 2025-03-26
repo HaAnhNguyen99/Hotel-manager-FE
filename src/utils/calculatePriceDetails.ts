@@ -12,10 +12,15 @@ export const calculatePriceDetails = (
   getValues: UseFormGetValues<BookingFormData>
 ): PriceDetails => {
   const checkinTime = getValues("checkinDate");
+  console.log(checkinTime);
   const checkoutTime = getValues("checkoutDate") || new Date().toISOString();
   const reduction = Number(getValues("reduction") || 0);
   const prePayment = Number(getValues("prepayment") || 0);
   const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
+
+  if (!checkinTime) {
+    throw new Error("Check-in date is required"); // Or handle it differently
+  }
 
   let roomPrice = 0;
 
