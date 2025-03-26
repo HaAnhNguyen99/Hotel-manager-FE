@@ -47,7 +47,12 @@ export const SelectService = ({ bookingId }: ServiceType) => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!serviceId || quantity === 0) {
+      return;
+    }
+
     setIsLoading(true);
+    // Create service usage and update booking status
     try {
       const payload: CreateServiceUsagePayload = {
         data: {

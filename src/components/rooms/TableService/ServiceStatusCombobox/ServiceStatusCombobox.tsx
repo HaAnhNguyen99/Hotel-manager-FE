@@ -1,8 +1,4 @@
-"use client";
-
-import * as React from "react";
 import { CheckCircle2, XCircle, LucideIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,7 +42,7 @@ const statusArr: Status[] = [
   },
 ];
 
-export function ComboboxPopover({
+export function ServiceStatusCombobox({
   currentStatus,
   serviceUsageId,
 }: ComboboxPopoverProps) {
@@ -57,6 +53,8 @@ export function ComboboxPopover({
 
   const handleSelectStatus = async (value: Status) => {
     const previousStatus = selectedStatus;
+    setOpen(false);
+
     try {
       setSelectedStatus(
         statusArr.find((s) => s.label === value.label) || statusArr[0]
@@ -75,7 +73,7 @@ export function ComboboxPopover({
 
   return (
     <div className="flex items-center space-x-4">
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -91,7 +89,7 @@ export function ComboboxPopover({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" side="right" align="start">
+        <PopoverContent className="p-0 max-w-fit" side="bottom" align="start">
           <Command>
             <CommandInput placeholder="Đổi trạng thái..." />
             <CommandList>
@@ -101,6 +99,7 @@ export function ComboboxPopover({
                   <CommandItem
                     key={status.value}
                     value={status.value}
+                    className="cursor-pointer"
                     onSelect={() => handleSelectStatus(status)}>
                     <status.icon
                       className={cn(

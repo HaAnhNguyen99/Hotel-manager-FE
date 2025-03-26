@@ -50,6 +50,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .self-anchor-center {
+    align-self: anchor-center;
+  }
 }
 
 @layer components {
@@ -58,6 +62,6 @@
   }
 
   .stat-card {
-    @apply bg-white border border-white shadow-md rounded-xl p-4 text-black m-2;
+    @apply bg-white border border-white shadow-md rounded-xl p-4 text-black m-2 basis-[18rem];
   }
 }

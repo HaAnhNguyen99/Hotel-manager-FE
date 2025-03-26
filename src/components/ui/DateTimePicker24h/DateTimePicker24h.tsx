@@ -51,7 +51,7 @@ export function DateTimePicker({
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isOpen} onOpenChange={setIsOpen} modal>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -70,7 +70,7 @@ export function DateTimePicker({
       <PopoverContent className="w-auto p-0">
         <div className="sm:flex text-black">
           <Calendar
-            className="!text-black"
+            className="!text-black hover:text-gray-500"
             locale={vi}
             mode="single"
             selected={date || undefined}

@@ -1,9 +1,10 @@
-import { Meta, Room } from './hotel';
+import { RoomType } from "./booking";
+import { Meta, Room } from "./hotel";
 
 export enum RoomStatus {
-  Available = 'Available',
-  Occupied = 'Occupied',
-  Cleaning = 'Cleaning',
+  Available = "Available",
+  Occupied = "Occupied",
+  Cleaning = "Cleaning",
 }
 
 export interface FetchRoom {
@@ -25,5 +26,6 @@ export interface RoomBooking {
   publishedAt: string | null;
   cccd: string | null;
   booking_status: string;
-  type: object;
+  type: RoomType;
 }
+

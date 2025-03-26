@@ -1,3 +1,5 @@
+import { ServiceStatus } from "./service_usage";
+
 export interface ServiceData {
   id: number;
   documentId: string;
@@ -22,5 +24,6 @@ export interface CreateServiceUsagePayload {
     quantity: number;
     UsageDate: string;
     booking: string | null;
+    service_status?: ServiceStatus;
   };
 }

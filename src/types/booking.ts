@@ -13,6 +13,7 @@ export interface BookingType {
   publishedAt: string;
   id: number;
   booking_status: BookingStatus;
+  type: RoomType;
 }
 
 export interface CreateBookingData {
@@ -51,10 +52,11 @@ export interface BookingFormData {
   checkinDate: string | null;
   checkoutDate: string | null;
   booking_date: string | null;
+  type: RoomType;
 }
 
 export interface CreateBookingPayload {
-  room: string | null;
+  room: string ;
   guest_name: string | null;
   cccd?: string | null;
   prepayment?: number | null;

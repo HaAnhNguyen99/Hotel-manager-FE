@@ -5,7 +5,6 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
 
 interface CancelPopoverProps {
   cancelFunction: () => Promise<void>;

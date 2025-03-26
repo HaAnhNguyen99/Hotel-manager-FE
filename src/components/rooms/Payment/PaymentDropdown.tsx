@@ -13,21 +13,25 @@ import { CommandGroup, CommandItem } from "@/components/ui/command";
 import { PaymentMethod } from "@/types/payment";
 
 const paymentMethods = [
-  { label: "Tiền mặt", value: "cash", icon: <IoMdCash className="mr-2" /> },
+  {
+    label: "Tiền mặt",
+    value: PaymentMethod.Cash,
+    icon: <IoMdCash className="mr-2" />,
+  },
   {
     label: "Chuyển khoản",
-    value: "bank",
+    value: PaymentMethod.Banking,
     icon: <RiBankFill className="mr-2" />,
   },
 ];
 
-export default function PaymentDropdown({
+const PaymentDropdown = ({
   setSelectedMethod,
   selectedMethod,
 }: {
   setSelectedMethod: React.Dispatch<React.SetStateAction<PaymentMethod>>;
   selectedMethod: PaymentMethod;
-}) {
+}) => {
   const [open, setOpen] = useState(false);
 
   const selectedMethodLabel = paymentMethods.find(
@@ -63,6 +67,7 @@ export default function PaymentDropdown({
                   key={method.value}
                   value={method.value}
                   onSelect={(currentValue) => {
+                    console.log(currentValue);
                     setSelectedMethod(currentValue as PaymentMethod);
                     setOpen(false);
                   }}
@@ -77,4 +82,6 @@ export default function PaymentDropdown({
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export default PaymentDropdown;

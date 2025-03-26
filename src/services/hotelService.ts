@@ -2,16 +2,13 @@ import { CreateServiceUsagePayload } from "@/types/service";
 import axios from "axios";
 import {
   BookingStatus,
-  CreateBookingData,
   CreateBookingPayload,
   UpdateBookingData,
 } from "@/types/booking";
-import {
-  ServiceStatus,
-  UpdateServiceUsagePayload,
-} from "@/types/service_usage";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { FetchRoom, RoomBooking, RoomStatus } from "@/types/room";
 import { CreatePaymentPayload } from "@/types/payment";
+import { compareDaily, dailyStat, yearlyStat } from "@/types/reservation";
 
 // Create a single Axios instance
 const api = axios.create({
@@ -81,7 +78,7 @@ export const createServiceUsage = async (
  * @param payload The payload for the new booking.
  * @returns A promise that resolves to the created booking data.
  */
-interface CreateBookingType {
+export interface CreateBookingType {
   data: CreateBookingPayload;
 }
 export const createBooking = async (payload: CreateBookingType) => {
@@ -218,7 +215,7 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
  */
 export const updateBooking = async (
   bookingId: string,
-  payload: UpdateBookingData
+  payload: Partial<UpdateBookingData>
 ) => {
   try {
     const response = await api.put(`/bookings/${bookingId}`, payload);
@@ -320,12 +317,19 @@ export const getHotelProfile = async () => {
   }
 };
 
+/**
+ * Fetches reservations from a given date to a given end date.
+ *
+ * @param startDate The start date.
+ * @param endDate The end date.
+ * @returns A promise that resolves to the reservations data.
+ */
 export const getReservationsFromDate = async (
-  date: string,
-  endDate: string
+  startDate: string | Date,
+  endDate: string | Date
 ) => {
   const params = {
-    "filters[date][$gte]": date,
+    "filters[date][$gte]": startDate,
     "filters[date][$lte]": endDate,
   };
 
@@ -334,6 +338,133 @@ export const getReservationsFromDate = async (
     return response.data;
   } catch (error) {
     console.error("Error creating payment:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches revenue data from a given date to a given end date.
+ *
+ * @param date The start date.
+ * @param endDate The end date.
+ * @returns A promise that resolves to the revenue data.
+ */
+export const getRevenueData = async () => {
+  try {
+    const response = await api.get(`/reservations?&sort=date:DESC&populate=*`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches revenue data for a given year.
+ *
+ * @param year The year for which to fetch revenue data.
+ * @returns A promise that resolves to the revenue data.
+ *
+ **/
+
+export const getYearlyStat = async (
+  year?: string | number
+): Promise<yearlyStat[]> => {
+  try {
+    const defaultYear = new Date().getFullYear();
+    const yearParams = year ? year : defaultYear;
+    const response = await api.get(
+      `/reservations/yearly-stats?year=${yearParams}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches revenue data for a given month.
+ *
+ * @param startDate The startDate for which to fetch revenue data.
+ * @param endDate The month for which to fetch revenue data (1-12).
+ * @returns A promise that resolves to the
+ */
+
+export const getDailyRevenue = async (
+  startDate: Date | string = "",
+  endDate: Date | string = ""
+): Promise<dailyStat[]> => {
+  try {
+    const response = await api.get(
+      `/reservations/daily-revenue?startDate=${startDate}&endDate=${endDate}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches room data for a given month.
+ *
+ * @param startDate The startDate for which to fetch room data.
+ * @param endDate The month for which to fetch room data (1-12).
+ * */
+export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
+  try {
+    const response = await api.get(`/reservations/compare-daily-revenue`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches room data for a given month.
+ *
+ * @param startDate The startDate for which to fetch room data.
+ * @param endDate The month for which to fetch room data (1-12).
+ * */
+export const getSearchData = async (payload: string) => {
+  try {
+    const response = await api.get(`/reservations/search?search=${payload}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching revenue data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Deletes a reservation by ID.
+ *
+ * @param id The ID of the reservation to delete.
+ * @returns A promise that resolves to the deleted reservation data.
+ * */
+export const deleteReservations = async (id: string) => {
+  try {
+    const response = await api.delete(`/reservations/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting reservations:", error);
+    throw error;
+  }
+};
+
+export const getReservationsPagination = async (
+  start: number,
+  limit: number
+) => {
+  try {
+    const response = await api.get(
+      `/reservations?pagination[start]=${start}&pagination[limit]=${limit}&populate=*&sort=date:DESC`
+    );
+    return response;
+  } catch (error) {
+    console.error("Error deleting reservations:", error);
     throw error;
   }
 };
