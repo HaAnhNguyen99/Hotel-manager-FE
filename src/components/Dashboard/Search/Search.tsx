@@ -6,7 +6,7 @@ import { getSearchData } from "@/services/hotelService";
 import { RevenueData } from "@/types/reservation";
 
 const Search = () => {
-  const { register, handleSubmit, watch } = useForm<{ search: string }>();
+  const { register, handleSubmit } = useForm<{ search: string }>();
   const [loading, setLoading] = useState(false);
   const [searchData, setSearchData] = useState<RevenueData[] | undefined>();
 

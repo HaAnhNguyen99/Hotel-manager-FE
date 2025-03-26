@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, LaptopMinimal } from "lucide-react";
-import { useEffect } from "react";
 
 export function ToggleTheme() {
   const { theme, setTheme } = useTheme();
