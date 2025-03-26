@@ -56,7 +56,7 @@ export interface BookingFormData {
 }
 
 export interface CreateBookingPayload {
-  room: string | null;
+  room: string ;
   guest_name: string | null;
   cccd?: string | null;
   prepayment?: number | null;

@@ -58,7 +58,7 @@ const RoomTypePopover: React.FC<PopoverProps> = ({
             role="combobox"
             aria-expanded={open}
             className="w-full justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center text-black">
               {selectedRoomTypeIcon}
               {selectedRoomTypeLabel}
             </div>
@@ -78,7 +78,7 @@ const RoomTypePopover: React.FC<PopoverProps> = ({
                       setSelectedRoomType(currentValue as RoomType);
                       setOpen(false);
                     }}
-                    className="flex items-center cursor-pointer">
+                    className="flex items-center cursor-pointer ">
                     {method.icon}
                     <span>{method.label}</span>
                   </CommandItem>

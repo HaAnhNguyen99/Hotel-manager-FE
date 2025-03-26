@@ -16,7 +16,6 @@ import {
   cancelBooking,
   createBooking,
   getRoomBooking,
-  updateBooking,
   updateRoomStatusAvailable,
   updateRoomStatusOccupied,
 } from "@/services/hotelService";
@@ -44,65 +43,38 @@ export const CreateRoomBtn = ({
   room: Room;
   onClick: () => void;
 }) => {
-  const [reduction, setReduction] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [bookingID, setBookingID] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const [prePayment, setPrePayment] = useState<number | null>(null);
-  const { reloadRooms, bookingForm } = useHotelContext();
-  const [bookingData, setBookingData] = useState<RoomBooking | null>(null);
-  const [checkinTime, setCheckinTime] = useState<string | null>(null);
-  const [checkoutTime, setCheckoutTime] = useState<string | null>(null);
+  const { reloadRooms, bookingForm, handleUpdateBooking, handleCreateBooking } =
+    useHotelContext();
   const { setValue, control, handleSubmit, reset, getValues } = bookingForm;
-
-  const iniPayloadData: CreateBookingPayload = {
-    room: room.documentId,
-    checkin: new Date().toISOString(),
-    checkout: null,
-    guest_name: "Vô danh",
-    prepayment: 0,
-    reduction: 0,
-    cccd: "",
-  };
 
   const handleBooking = async (room: Room) => {
     setIsLoading(true);
     const roomBooking = await getRoomBooking(room.documentId);
     if (roomBooking) {
-      setBookingData(roomBooking);
-      setIsOpen(true);
       setBookingID(roomBooking.documentId);
-      setCheckinTime(roomBooking.checkin);
-      setCheckoutTime(roomBooking.checkout);
-      setPrePayment(roomBooking.prepayment);
-      setReduction(roomBooking.reduction);
+      setIsOpen(true);
+      setValue("checkinDate", roomBooking.checkin);
+      setValue("guestName", roomBooking.guest_name);
+      setValue("prepayment", roomBooking.prepayment);
+      setValue("reduction", roomBooking.reduction);
+      setValue("type", roomBooking.type);
+      setValue(
+        "checkoutDate",
+        roomBooking.checkout ? convertToISO(roomBooking.checkout) : null
+      );
       setIsLoading(false);
     } else {
-      handleCreateBooking(room);
+      onCreateBooking(room);
     }
   };
 
-  const handleCreateBooking = async (room: Room) => {
-    const newPayloadData = {
-      ...iniPayloadData,
-      type: RoomType.Hour,
-      booking_date: new Date().toISOString(),
-      booking_status: BookingStatus.Pending,
-    };
+  const onCreateBooking = async (room: Room) => {
     try {
-      const payload = {
-        data: newPayloadData,
-      };
-
-      const res = await createBooking(payload);
-      console.log(res.data);
-      setBookingID(res.data.documentId);
-      setValue("checkinDate", res.data.checkin);
-      setValue("guestName", res.data.guest_name);
-      setValue("prepayment", res.data.prepayment);
-      setValue("reduction", res.data.reduction);
-      setValue("type", res.data.type);
-      setCheckinTime(res.data.checkin);
+      const bookingId = await handleCreateBooking(room.documentId);
+      setBookingID(bookingId);
 
       toast.success("Đã đặt phòng thành công");
     } catch (error) {
@@ -122,15 +94,11 @@ export const CreateRoomBtn = ({
     }
   };
 
-  const handleUpdateBooking = async (data: BookingFormData) => {
+  const onUpdate = async (data: BookingFormData) => {
     const bookingData = {
       room: room.documentId,
-      checkin: data.checkinDate
-        ? convertToISO(data.checkinDate.toString())
-        : null,
-      checkout: data.checkoutDate
-        ? convertToISO(data.checkoutDate.toString())
-        : null,
+      checkin: getValues("checkinDate"),
+      checkout: getValues("checkoutDate"),
       guest_name: data.guestName,
       prepayment: Number(data.prepayment),
       reduction: Number(data.reduction),
@@ -144,10 +112,8 @@ export const CreateRoomBtn = ({
 
     try {
       setIsLoading(true);
-      if (JSON.stringify(iniPayloadData) !== JSON.stringify(bookingData)) {
-        await updateBooking(bookingID, payload);
-      }
       await handleUpdateRoomStatus(room);
+      await handleUpdateBooking(bookingID, payload);
 
       toast.success("Đã cập nhật phòng !");
     } catch (error) {
@@ -181,8 +147,6 @@ export const CreateRoomBtn = ({
       await updateRoomStatusAvailable(room.documentId);
       await reloadRooms();
       reset();
-      setPrePayment(null);
-      setReduction(null);
     } catch (error) {
       console.error("Error canceling booking:", error);
     } finally {
@@ -231,17 +195,8 @@ export const CreateRoomBtn = ({
                 <RoomDetails room={room} />
 
                 <div className="col-span-2">
-                  <form
-                    onSubmit={handleSubmit(handleUpdateBooking)}
-                    id={bookingID}>
-                    <GuestFormSection
-                      control={control}
-                      bookingData={bookingData}
-                      setCheckoutTime={setCheckoutTime}
-                      setCheckinDate={setCheckinTime}
-                      setPrePayment={setPrePayment}
-                      setReduction={setReduction}
-                    />
+                  <form onSubmit={handleSubmit(onUpdate)} id={bookingID}>
+                    <GuestFormSection control={control} />
                   </form>
                   <Separator className="my-4" />
                   <SelectService bookingId={bookingID} />
@@ -266,10 +221,6 @@ export const CreateRoomBtn = ({
                   <Payment
                     bookingId={bookingID}
                     room={room}
-                    checkinTime={checkinTime}
-                    checkoutTime={checkoutTime}
-                    prePayment={prePayment}
-                    reduction={reduction}
                     setCardOpen={handleOpenChange}
                   />
                 )}

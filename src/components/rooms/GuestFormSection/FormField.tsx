@@ -27,7 +27,7 @@ const FormField = <T extends keyof BookingFormData>({
 }: {
   control: Control<BookingFormData>;
   fieldConfig: FieldConfig<T>;
-  onValueChange?: (value: any) => void;
+  onValueChange?: (value: string | number) => void;
 }) => (
   <div className={`flex flex-col gap-3 ${fieldConfig.width || "w-full"}`}>
     <Label className="flex gap-2 items-center">

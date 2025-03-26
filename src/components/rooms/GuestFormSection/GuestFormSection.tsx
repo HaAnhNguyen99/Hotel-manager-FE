@@ -9,10 +9,7 @@ import {
   TicketPercent,
 } from "lucide-react";
 import { DateTimePicker } from "../../ui/DateTimePicker24h/DateTimePicker24h";
-import { BookingFormData, RoomType } from "@/types/booking";
-import { RoomBooking } from "@/types/room";
-import { useHotelContext } from "@/context/HotelContext";
-import { useEffect } from "react";
+import { BookingFormData } from "@/types/booking";
 import { convertToISO } from "@/utils/ConvertToISO";
 import RoomTypePopover from "../RoomType/RoomType";
 import FormField, { FieldConfig } from "./FormField";
@@ -21,22 +18,9 @@ import FormField, { FieldConfig } from "./FormField";
 
 export const GuestFormSection = ({
   control,
-  bookingData,
-  setCheckoutTime,
-  setCheckinDate,
-  setReduction,
-  setPrePayment,
 }: {
   control: Control<BookingFormData>;
-  bookingData: RoomBooking | null;
-  setCheckoutTime: React.Dispatch<React.SetStateAction<string | null>>;
-  setCheckinDate: React.Dispatch<React.SetStateAction<string | null>>;
-  setReduction: React.Dispatch<React.SetStateAction<number | null>>;
-  setPrePayment: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
-  const { bookingForm } = useHotelContext();
-  const { setValue } = bookingForm;
-
   // Typed field configurations with customInput for room type
   const fieldConfigs: Array<FieldConfig<keyof BookingFormData>> = [
     {
@@ -85,7 +69,6 @@ export const GuestFormSection = ({
                 field.onChange(value);
                 onValueChange?.(value);
               }}
-              {...field}
             />
           )}
         />
@@ -129,23 +112,6 @@ export const GuestFormSection = ({
     },
   ];
 
-  useEffect(() => {
-    if (bookingData) {
-      setPrePayment(bookingData.prepayment || null);
-      setReduction(bookingData.reduction || null);
-      setValue("guestName", bookingData.guest_name || "");
-      setValue("cccd", bookingData.cccd || "");
-      setValue("prepayment", bookingData.prepayment || null);
-      setValue("reduction", bookingData.reduction || null);
-      setValue("checkinDate", bookingData.checkin || null);
-      setValue("type", bookingData.type || RoomType.Hour);
-      setValue(
-        "checkoutDate",
-        bookingData.checkout ? convertToISO(bookingData.checkout) : null
-      );
-    }
-  }, [bookingData, setValue, setPrePayment, setReduction]);
-
   return (
     <section className="space-y-4">
       <h3 className="text-center text-xl font-bold">Thông tin khách hàng</h3>
@@ -156,30 +122,14 @@ export const GuestFormSection = ({
       </div>
 
       <div className="flex gap-2 my-3">
-        <FormField
-          control={control}
-          fieldConfig={fieldConfigs[2]}
-          onValueChange={setPrePayment}
-        />
-        <FormField
-          control={control}
-          fieldConfig={fieldConfigs[3]}
-          onValueChange={setReduction}
-        />
+        <FormField control={control} fieldConfig={fieldConfigs[2]} />
+        <FormField control={control} fieldConfig={fieldConfigs[3]} />
         <FormField control={control} fieldConfig={fieldConfigs[4]} />
       </div>
 
       <div className="flex gap-2 my-4">
-        <FormField
-          control={control}
-          fieldConfig={fieldConfigs[5]}
-          onValueChange={setCheckinDate}
-        />
-        <FormField
-          control={control}
-          fieldConfig={fieldConfigs[6]}
-          onValueChange={setCheckoutTime}
-        />
+        <FormField control={control} fieldConfig={fieldConfigs[5]} />
+        <FormField control={control} fieldConfig={fieldConfigs[6]} />
       </div>
     </section>
   );

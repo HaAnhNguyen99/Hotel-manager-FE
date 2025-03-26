@@ -24,31 +24,28 @@ import { ServiceData } from "@/types/service";
 import { PaymentMethod } from "@/types/payment";
 import PaymentType from "../PaymentType/PaymentType";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { useHotelContext } from "@/context/HotelContext";
 
 type PaymentProps = {
   room: Room;
   bookingId: string;
-  checkinTime: string | null;
-  checkoutTime: string | null;
-  prePayment: number | null;
-  reduction: number | null;
   setCardOpen: (open: boolean) => Promise<void>;
 };
-export function Payment({
-  room,
-  checkinTime,
-  checkoutTime,
-  bookingId,
-  prePayment,
-  reduction,
-  setCardOpen,
-}: PaymentProps) {
+export function Payment({ room, bookingId, setCardOpen }: PaymentProps) {
   const [serviceUsage, setServiceUsage] = useState<ServiceData[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>(
     PaymentMethod.Cash
   );
   const [isLoading, setIsLoading] = useState(false);
+  const { bookingForm } = useHotelContext();
+  const { getValues } = bookingForm;
+  const checkinTime = getValues("checkinDate");
+  const checkoutTime = getValues("checkoutDate")
+    ? getValues("checkoutDate")
+    : new Date().toISOString();
+  let reduction = getValues("reduction");
+  let prePayment = getValues("prepayment");
 
   const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
   const RoomPrice =
@@ -65,11 +62,13 @@ export function Payment({
   }
 
   const totalWithReduction =
-    reduction && reduction !== 0 ? totalGeneral - reduction : totalGeneral;
+    reduction && reduction !== 0
+      ? Number(totalGeneral) - Number(reduction)
+      : Number(totalGeneral);
 
   const Total =
     prePayment && prePayment > 0
-      ? prePayment - totalWithReduction
+      ? totalWithReduction - prePayment
       : totalWithReduction;
 
   useEffect(() => {

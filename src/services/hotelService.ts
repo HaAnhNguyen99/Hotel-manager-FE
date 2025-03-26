@@ -78,7 +78,7 @@ export const createServiceUsage = async (
  * @param payload The payload for the new booking.
  * @returns A promise that resolves to the created booking data.
  */
-interface CreateBookingType {
+export interface CreateBookingType {
   data: CreateBookingPayload;
 }
 export const createBooking = async (payload: CreateBookingType) => {
@@ -215,7 +215,7 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
  */
 export const updateBooking = async (
   bookingId: string,
-  payload: UpdateBookingData
+  payload: Partial<UpdateBookingData>
 ) => {
   try {
     const response = await api.put(`/bookings/${bookingId}`, payload);
