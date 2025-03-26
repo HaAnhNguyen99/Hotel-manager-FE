@@ -9,7 +9,6 @@ import {
 } from "react";
 import {
   createBooking,
-  CreateBookingType,
   fetchRooms,
   updateBooking,
 } from "../services/hotelService";
