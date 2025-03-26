@@ -24,9 +24,12 @@ import { calculatePriceDetails } from "@/utils/calculatePriceDetails";
 import RoomInfo from "./RoomInfo";
 import BookingDetails from "./BookingDetails";
 import { PaymentMethod, PaymentProps, PriceDetails } from "./types";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
 
 const Payment = ({ room, bookingId, setCardOpen }: PaymentProps) => {
-  const [serviceUsage, setServiceUsage] = useState([]);
+  const [serviceUsage, setServiceUsage] = useState<UpdateServiceUsagePayload[]>(
+    []
+  );
   const [open, setOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(PaymentMethod.Cash);
   const [isLoading, setIsLoading] = useState(false);

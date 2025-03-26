@@ -1,12 +1,16 @@
 // src/components/Payment/paymentUtils.ts
 import { calculateHours } from "@/utils/FormatDate";
 import { calculateTotal } from "@/utils/calculateTotal";
-import { Room, PriceDetails } from "./types";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
+import { Room } from "@/types/hotel";
+import { PriceDetails } from "@/components/rooms/Payment/types";
+import { BookingFormData } from "@/types/booking";
+import { UseFormGetValues } from "react-hook-form";
 
 export const calculatePriceDetails = (
   room: Room,
-  serviceUsage: any[],
-  getValues: any
+  serviceUsage: UpdateServiceUsagePayload[],
+  getValues: UseFormGetValues<BookingFormData>
 ): PriceDetails => {
   const checkinTime = getValues("checkinDate");
   const checkoutTime = getValues("checkoutDate") || new Date().toISOString();

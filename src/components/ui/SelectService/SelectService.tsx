@@ -14,6 +14,7 @@ import { createServiceUsage } from "@/services/hotelService";
 import { toast } from "sonner";
 import { CreateServiceUsagePayload } from "@/types/service";
 import { Spinner } from "@/components/common/Spinner/Spinner";
+import { ServiceStatus } from "@/types/service_usage";
 
 interface ServiceType {
   bookingId: string;
