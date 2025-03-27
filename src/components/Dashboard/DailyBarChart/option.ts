@@ -1,6 +1,28 @@
 import { formatDate } from "@/utils/formatChartDate";
 import { ChartOptions, ChartData } from "chart.js";
 import { DailyBarChartProps } from "./DailyBarChart";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export function chartOption(data: DailyBarChartProps): {
   chartData: ChartData<"bar" | "line">;
