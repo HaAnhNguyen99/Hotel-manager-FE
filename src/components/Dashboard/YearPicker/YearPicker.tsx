@@ -17,14 +17,14 @@ const YearPicker: React.FC<YearPickerProps> = ({
   onYearChange,
 }) => {
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i); // 50 năm gần nhất
+  const years = Array.from({ length: 10 }, (_, i) => currentYear - i); 
 
   return (
     <Popover>
       <PopoverTrigger asChild className="mb-10">
-        <Button variant="outline" className="w-32 flex justify-around">
-          <YearIcon />
-          {selectedYear !== currentYear ? selectedYear : "Năm"}
+        <Button variant="outline" className="w-32 flex justify-center">
+          <img src={YearIcon} alt="year icon" width={20} />
+          {selectedYear !== currentYear ? selectedYear : ""}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-32 p-2">
