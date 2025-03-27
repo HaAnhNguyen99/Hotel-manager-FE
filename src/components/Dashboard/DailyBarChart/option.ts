@@ -1,5 +1,10 @@
 import { formatDate } from "@/utils/formatChartDate";
-import { ChartOptions, ChartData } from "chart.js";
+import {
+  ChartOptions,
+  ChartData,
+  LineController,
+  BarController,
+} from "chart.js";
 import { DailyBarChartProps } from "./DailyBarChart";
 import {
   Chart as ChartJS,
@@ -19,6 +24,8 @@ ChartJS.register(
   PointElement,
   LineElement,
   BarElement,
+  LineController,
+  BarController,
   Title,
   Tooltip,
   Legend
