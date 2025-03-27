@@ -131,7 +131,6 @@ export const HotelProvider = ({ children }: { children: ReactNode }) => {
     async (bookingId: string, payload: Partial<UpdateBookingData>) => {
       try {
         const response = await updateBooking(bookingId, payload);
-        console.log(response.data);
         return response.data as BookingType;
       } catch (err) {
         throw new Error(

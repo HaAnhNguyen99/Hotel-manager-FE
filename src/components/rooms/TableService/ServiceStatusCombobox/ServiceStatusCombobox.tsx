@@ -67,10 +67,6 @@ export function ServiceStatusCombobox({
     }
   };
 
-  useEffect(() => {
-    console.log(selectedStatus);
-  }, [selectedStatus]);
-
   return (
     <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen} modal>

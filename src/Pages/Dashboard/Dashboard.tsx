@@ -90,7 +90,6 @@ const Dashboard = () => {
 
       const res = await getDailyRevenue(date.from, date.to);
       setRevenueData(res);
-      console.log(res);
     };
     fetchDailyStat();
   }, [date]);
@@ -99,7 +98,6 @@ const Dashboard = () => {
     const fetchYearData = async () => {
       const res = await getYearlyStat(year);
       setYearlyStat(res);
-      console.log(res);
     };
     fetchYearData();
   }, [year]);
@@ -127,7 +125,6 @@ const Dashboard = () => {
     },
   ];
 
-  console.log(date);
 
   return (
     <div className="p-4 px-10">

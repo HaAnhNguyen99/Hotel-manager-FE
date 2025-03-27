@@ -117,7 +117,6 @@ const AppSidebar = () => {
                     <NavLink
                       to={item.url}
                       className={({ isActive }) => {
-                        console.log(isActive);
                         return isActive
                           ? "text-primary font-semibold"
                           : "text-muted-foreground hover:text-primary";

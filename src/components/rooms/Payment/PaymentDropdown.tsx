@@ -67,7 +67,6 @@ const PaymentDropdown = ({
                   key={method.value}
                   value={method.value}
                   onSelect={(currentValue) => {
-                    console.log(currentValue);
                     setSelectedMethod(currentValue as PaymentMethod);
                     setOpen(false);
                   }}

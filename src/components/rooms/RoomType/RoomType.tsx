@@ -47,7 +47,6 @@ const RoomTypePopover: React.FC<PopoverProps> = ({
   const selectedRoomTypeIcon = RoomTypeData.find(
     (method) => method.value === selectedRoomType
   )?.icon;
-  console.log(selectedRoomType);
 
   return (
     <div>

@@ -28,7 +28,6 @@ export const RoomList = () => {
             key={room.documentId}
             room={room}
             onClick={() => {
-              console.log(room);
               setSelectedRoom(room);
               setIsModalOpen(true);
             }}

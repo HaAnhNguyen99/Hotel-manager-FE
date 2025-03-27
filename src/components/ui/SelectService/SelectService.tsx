@@ -62,9 +62,7 @@ export const SelectService = ({ bookingId }: ServiceType) => {
           booking: bookingId,
         },
       };
-      const response = await createServiceUsage(payload);
-      console.log(response.data);
-      toast.success("Thêm dịch vụ thành công");
+      await createServiceUsage(payload);
     } catch (error) {
       console.error("Error creating service usage:", error);
       toast.error("Thêm dịch vụ thất bại, vui lòng thử lại");

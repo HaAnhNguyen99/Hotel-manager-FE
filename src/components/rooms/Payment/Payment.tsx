@@ -45,7 +45,6 @@ const Payment = ({ room, bookingId, setCardOpen }: PaymentProps) => {
   useEffect(() => {
     const fetchServiceUsage = async () => {
       const data = await getServiceUsageStatusPayed(bookingId);
-      console.log(data);
       setServiceUsage(data);
     };
     fetchServiceUsage();

@@ -14,7 +14,6 @@ const Search = () => {
     setLoading(true);
     try {
       const response = await getSearchData(data.search);
-      console.log(response.data);
       setSearchData(response.data);
     } catch (error) {
       console.error("Search error:", error);

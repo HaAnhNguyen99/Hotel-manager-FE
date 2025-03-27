@@ -12,7 +12,6 @@ export const calculatePriceDetails = (
   getValues: UseFormGetValues<BookingFormData>
 ): PriceDetails => {
   const checkinTime = getValues("checkinDate");
-  console.log(checkinTime);
   const checkoutTime = getValues("checkoutDate") || new Date().toISOString();
   const reduction = Number(getValues("reduction") || 0);
   const prePayment = Number(getValues("prepayment") || 0);
