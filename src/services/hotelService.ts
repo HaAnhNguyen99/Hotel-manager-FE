@@ -3,12 +3,19 @@ import axios from "axios";
 import {
   BookingStatus,
   CreateBookingPayload,
+  RoomType,
   UpdateBookingData,
 } from "@/types/booking";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";
 import { FetchRoom, RoomBooking, RoomStatus } from "@/types/room";
 import { CreatePaymentPayload } from "@/types/payment";
-import { compareDaily, dailyStat, yearlyStat } from "@/types/reservation";
+import {
+  compareDaily,
+  dailyStat,
+  RevenueData,
+  yearlyStat,
+} from "@/types/reservation";
+import { getTodayISODate } from "@/utils/getTodayISODate";
 
 // Create a single Axios instance
 const api = axios.create({
@@ -19,10 +26,12 @@ const api = axios.create({
 });
 
 /**
- * Fetches a list of rooms from the API.
+ * Fetches all rooms sorted by room number with related data populated.
  *
- * @returns A promise that resolves to an array of Room objects.
+ * @returns {Promise<FetchRoom>} The API response containing room data.
+ * @throws {Error} If the request fails.
  */
+
 export const fetchRooms = async (): Promise<FetchRoom> => {
   try {
     const response = await api.get("/rooms?sort[0]=room_number&populate=*");
@@ -34,11 +43,13 @@ export const fetchRooms = async (): Promise<FetchRoom> => {
 };
 
 /**
- * Fetches a list of bookings for a given room from the API.
+ * Fetches the pending booking for a specific room.
  *
- * @param roomId The ID of the room.
- * @returns A promise that resolves to an array of Booking objects.
+ * @param {string} roomId - The document ID of the room.
+ * @returns {Promise<RoomBooking>} The pending booking data for the room.
+ * @throws {Error} If the request fails.
  */
+
 export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
   try {
     const response = await api.get(
@@ -55,11 +66,13 @@ export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
 };
 
 /**
- * Creates a new service usage record.
+ * Creates a new service usage entry with the provided data.
  *
- * @param payload The payload for the new service usage.
- * @returns A promise that resolves to the created service usage data.
+ * @param {CreateServiceUsagePayload} payload - The service usage details to be sent.
+ * @returns {Promise<Object>} The API response containing the created service usage data.
+ * @throws {Error} If the request fails.
  */
+
 export const createServiceUsage = async (
   payload: CreateServiceUsagePayload
 ) => {
@@ -73,11 +86,13 @@ export const createServiceUsage = async (
 };
 
 /**
- * Creates a new booking.
+ * Creates a new booking with the provided data.
  *
- * @param payload The payload for the new booking.
- * @returns A promise that resolves to the created booking data.
+ * @param {CreateBookingType} payload - The booking details to be sent.
+ * @returns {Promise<Object>} The API response containing the created booking data.
+ * @throws {Error} If the request fails.
  */
+
 export interface CreateBookingType {
   data: CreateBookingPayload;
 }
@@ -92,11 +107,13 @@ export const createBooking = async (payload: CreateBookingType) => {
 };
 
 /**
- * Cancels a booking.
+ * Cancels a booking by deleting it from the system.
  *
- * @param bookingId The ID of the booking to cancel.
- * @returns A promise that resolves to the cancelled booking data.
+ * @param {string} bookingId - The ID of the booking to cancel.
+ * @returns {Promise<Object>} The API response confirming the cancellation.
+ * @throws {Error} If the request fails.
  */
+
 export const cancelBooking = async (bookingId: string) => {
   try {
     const response = await api.delete(`/bookings/${bookingId}`);
@@ -108,11 +125,13 @@ export const cancelBooking = async (bookingId: string) => {
 };
 
 /**
- * Fetches service usage records for a given booking.
+ * Fetches all service usage entries for a given booking.
  *
- * @param bookingId The ID of the booking.
- * @returns A promise that resolves to an array of service usage records.
+ * @param {string} bookingId - The document ID of the booking.
+ * @returns {Promise<Object[]>} The API response containing service usage entries.
+ * @throws {Error} If the request fails.
  */
+
 export const getServiceUsage = async (bookingId: string) => {
   try {
     const response = await api.get(
@@ -126,11 +145,13 @@ export const getServiceUsage = async (bookingId: string) => {
 };
 
 /**
- * Fetches service usage records for a given booking that are paid.
+ * Fetches unpaid service usage entries for a given booking.
  *
- * @param bookingId The ID of the booking.
- * @returns A promise that resolves to an array of service usage records.
+ * @param {string} bookingId - The document ID of the booking.
+ * @returns {Promise<Object[]>} The API response containing unpaid service usage entries.
+ * @throws {Error} If the request fails.
  */
+
 export const getServiceUsageStatusPayed = async (bookingId: string) => {
   try {
     const response = await api.get(
@@ -144,12 +165,14 @@ export const getServiceUsageStatusPayed = async (bookingId: string) => {
 };
 
 /**
- * Updates a service usage record.
+ * Updates a service usage entry with the provided data.
  *
- * @param serviceUsageId The ID of the service usage to update.
- * @param payload The payload for the update.
- * @returns A promise that resolves to the updated service usage data.
+ * @param {string} serviceUsageId - The ID of the service usage to update.
+ * @param {UpdateServiceUsagePayload} payload - The updated service usage data.
+ * @returns {Promise<Object>} The API response containing the updated service usage data.
+ * @throws {Error} If the request fails.
  */
+
 export const updateServiceUsage = async (
   serviceUsageId: string,
   payload: UpdateServiceUsagePayload
@@ -167,12 +190,14 @@ export const updateServiceUsage = async (
 };
 
 /**
- * Updates the status of a service usage record.
+ * Updates the payment status of a service usage.
  *
- * @param serviceUsageId The ID of the service usage to update.
- * @param service_status The new status of the service usage.
- * @returns A promise that resolves to the updated service usage data.
+ * @param {string} serviceUsageId - The ID of the service usage to update.
+ * @param {string} service_status - The new status of the service usage.
+ * @returns {Promise<void>} Resolves when the update is successful.
+ * @throws {Error} If the request fails.
  */
+
 export const updateServicePayment = async (
   serviceUsageId: string,
   service_status: string
@@ -191,11 +216,13 @@ export const updateServicePayment = async (
 };
 
 /**
- * Deletes a service usage record.
+ * Deletes a service usage entry by ID.
  *
- * @param serviceUsageId The ID of the service usage to delete.
- * @returns A promise that resolves to the deleted service usage data.
+ * @param {string} serviceUsageId - The ID of the service usage to delete.
+ * @returns {Promise<Object>} The API response confirming the deletion.
+ * @throws {Error} If the request fails.
  */
+
 export const deleteServiceUsage = async (serviceUsageId: string) => {
   try {
     const response = await api.delete(`/service-usages/${serviceUsageId}`);
@@ -207,12 +234,14 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
 };
 
 /**
- * Updates a booking.
+ * Updates a booking with the provided data.
  *
- * @param bookingId The ID of the booking to update.
- * @param payload The payload for the update.
- * @returns A promise that resolves to the updated booking data.
+ * @param {string} bookingId - The ID of the booking to update.
+ * @param {Partial<UpdateBookingData>} payload - The updated booking data.
+ * @returns {Promise<Object>} The API response containing the updated booking data.
+ * @throws {Error} If the request fails.
  */
+
 export const updateBooking = async (
   bookingId: string,
   payload: Partial<UpdateBookingData>
@@ -229,9 +258,11 @@ export const updateBooking = async (
 /**
  * Updates the status of a booking to "Completed".
  *
- * @param bookingId The ID of the booking to update.
- * @returns A promise that resolves to the updated booking data.
+ * @param {string} bookingId - The ID of the booking to update.
+ * @returns {Promise<Object>} The API response containing the updated booking data.
+ * @throws {Error} If the request fails.
  */
+
 export const updateBookingStatus = async (bookingId: string) => {
   try {
     const response = await api.put(`/bookings/${bookingId}`, {
@@ -249,9 +280,11 @@ export const updateBookingStatus = async (bookingId: string) => {
 /**
  * Updates the status of a room to "Occupied".
  *
- * @param roomId The ID of the room.
- * @returns A promise that resolves to the updated room data.
+ * @param {string} roomId - The ID of the room to update.
+ * @returns {Promise<Object>} The API response containing the updated room data.
+ * @throws {Error} If the request fails.
  */
+
 export const updateRoomStatusOccupied = async (roomId: string) => {
   try {
     const response = await api.put(`/rooms/${roomId}`, {
@@ -269,9 +302,11 @@ export const updateRoomStatusOccupied = async (roomId: string) => {
 /**
  * Updates the status of a room to "Available".
  *
- * @param roomId The ID of the room to update.
- * @returns A promise that resolves to the updated room data.
+ * @param {string} roomId - The ID of the room to update.
+ * @returns {Promise<Object>} The API response containing the updated room data.
+ * @throws {Error} If the request fails.
  */
+
 export const updateRoomStatusAvailable = async (roomId: string) => {
   try {
     const response = await api.put(`/rooms/${roomId}`, {
@@ -287,11 +322,13 @@ export const updateRoomStatusAvailable = async (roomId: string) => {
 };
 
 /**
- * Creates a new payment record.
+ * Creates a new payment for a reservation.
  *
- * @param payload The payload for the new payment.
- * @returns A promise that resolves to the created payment data.
+ * @param {CreatePaymentPayload} payload - The payment details to be sent.
+ * @returns {Promise<Object>} The API response containing the created payment data.
+ * @throws {Error} If the request fails.
  */
+
 export const createPayment = async (payload: CreatePaymentPayload) => {
   try {
     const response = await api.post(`/reservations`, payload);
@@ -303,10 +340,12 @@ export const createPayment = async (payload: CreatePaymentPayload) => {
 };
 
 /**
- * Fetches the hotel profile.
+ * Fetches the hotel profile with all related data.
  *
- * @returns A promise that resolves to the hotel profile data.
+ * @returns {Promise<Object>} The API response containing hotel profile data.
+ * @throws {Error} If the request fails.
  */
+
 export const getHotelProfile = async () => {
   try {
     const response = await api.get(`/hotels?populate=*`);
@@ -318,24 +357,27 @@ export const getHotelProfile = async () => {
 };
 
 /**
- * Fetches reservations from a given date to a given end date.
+ * Fetches reservations within a specified date range.
  *
- * @param startDate The start date.
- * @param endDate The end date.
- * @returns A promise that resolves to the reservations data.
+ * @param {string | Date} startDate - The start date for filtering reservations.
+ * @param {string | Date} endDate - The end date for filtering reservations.
+ * @returns {Promise<RevenueData[]>} The API response containing filtered reservations data.
+ * @throws {Error} If the request fails.
  */
+
 export const getReservationsFromDate = async (
   startDate: string | Date,
   endDate: string | Date
-) => {
+): Promise<RevenueData[]> => {
   const params = {
     "filters[date][$gte]": startDate,
     "filters[date][$lte]": endDate,
+    populate: "*",
   };
 
   try {
-    const response = await api.get(`/reservations?populate=*`, { params });
-    return response.data;
+    const response = await api.get(`/reservations`, { params });
+    return response.data.data;
   } catch (error) {
     console.error("Error creating payment:", error);
     throw error;
@@ -343,12 +385,12 @@ export const getReservationsFromDate = async (
 };
 
 /**
- * Fetches revenue data from a given date to a given end date.
+ * Fetches revenue data sorted by date in descending order.
  *
- * @param date The start date.
- * @param endDate The end date.
- * @returns A promise that resolves to the revenue data.
+ * @returns {Promise<Object>} The API response containing revenue data.
+ * @throws {Error} If the request fails.
  */
+
 export const getRevenueData = async () => {
   try {
     const response = await api.get(`/reservations?&sort=date:DESC&populate=*`);
@@ -360,12 +402,12 @@ export const getRevenueData = async () => {
 };
 
 /**
- * Fetches revenue data for a given year.
+ * Fetches yearly revenue statistics for a given year.
  *
- * @param year The year for which to fetch revenue data.
- * @returns A promise that resolves to the revenue data.
- *
- **/
+ * @param {string | number} [year] - The year for the query. Defaults to the current year if not provided.
+ * @returns {Promise<yearlyStat[]>} The API response containing yearly revenue statistics.
+ * @throws {Error} If the request fails.
+ */
 
 export const getYearlyStat = async (
   year?: string | number
@@ -384,13 +426,13 @@ export const getYearlyStat = async (
 };
 
 /**
- * Fetches revenue data for a given month.
+ * Fetches daily revenue statistics for a given date range.
  *
- * @param startDate The startDate for which to fetch revenue data.
- * @param endDate The month for which to fetch revenue data (1-12).
- * @returns A promise that resolves to the
+ * @param {Date | string} [startDate=""] - The start date for the query.
+ * @param {Date | string} [endDate=""] - The end date for the query.
+ * @returns {Promise<dailyStat[]>} The API response containing daily revenue statistics.
+ * @throws {Error} If the request fails.
  */
-
 export const getDailyRevenue = async (
   startDate: Date | string = "",
   endDate: Date | string = ""
@@ -407,11 +449,12 @@ export const getDailyRevenue = async (
 };
 
 /**
- * Fetches room data for a given month.
+ * Fetches and compares daily revenue data.
  *
- * @param startDate The startDate for which to fetch room data.
- * @param endDate The month for which to fetch room data (1-12).
- * */
+ * @returns {Promise<compareDaily>} The API response containing daily revenue comparison data.
+ * @throws {Error} If the request fails.
+ */
+
 export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
   try {
     const response = await api.get(`/reservations/compare-daily-revenue`);
@@ -423,11 +466,13 @@ export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
 };
 
 /**
- * Fetches room data for a given month.
+ * Searches for reservations based on a given query string.
  *
- * @param startDate The startDate for which to fetch room data.
- * @param endDate The month for which to fetch room data (1-12).
- * */
+ * @param {string} payload - The search query.
+ * @returns {Promise<Object>} The API response containing matching reservations.
+ * @throws {Error} If the request fails.
+ */
+
 export const getSearchData = async (payload: string) => {
   try {
     const response = await api.get(`/reservations/search?search=${payload}`);
@@ -439,11 +484,13 @@ export const getSearchData = async (payload: string) => {
 };
 
 /**
- * Deletes a reservation by ID.
+ * Fetches a paginated list of reservations.
  *
- * @param id The ID of the reservation to delete.
- * @returns A promise that resolves to the deleted reservation data.
- * */
+ * @param {number} start - The starting index for pagination.
+ * @param {number} limit - The number of reservations to fetch per page.
+ * @returns {Promise<Object>} The API response containing reservations data.
+ * @throws {Error} If the request fails.
+ */
 export const deleteReservations = async (id: string) => {
   try {
     const response = await api.delete(`/reservations/${id}`);
@@ -453,6 +500,13 @@ export const deleteReservations = async (id: string) => {
     throw error;
   }
 };
+
+/**
+ * Fetches reservations data with pagination.
+ *
+ * @param start The start index for pagination.
+ * @param limit The number of records to fetch per page.
+ * */
 
 export const getReservationsPagination = async (
   start: number,
@@ -467,4 +521,40 @@ export const getReservationsPagination = async (
     console.error("Error deleting reservations:", error);
     throw error;
   }
+};
+
+/**
+ * Fetches today's room reservations, categorizes them by type, and calculates total revenue.
+ *
+ * @returns {Promise<Object>} An object containing:
+ *   - todayHourRoom {number}: Number of hourly bookings.
+ *   - todayOvernightRoom {number}: Number of overnight bookings.
+ *   - totalRevenue {number}: Total revenue for today.
+ *   - totalRooms {number}: Total number of bookings today.
+ */
+
+export const getTodayRooms = async () => {
+  const { startDate, endDate } = getTodayISODate();
+  const TodayData = await getReservationsFromDate(startDate, endDate);
+
+  const TodayHourRoom = TodayData.filter(
+    (x) => x.booking.type === RoomType.Hour
+  );
+
+  const TodayOvernightRoom = TodayData.filter(
+    (x) => x.booking.type === RoomType.Overnight
+  );
+
+  const totalRevenue = TodayData.reduce(
+    (sum, item) => sum + Number(item.amount),
+    0
+  );
+
+  const totalRooms = TodayData.length;
+  return {
+    todayHourRoom: TodayHourRoom.length,
+    todayOvernightRoom: TodayOvernightRoom.length,
+    totalRevenue,
+    totalRooms,
+  };
 };

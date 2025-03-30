@@ -1,4 +1,4 @@
-import { Calendar } from "@/";
+import Ellipsis from "@/assets/svg/ellipsis.svg";
 
 export type DashboardCardProps = {
   title: string;
@@ -34,16 +34,16 @@ const DashboardCard = ({ CardData }: { CardData: DashboardCardProps }) => {
         </div>
         <h3 className=" text-left text-grey font-normal text-[14px] whitespace-nowrap">
           {title}
-          <p className="font-bold text-4xl leading-snug text-black">
-            {value?.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
-          </p>
+          <p className="font-bold text-4xl leading-snug text-black">{value}</p>
         </h3>
       </div>
       <div className="h-full">
-        <Ellipsis color="grey" size={30} min={10} />
+        <img
+          src={Ellipsis}
+          alt="eliipsis icon"
+          width={25}
+          style={{ fill: "grey" }}
+        />
       </div>
     </div>
   );
