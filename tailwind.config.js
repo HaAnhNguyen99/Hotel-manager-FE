@@ -7,6 +7,23 @@ module.exports = {
         bigShoulders: ["Big Shoulders Stencil", "cursive"],
       },
       colors: {
+        grey: {
+          DEFAULT: "#D9D9D9",
+          secondary: "##ffffff8a",
+        },
+        blue: {
+          DEFAULT: "#00274D",
+        },
+        green: {
+          DEFAULT: "#94E9B8",
+        },
+        yellow: {
+          DEFAULT: "#FFDB56",
+          secondary: "#FFE99A",
+        },
+        pink: {
+          DEFAULT: "#B490AC",
+        },
         primary: {
           DEFAULT: "#F72585",
           foreground: "#FFFFFF",

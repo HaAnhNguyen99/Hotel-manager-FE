@@ -62,6 +62,7 @@
   }
 
   .stat-card {
-    @apply bg-white border border-white shadow-md rounded-xl p-4 text-black m-2 basis-[18rem];
+    @apply bg-white border border-white shadow-md rounded-[20px] p-4 text-black basis-[18rem];
+    filter: drop-shadow(6px 4px 15px rgba(0, 0, 0, 0.1));
   }
 }

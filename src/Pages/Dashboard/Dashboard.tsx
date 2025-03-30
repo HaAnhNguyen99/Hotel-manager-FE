@@ -1,22 +1,14 @@
-import { ChevronsUp, ChevronsDown } from "lucide-react";
-import DashboardCard from "@/components/Dashboard/DashboardCard/DashboardCard";
 import { useEffect, useState } from "react";
 import { getCardData } from "./Dashboard.Data";
 import { compareDaily, dailyStat, yearlyStat } from "@/types/reservation";
-import BarChart from "@/components/Dashboard/BarChart/BarChart";
-import DailyBarChart from "@/components/Dashboard/DailyBarChart/DailyBarChart";
-import { Badge } from "@/components/ui/badge";
 import {
   getCompareDailyRevenue,
   getDailyRevenue,
   getYearlyStat,
 } from "@/services/hotelService";
-import Overview from "@/components/Dashboard/Overview/Overview";
-import HistoryPayment from "@/components/Dashboard/HistoryPayment/HistoryPayment";
-import YearPicker from "@/components/Dashboard/YearPicker/YearPicker";
-import { DatePickerWithRange } from "@/components/Dashboard/DateRangePicker/DateRangePicker";
 import { DateRange } from "react-day-picker";
-import DashboardHeader from "@/components/Dashboard/DashboardHeader/DashboardHeader";
+import Header from "@/components/Dashboard/Header/Header";
+import MainContent from "@/components/Dashboard/MainContent/MainContent";
 
 interface ChartData {
   date: string;
@@ -125,75 +117,19 @@ const Dashboard = () => {
     },
   ];
 
-
   return (
     <div className="p-4 px-10">
-      <DashboardHeader />
-      <section>
-        <div className="flex gap-2 mt-10">
-          <div>
-            <h3 className="text-sm font-bold">Tổng thu</h3>
-            <div className="flex gap-2">
-              <p className="text-2xl font-extrabold">
-                ${compareRevenue.todayTotal}
-              </p>
-              <Badge
-                variant="outline"
-                className={`flex gap-1 w-fit rounded-xl text-white ${
-                  compareRevenue.percentageChange > 0
-                    ? "bg-green-400"
-                    : "bg-red-400"
-                }`}>
-                {compareRevenue.percentageChange > 0 ? (
-                  <ChevronsUp />
-                ) : (
-                  <ChevronsDown />
-                )}
-                <p className="font-bold">{compareRevenue.percentageChange}%</p>
-              </Badge>
-            </div>
-            <div className="text-sm">
-              <span>
-                So với hôm qua -{" "}
-                <span className="font-bold">
-                  ${compareRevenue.yesterdayTotal}
-                </span>
-              </span>
-            </div>
-          </div>
-          <div className="flex gap-2 justify-around flex-wrap w-full">
-            {cardData.map((data, index) => (
-              <DashboardCard key={index} CardData={data} />
-            ))}
-          </div>
-        </div>
-      </section>
-      <section>
-        <div className="flex gap-2 justify-around mt-10">
-          <div>
-            <YearPicker selectedYear={year} onYearChange={setYear} />
-            <BarChart yearlyStat={yearlyStat} />
-          </div>
-          <div className="flex gap-10">
-            <div className="space-y-2">
-              {overviewData.map((overviewData, index) => (
-                <Overview
-                  key={index}
-                  title={overviewData.title}
-                  value={overviewData.value}
-                />
-              ))}
-            </div>
-            <div className=" p-2 rounded-lg">
-              <DatePickerWithRange date={date} setDate={setDate} />
-              <DailyBarChart data={revenueData} />
-            </div>
-          </div>
-        </div>
-      </section>
-      <section>
-        <HistoryPayment />
-      </section>
+      <Header compareRevenue={compareRevenue}  />
+      <MainContent
+        yearlyStat={yearlyStat}
+        overviewData={overviewData}
+        revenueData={revenueData}
+        date={date}
+        setDate={setDate}
+        year={year}
+        setYear={setYear}
+        cardData={cardData}
+      />
     </div>
   );
 };

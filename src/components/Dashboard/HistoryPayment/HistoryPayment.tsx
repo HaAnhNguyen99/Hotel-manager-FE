@@ -33,17 +33,19 @@ const HistoryPayment: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-10 p-2 px-4 rounded-2xl border border-gray-500 shadow-lg">
-      <h3 className="text-center font-bold text-2xl">Lịch sử</h3>
-      <PaymentTable
-        paymentData={paymentData}
-        setPaymentData={setPaymentData}
-        pagination={pagination}
-        setPagination={setPagination}
-        handlePagination={handlePagination}
-        loading={loading}
-      />
-    </div>
+    <section>
+      <div className="mt-10 p-2 px-4 rounded-2xl border border-gray-500 shadow-lg">
+        <h3 className="text-center font-bold text-2xl">Lịch sử</h3>
+        <PaymentTable
+          paymentData={paymentData}
+          setPaymentData={setPaymentData}
+          pagination={pagination}
+          setPagination={setPagination}
+          handlePagination={handlePagination}
+          loading={loading}
+        />
+      </div>
+    </section>
   );
 };
 

@@ -1,13 +1,13 @@
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { Calendar } from "@/";
 
-type DashboardCardProps = {
+export type DashboardCardProps = {
   title: string;
-  value: number | string;
-  icon: React.ElementType;
-  day: string;
-  profit: number;
-  color: string;
-  foreground: string;
+  value?: number | string;
+  icon?: React.ElementType;
+  day?: string;
+  profit?: number;
+  color?: string;
+  foreground?: string;
   textColor?: string;
   iconColor?: string;
 };
@@ -17,35 +17,33 @@ const DashboardCard = ({ CardData }: { CardData: DashboardCardProps }) => {
     title,
     value,
     icon: Icon,
-    day,
-    profit,
-    color,
-    foreground,
+    color = "bg-white",
+    foreground = "bg-yellow-secondary",
     textColor,
-    iconColor,
+    iconColor = "pink",
   } = CardData;
-  const isProfitPositive = profit > 0;
-  const ProfitIcon = isProfitPositive ? TrendingUp : TrendingDown;
-  const profitColor = isProfitPositive ? "text-green-600" : "text-red-500";
 
   return (
-    <div className={`stat-card ${color} ${textColor}`}>
-      <div className="flex gap-2 mb-5">
-        <div className={`${foreground} p-1 rounded-md`}>
-          {Icon && <Icon size={24} color={iconColor} />}
-        </div>
-        <h3 className="self-center">{title}</h3>
-      </div>
-
-      <div className="flex gap-2 items-end justify-center">
-        <p className="font-bold text-4xl leading-snug">{value}</p>
-        <div className="self-anchor-center">
-          <div className={`flex items-center gap-1 ${profitColor}`}>
-            <ProfitIcon color={isProfitPositive ? "green" : "red"} size={14} />
-            <p className="text-[0.7rem] font-semibold">{profit}%</p>
+    <div
+      className={`stat-card ${color} ${textColor} flex-1 flex-shrink-0 py-6 px-8 flex gap-2 justify-between`}>
+      <div className="flex gap-4 items-center py-6">
+        <div className="self-center">
+          <div className={`${foreground} rounded-full p-5`}>
+            {Icon && <Icon size={32} color={iconColor} />}
           </div>
-          <p className="text-[0.8rem]">{day}</p>
         </div>
+        <h3 className=" text-left text-grey font-normal text-[14px] whitespace-nowrap">
+          {title}
+          <p className="font-bold text-4xl leading-snug text-black">
+            {value?.toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}
+          </p>
+        </h3>
+      </div>
+      <div className="h-full">
+        <Ellipsis color="grey" size={30} min={10} />
       </div>
     </div>
   );

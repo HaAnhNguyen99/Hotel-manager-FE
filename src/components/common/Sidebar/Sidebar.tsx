@@ -88,7 +88,7 @@ const AppSidebar = () => {
           <SkeletonSidebarHeader />
         ) : (
           <>
-            <a href="#" className=" rounded-lg overflow-hidden ">
+            <NavLink to="/" className=" rounded-lg overflow-hidden ">
               <img
                 src={hotelProfile.logo?.url}
                 alt={hotelProfile.logo?.name}
@@ -96,7 +96,7 @@ const AppSidebar = () => {
                 height={50}
                 className={`${loading ? "animate-pulse" : ""}`}
               />
-            </a>
+            </NavLink>
             <p
               className={`${
                 state === "collapsed" ? "hidden" : "block"
@@ -117,9 +117,10 @@ const AppSidebar = () => {
                     <NavLink
                       to={item.url}
                       className={({ isActive }) => {
+                        console.log(isActive);
                         return isActive
                           ? "text-primary font-semibold"
-                          : "text-muted-foreground hover:text-primary";
+                          : "text-muted-foreground hover:text-primary ";
                       }}>
                       <item.icon />
                       <span>{item.title}</span>
