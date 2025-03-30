@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import YearPicker from "../YearPicker/YearPicker";
-import { DatePickerWithRange } from "../DateRangePicker/DateRangePicker";
-import DailyBarChart from "../DailyBarChart/DailyBarChart";
 import HistoryPayment from "../HistoryPayment/HistoryPayment";
-import BarChart from "../BarChart/BarChart";
 import DashboardCard from "../DashboardCard/DashboardCard";
 import { DateRange } from "react-day-picker";
 import { CardItem, YearlyStat, ChartData } from "@/types/dashboard";
 import { fetchCardData } from "@/services/dashboardService";
+import YearlyRevenueChart from "../YearlyRevenueChart/YearlyRevenueChart";
+import DailyRevenueChart from "../DailyRevenueChart/DailyRevenueChart";
 
 interface MainContentProps {
   yearlyStat: YearlyStat[];
@@ -44,17 +42,17 @@ const MainContent = ({
             <DashboardCard key={index} CardData={data} />
           ))}
         </div>
-        <div className="mt-10 flex justify-around gap-2">
-          <div>
-            <YearPicker selectedYear={year} onYearChange={setYear} />
-            <BarChart yearlyStat={yearlyStat} />
-          </div>
-          <div className="flex gap-10">
-            <div className="rounded-lg p-2">
-              <DatePickerWithRange date={date} setDate={setDate} />
-              <DailyBarChart data={revenueData} />
-            </div>
-          </div>
+        <div className="mt-10 flex justify-between gap-2">
+          <YearlyRevenueChart
+            yearlyStat={yearlyStat}
+            year={year}
+            setYear={setYear}
+          />
+          <DailyRevenueChart
+            revenueData={revenueData}
+            date={date}
+            setDate={setDate}
+          />
         </div>
       </section>
       <HistoryPayment />

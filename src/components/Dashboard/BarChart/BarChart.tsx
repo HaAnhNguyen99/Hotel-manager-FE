@@ -36,10 +36,9 @@ const BarChart: React.FC<BarChartProps> = ({ yearlyStat }) => {
       {
         label: "Doanh thu (VNĐ)",
         data: dataValues,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "#FFDB56",
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: 20,
       },
     ],
   };
@@ -85,7 +84,7 @@ const BarChart: React.FC<BarChartProps> = ({ yearlyStat }) => {
     },
   };
 
-  return <Bar height={500} width={500} data={chartConfig} options={options} />;
+  return <Bar height={280} width={440} data={chartConfig} options={options} />;
 };
 
 export default BarChart;

@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import YearIcon from "@/assets/svg/calendar.svg";
+import { ChevronDown } from "lucide-react";
 
 interface YearPickerProps {
   selectedYear: number;
@@ -17,14 +18,14 @@ const YearPicker: React.FC<YearPickerProps> = ({
   onYearChange,
 }) => {
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => currentYear - i); 
+  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
   return (
     <Popover>
-      <PopoverTrigger asChild className="mb-10">
+      <PopoverTrigger asChild>
         <Button variant="outline" className="w-32 flex justify-center">
-          <img src={YearIcon} alt="year icon" width={20} />
-          {selectedYear !== currentYear ? selectedYear : ""}
+          {selectedYear !== currentYear ? selectedYear : currentYear}
+          <ChevronDown width={20} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-32 p-2">
