@@ -14,10 +14,15 @@ const DailyRevenueChart = ({
   setDate,
 }: DailyRevenueChartProps) => {
   return (
-    <div className="flex gap-10">
-      <div className="rounded-lg p-2">
-        <DatePickerWithRange date={date} setDate={setDate} />
-        <DailyBarChart data={revenueData} />
+    <div className="card-shadow flex-1 w-2/4 h-full">
+      <div className="rounded-lg p-2 h-full">
+        <div className="flex justify-between mb-10">
+          <p className="card-header">Doanh thu ngày</p>
+          <DatePickerWithRange date={date} setDate={setDate} />
+        </div>
+        <div className="h-52 w-full">
+          <DailyBarChart data={revenueData} />
+        </div>
       </div>
     </div>
   );

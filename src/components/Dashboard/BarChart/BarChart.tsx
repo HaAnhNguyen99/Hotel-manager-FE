@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 import { ChartData } from "chart.js";
 import { yearlyStat } from "@/types/reservation";
@@ -19,7 +20,8 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 interface BarChartProps {
@@ -45,6 +47,7 @@ const BarChart: React.FC<BarChartProps> = ({ yearlyStat }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -84,7 +87,7 @@ const BarChart: React.FC<BarChartProps> = ({ yearlyStat }) => {
     },
   };
 
-  return <Bar height={280} width={440} data={chartConfig} options={options} />;
+  return <Bar data={chartConfig} options={options} />;
 };
 
 export default BarChart;

@@ -1,11 +1,10 @@
-import { getCardData } from "@/Pages/Dashboard/Dashboard.Data";
 import {
   getCompareDailyRevenue,
   getDailyRevenue,
   getTodayRooms,
   getYearlyStat,
 } from "@/services/hotelService";
-import { ChartData, CompareDaily, YearlyStat } from "@/types/dashboard";
+import { ChartData, YearlyStat } from "@/types/dashboard";
 
 export const fetchDashboardData = async () => {
   const [yearlyStat, compareRevenue] = await Promise.all([
@@ -27,6 +26,6 @@ export const fetchYearlyData = async (year: number): Promise<YearlyStat[]> => {
 };
 
 export const fetchCardData = async () => {
-  const todayData = await getTodayRooms();
-  return getCardData(todayData);
+  const data = await getTodayRooms();
+  return data;
 };

@@ -4,6 +4,7 @@ import {
   ChartData,
   LineController,
   BarController,
+  Filler,
 } from "chart.js";
 import { DailyBarChartProps } from "./DailyBarChart";
 import {
@@ -28,7 +29,8 @@ ChartJS.register(
   BarController,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 export function chartOption(data: DailyBarChartProps): {
@@ -49,8 +51,8 @@ export function chartOption(data: DailyBarChartProps): {
         type: "line" as const,
         label: "Tổng",
         data: data.data.map((item) => item.total),
-        borderColor: "#4CAF50",
-        backgroundColor: "rgba(76, 175, 80, 0.2)",
+        borderColor: "#b490ac",
+        backgroundColor: "rgba(144, 115, 138, 0.2)",
         yAxisID: "y",
         tension: 0.3,
         fill: true,
@@ -60,8 +62,9 @@ export function chartOption(data: DailyBarChartProps): {
         label: "Số phòng",
         data: data.data.map((item) => item.roomCount),
         borderColor: "#2196F3",
-        backgroundColor: "#99BC85",
+        backgroundColor: "#FFDB56",
         yAxisID: "y1",
+        borderRadius: 10,
       },
     ],
   };

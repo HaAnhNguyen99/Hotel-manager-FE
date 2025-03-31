@@ -1,4 +1,9 @@
-import { Bed, CircleDollarSign } from "lucide-react";
+import {
+  Bed,
+  CalendarCheck,
+  CalendarClock,
+  CircleDollarSign,
+} from "lucide-react";
 
 interface TodayData {
   todayHourRoom: number;
@@ -21,18 +26,17 @@ export const getCardData = ({
     {
       title: "Tổng số phòng",
       value: totalRooms,
-      icon: Bed,
+      icon: CalendarCheck,
     },
     {
       title: "Tổng lợi nhuận",
       value: Revenue,
       icon: CircleDollarSign,
-      iconColor: "pink",
     },
     {
       title: "Phòng giờ",
       value: todayHourRoom,
-      icon: Bed,
+      icon: CalendarClock,
     },
     {
       title: "Phòng qua đêm",

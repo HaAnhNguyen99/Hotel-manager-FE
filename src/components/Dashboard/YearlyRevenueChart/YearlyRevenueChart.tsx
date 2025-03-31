@@ -14,14 +14,14 @@ const YearlyRevenueChart = ({
   setYear,
 }: YearlyRevenueChartProp) => {
   return (
-    <div className="card-shadow w-full">
-      <div className="flex justify-between mb-5">
-        <p className="text-xl font-bold leading-6 text-black whitespace-nowrap">
-          Doanh thu theo năm
-        </p>
+    <div className="card-shadow w-1/4 pt-9">
+      <div className="flex justify-between mb-10">
+        <p className="card-header">Doanh thu theo năm</p>
         <YearPicker selectedYear={year} onYearChange={setYear} />
       </div>
-      <BarChart yearlyStat={yearlyStat} />
+      <div className="h-52">
+        <BarChart yearlyStat={yearlyStat} />
+      </div>
     </div>
   );
 };

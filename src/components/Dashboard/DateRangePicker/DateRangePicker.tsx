@@ -33,21 +33,21 @@ export function DatePickerWithRange({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal text-black",
+              "p-2 px-4 flex gap-3 font-normal  text-[#1B1B1B] bg-[#f5f5f5] justify-center rounded-xl",
               !date && "text-muted-foreground"
             )}>
             <CalendarIcon />
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y", { locale: vi })} -{" "}
-                  {format(date.to, "LLL dd, y", { locale: vi })}
+                  {format(date.from, "dd-MM-y", { locale: vi })} -{" "}
+                  {format(date.to, "dd-MM-y", { locale: vi })}
                 </>
               ) : (
-                format(date.from, "LLL dd, y", { locale: vi })
+                format(date.from, "dd-MM-y", { locale: vi })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Chọn ngày</span>
             )}
           </Button>
         </PopoverTrigger>
