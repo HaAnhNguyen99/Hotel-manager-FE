@@ -9,7 +9,9 @@ module.exports = {
       colors: {
         grey: {
           DEFAULT: "#D9D9D9",
-          secondary: "##ffffff8a",
+          secondary: "#ffffff8a",
+          secondaryDark: "#f5f5f5",
+          secondaryLight: "#949494",
         },
         blue: {
           DEFAULT: "#00274D",
@@ -33,7 +35,6 @@ module.exports = {
           foreground: "#7209B7",
         },
         border: "hsl(var(--border-primary))",
-
         accent: {
           DEFAULT: "#3A0CA3",
           foreground: "#7209B7",

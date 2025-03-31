@@ -17,6 +17,7 @@
   --gray-secondary: 0 0% 30%;
   --border-primary: 0 0% 50%;
 }
+
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -67,7 +68,16 @@
   }
 
   .card-shadow {
-    @apply bg-white border border-white shadow-md rounded-[20px] text-black basis-[18rem] h-fit p-6;
+    @apply bg-white border border-white shadow-md rounded-[20px] text-black  h-fit p-6;
+    filter: drop-shadow(6px 4px 15px rgba(0, 0, 0, 0.1));
+  }
+
+  .card-header {
+    @apply text-xl font-bold leading-6 text-black whitespace-nowrap;
+  }
+
+  .shadow-small {
+    @apply shadow-lg;
     filter: drop-shadow(6px 4px 15px rgba(0, 0, 0, 0.1));
   }
 }
