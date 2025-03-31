@@ -82,7 +82,7 @@ const AppSidebar = () => {
   }, []);
 
   return (
-    <Sidebar variant="inset" collapsible="icon">
+    <Sidebar variant="inset" collapsible="icon" className="border shadow-small">
       <SidebarHeader className="flex md:flex-row gap-2 items-center justify-center">
         {loading ? (
           <SkeletonSidebarHeader />
