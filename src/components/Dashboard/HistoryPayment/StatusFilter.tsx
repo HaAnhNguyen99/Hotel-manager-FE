@@ -34,11 +34,13 @@ const StatusFilter = () => {
       <PopoverContent className="w-auto p-0">
         <div className="flex flex-col gap-2 p-2 border-border border bg-grey-secondaryDark">
           <Button
+            onClick={() => setStatus(BookingStatus.Completed)}
             variant="ghost"
             className="border border-gray-500 rounded-lg hover:bg-black hover:text-white transition-all">
             Hoàn tất
           </Button>
           <Button
+            onClick={() => setStatus(BookingStatus.Pending)}
             variant="ghost"
             className="border border-gray-500 rounded-lg hover:bg-black hover:text-white transition-all ">
             Chờ thanh toán

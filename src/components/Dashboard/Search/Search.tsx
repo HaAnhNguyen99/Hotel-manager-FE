@@ -42,11 +42,11 @@ const Search = () => {
         </label>
         <button type="submit" hidden />
       </form>
-      {/* <div className="absolute -bottom-6 left-0 right-0 border-border border px-3 ">
+      <div className="absolute -bottom-6 left-0 right-0 border-border border px-3 ">
         {loading
           ? "Loading..."
           : searchData?.map((item, index) => <p key={index}>{item.id}</p>)}
-      </div> */}
+      </div>
     </div>
   );
 };

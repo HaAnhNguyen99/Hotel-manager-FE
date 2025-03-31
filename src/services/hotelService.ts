@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   BookingStatus,
   CreateBookingPayload,
-  RoomType,
   UpdateBookingData,
 } from "@/types/booking";
 import { UpdateServiceUsagePayload } from "@/types/service_usage";

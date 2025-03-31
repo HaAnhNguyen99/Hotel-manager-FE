@@ -8,6 +8,7 @@ import {
 } from "chart.js";
 import "./PaymentMethodChart.css";
 import { convertMoney } from "@/utils/convertMoney";
+import { TooltipItem } from "chart.js";
 
 // Register ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend, Filler);
@@ -58,7 +59,7 @@ const PaymentMethodChart = ({ Data }: PaymentMethodChartProps) => {
       },
       tooltip: {
         callbacks: {
-          label: function (context) {
+          label: function (context: TooltipItem<"doughnut">) {
             const label = context.label || "";
             const value = context.raw || 0;
             return `${label}: $${value.toLocaleString()}`;
