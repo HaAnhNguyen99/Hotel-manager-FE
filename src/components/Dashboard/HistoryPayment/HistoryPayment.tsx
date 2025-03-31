@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import PaymentTable from "../PaymentTable/PaymentTable";
 import { getReservationsPagination } from "@/services/hotelService";
 import { RevenueData } from "@/types/reservation";
+import HistoryHeader from "./HistoryHeader";
 
 const HistoryPayment: React.FC = () => {
   const [paymentData, setPaymentData] = useState<RevenueData[] | undefined>();
@@ -34,8 +35,8 @@ const HistoryPayment: React.FC = () => {
 
   return (
     <section>
-      <div className="mt-10 p-2 px-4 rounded-2xl border border-gray-500 shadow-lg">
-        <h3 className="text-center font-bold text-2xl">Lịch sử</h3>
+      <div className="card-shadow mt-10">
+        <HistoryHeader />
         <PaymentTable
           paymentData={paymentData}
           setPaymentData={setPaymentData}

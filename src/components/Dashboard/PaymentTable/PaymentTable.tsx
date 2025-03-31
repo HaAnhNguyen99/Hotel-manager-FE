@@ -14,7 +14,7 @@ import { deleteReservations } from "@/services/hotelService";
 import { BookingStatus } from "@/types/booking";
 import { PaymentMethod } from "@/types/payment";
 import { RevenueData } from "@/types/reservation";
-import { CircleX } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleX } from "lucide-react";
 import { toast } from "sonner";
 
 // Hàm định dạng ngày
@@ -97,10 +97,18 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
         </TableHeader>
         <TableBody>
           {loading ? (
-            <InlineLoading />
+            <TableRow>
+              <TableCell colSpan={10} className="text-center">
+                <InlineLoading />
+              </TableCell>
+            </TableRow>
           ) : paymentData ? (
-            paymentData.map((payment: RevenueData) => (
-              <TableRow key={payment.id} className="text-center">
+            paymentData.map((payment: RevenueData, index: number) => (
+              <TableRow
+                key={payment.id}
+                className={`text-center ${
+                  index % 2 === 0 ? "bg-[#fffaf7]" : "bg-[#fff6eb]"
+                }`}>
                 <TableCell className="font-medium text-left">
                   {payment.id}
                 </TableCell>
@@ -119,10 +127,10 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
                 <TableCell>{payment.booking.type}</TableCell>
                 <TableCell>{payment.note || "Không có"}</TableCell>
                 <TableCell className="flex justify-center">
-                  <p className="border-green-300 boder bg-green-400 w-fit p-2 rounded-lg text-neutral-100">
+                  <p className="border-green-300 boder bg-[#8193a6] w-fit p-2 rounded-2xl text-[#93e9b8] max-h-[80%]">
                     {payment.booking.booking_status === BookingStatus.Completed
-                      ? "Hoàn thành"
-                      : "Chưa hoàn thành"}
+                      ? "Hoàn tất"
+                      : "Chờ thanh toán"}
                   </p>
                 </TableCell>
                 <TableCell>
@@ -138,15 +146,23 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
               </TableRow>
             ))
           ) : (
-            <TableRow>
+            <TableRow className="bg-[#fffaf7]">
               <TableCell>"Không có dữ liệu"</TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <div className="flex justify-center w-full mx-auto">
-        <div className="flex justify-between gap-5 mt-4 items-center text-xl font-extrabold ">
+      <div className="flex justify-between w-full mt-4 mx-auto text-gray-400 text-sm">
+        <div>
+          <p className="flex">
+            <span>Trang {pagination.start / pagination.limit + 1} </span>
+            <span>/</span>
+            <span>{Math.ceil(pagination.total / pagination.limit)}</span>
+          </p>
+        </div>
+        <div className="flex gap-1 max-h-5">
           <Button
+            className="h-full bg-gray-300"
             disabled={pagination.start === 0}
             onClick={() => {
               setPagination((prev) => ({
@@ -155,14 +171,11 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
               }));
               handlePagination(pagination.start - pagination.limit);
             }}>
-            Trang trước
+            <ChevronLeft />
           </Button>
-          <p className="flex">
-            <span>{pagination.start / pagination.limit + 1} </span>
-            <span>/</span>
-            <span>{Math.ceil(pagination.total / pagination.limit)}</span>
-          </p>
+
           <Button
+            className="h-full bg-gray-300"
             disabled={pagination.start + pagination.limit >= pagination.total}
             onClick={() => {
               setPagination((prev) => ({
@@ -171,7 +184,7 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
               }));
               handlePagination(pagination.start + pagination.limit);
             }}>
-            Trang sau
+            <ChevronRight />
           </Button>
         </div>
       </div>
