@@ -18,7 +18,7 @@ export const calculatePriceDetails = (
   const hours = checkinTime ? calculateHours(checkinTime, checkoutTime) : 0;
 
   if (!checkinTime) {
-    throw new Error("Check-in date is required"); // Or handle it differently
+    throw new Error("Check-in date is required");
   }
 
   let roomPrice = 0;
