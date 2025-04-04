@@ -11,12 +11,27 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getHotelProfile } from "@/services/hotelService";
-import { Home, LayoutDashboard, Settings } from "lucide-react";
+import {
+  CircleUser,
+  Home,
+  LayoutDashboard,
+  LogOut,
+  RefreshCcw,
+  Settings,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
+import { Button } from "@/components/ui/button";
+import { useUserContext } from "@/context/UserContext";
 
 function SkeletonSidebarHeader() {
   return (
@@ -29,7 +44,7 @@ function SkeletonSidebarHeader() {
 const items = [
   {
     title: "Phòng",
-    url: "/",
+    url: "/home",
     icon: Home,
   },
   {
@@ -55,6 +70,7 @@ const AppSidebar = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  const { logoutUser } = useUserContext();
   const { state, open } = useSidebar();
 
   useEffect(() => {
@@ -82,7 +98,7 @@ const AppSidebar = () => {
   }, []);
 
   return (
-    <Sidebar variant="inset" collapsible="icon" className="border shadow-small">
+    <Sidebar variant="inset" collapsible="icon" className="sidebar-shadow">
       <SidebarHeader className="flex md:flex-row gap-2 items-center justify-center">
         {loading ? (
           <SkeletonSidebarHeader />
@@ -106,26 +122,25 @@ const AppSidebar = () => {
           </>
         )}
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="transition-all duration-500 ease-in-out">
         <SidebarGroup>
           <SidebarGroupLabel>Điều hướng</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      className={({ isActive }) => {
-                        console.log(isActive);
-                        return isActive
-                          ? "text-primary font-semibold"
-                          : "text-muted-foreground hover:text-primary ";
-                      }}>
-                      <item.icon />
+                  <NavLink
+                    to={item.url}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "text-white font-semibold flex items-center gap-2 bg-yellow rounded-lg"
+                        : "flex items-center gap-2 rounded-lg "
+                    }>
+                    <SidebarMenuButton className="hover:bg-neutral-500 hover:rounded-lg hover:text-white">
+                      <item.icon className="w-3 h-3" />
                       <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
+                    </SidebarMenuButton>
+                  </NavLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -134,6 +149,25 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter>
         <ToggleTheme />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <CircleUser color="black" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="center"
+            className="translate-x-14">
+            <DropdownMenuItem onClick={logoutUser} className="flex gap-2">
+              <LogOut />
+              Đăng xuất
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex gap-2">
+              <RefreshCcw />
+              Đổi mật khẩu
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );
