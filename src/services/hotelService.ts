@@ -24,6 +24,28 @@ const api = axios.create({
   },
 });
 
+const getAuthToken = () => {
+  try {
+    const userData =
+      localStorage.getItem("user") || sessionStorage.getItem("user");
+    if (!userData) return null;
+
+    const user = JSON.parse(userData);
+    return user?.jwt || null;
+  } catch (error) {
+    console.error("Lỗi khi lấy token từ localStorage:", error);
+    return null;
+  }
+};
+
+api.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 /**
  * Fetches all rooms sorted by room number with related data populated.
  *
@@ -536,5 +558,5 @@ export const getTodayRooms = async () => {
   const { startDate, endDate } = getTodayISODate();
   const TodayData = await getReservationsFromDate(startDate, endDate);
 
- return TodayData
+  return TodayData;
 };

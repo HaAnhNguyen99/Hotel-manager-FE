@@ -1,6 +1,8 @@
 import logo from "@/assets/images/logo v2 dark.jpeg";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import Login from "./Login";
+import { useUserContext } from "@/context/UserContext";
 const Header = () => {
   const data = [
     { title: "Lorem", link: "#" },
@@ -8,6 +10,7 @@ const Header = () => {
     { title: "Lorem", link: "#" },
     { title: "Lorem", link: "#" },
   ];
+  const { isAuthenticated, logoutUser } = useUserContext();
   return (
     <header className="flex justify-between items-center p-4">
       <div className="flex gap-2 items-center">
@@ -28,9 +31,13 @@ const Header = () => {
           <div key={index}>{<Link to={x.link}>{x.title}</Link>}</div>
         ))}
       </div>
-      <Button className="px-4 py-2 border border-border text-border">
-        Đăng nhập
-      </Button>
+      {isAuthenticated ? (
+        <Button variant="outline" onClick={logoutUser}>
+          Đăng xuất
+        </Button>
+      ) : (
+        <Login />
+      )}
     </header>
   );
 };
