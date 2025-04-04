@@ -146,7 +146,7 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
               </TableRow>
             ))
           ) : (
-            <TableRow className="bg-[#fffaf7]">
+            <TableRow className="bg-[#fffaf7] w-full text-center">
               <TableCell>"Không có dữ liệu"</TableCell>
             </TableRow>
           )}
