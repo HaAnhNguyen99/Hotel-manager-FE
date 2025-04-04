@@ -42,7 +42,11 @@ export const SelectService = ({ bookingId }: ServiceType) => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div className="text-center text-red-500 font-bold">
+        Lỗi khi lấy dữ liệu
+      </div>
+    );
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -5,6 +5,7 @@ import { FaBed, FaCheck, FaLock } from "react-icons/fa";
 import { RoomList } from "../rooms/RoomList/RoomList";
 import { MdCleaningServices } from "react-icons/md";
 import LoadingText from "../common/LoadingText/LoadingText";
+import ErrorPage from "../common/ErrorPage";
 
 export const HotelOverview = () => {
   const { rooms, loading, error } = useHotelContext();
@@ -15,7 +16,7 @@ export const HotelOverview = () => {
         <LoadingText />
       </div>
     );
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <ErrorPage error={error} />;
 
   const stats = {
     total: rooms.length,
