@@ -8,6 +8,7 @@
   --gray-primary: 0 0% 50%;
   --gray-secondary: 0 0% 75%;
   --border-primary: 0 0% 60%;
+  --sidebar-shadow: 0 0% 0%/24%;
 }
 
 .dark {
@@ -16,6 +17,7 @@
   --gray-primary: 0 0% 40%;
   --gray-secondary: 0 0% 30%;
   --border-primary: 0 0% 50%;
+  --sidebar-shadow: 0 0% 0%/44%;
 }
 
 @layer base {
@@ -79,5 +81,13 @@
   .shadow-small {
     @apply shadow-lg;
     filter: drop-shadow(6px 4px 15px rgba(0, 0, 0, 0.1));
+  }
+
+  .sidebar-shadow {
+    box-shadow: 6px 4px 15px 0px hsl(var(--sidebar-shadow));
+  }
+
+  .button-press {
+    @apply transition transform active:scale-95 duration-300;
   }
 }
