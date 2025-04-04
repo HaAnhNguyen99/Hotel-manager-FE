@@ -3,6 +3,8 @@ import { IoMdSend } from "react-icons/io";
 const Contact = () => {
   const title = "Liên hệ";
   const des = "Chúng tôi sẽ liên lạc lại trong thời gian sớm nhất";
+  
+
   return (
     <section className="bg-border flex gap-4 justify-around p-4">
       <div>

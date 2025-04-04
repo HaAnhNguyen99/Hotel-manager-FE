@@ -1,5 +1,4 @@
 import { Bath, BedSingle, Car, PawPrint } from "lucide-react";
-import React from "react";
 
 const Property = () => {
   const title = "Apartment Description";

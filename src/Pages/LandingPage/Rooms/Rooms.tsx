@@ -1,4 +1,3 @@
-import React from "react";
 import RoomItems from "./RoomItems";
 
 const Rooms = () => {

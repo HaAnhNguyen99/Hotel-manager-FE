@@ -4,6 +4,8 @@ import Property from "./Property/Property";
 import Amenities from "./Amenities/Amenities";
 import Rooms from "./Rooms/Rooms";
 import Contact from "./Contact/Contact";
+import Map from "./Map/Map";
+import Footer from "./Footer";
 
 const LandingPage = () => {
   return (
@@ -15,6 +17,8 @@ const LandingPage = () => {
         <Amenities />
         <Rooms />
         <Contact />
+        <Map />
+        <Footer />
       </main>
     </div>
   );
