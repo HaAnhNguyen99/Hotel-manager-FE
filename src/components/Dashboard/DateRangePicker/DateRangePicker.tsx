@@ -33,7 +33,7 @@ export function DatePickerWithRange({
             id="date"
             variant={"outline"}
             className={cn(
-              "p-2 px-4 flex gap-3 font-normal  text-[#1B1B1B] bg-[#f5f5f5] justify-center rounded-xl",
+              "p-2 px-4 flex gap-3 font-normal  text-[#1B1B1B] bg-[#f5f5f5] justify-center rounded-xl dark:bg-[#f5f5f5] button-shadow-mode",
               !date && "text-muted-foreground"
             )}>
             <CalendarIcon />

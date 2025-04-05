@@ -14,7 +14,7 @@ const YearlyRevenueChart = ({
   setYear,
 }: YearlyRevenueChartProp) => {
   return (
-    <div className="card-shadow w-1/4 pt-9">
+    <div className="card-shadow w-1/4 pt-9 bg-shadow-mode ">
       <div className="flex justify-between mb-10">
         <p className="card-header">Doanh thu theo năm</p>
         <YearPicker selectedYear={year} onYearChange={setYear} />

@@ -35,7 +35,7 @@ const HistoryPayment: React.FC = () => {
 
   return (
     <section>
-      <div className="card-shadow mt-10">
+      <div className="card-shadow mt-10 bg-shadow-mode ">
         <HistoryHeader />
         <PaymentTable
           paymentData={paymentData}

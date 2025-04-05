@@ -106,8 +106,10 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
             paymentData.map((payment: RevenueData, index: number) => (
               <TableRow
                 key={payment.id}
-                className={`text-center ${
-                  index % 2 === 0 ? "bg-[#fffaf7]" : "bg-[#fff6eb]"
+                className={`text-center dark:text-white hover:opacity-80 ${
+                  index % 2 === 0
+                    ? "bg-[#fffaf7] dark:bg-transparent"
+                    : "bg-[#fff6eb] dark:bg-[#9ca3af]"
                 }`}>
                 <TableCell className="font-medium text-left">
                   {payment.id}
@@ -126,8 +128,8 @@ const PaymentTable: React.FC<PaymentTableProp> = ({
                 <TableCell>{payment.booking.reduction}</TableCell>
                 <TableCell>{payment.booking.type}</TableCell>
                 <TableCell>{payment.note || "Không có"}</TableCell>
-                <TableCell className="flex justify-center">
-                  <p className="border-green-300 boder bg-[#8193a6] w-fit p-2 rounded-2xl text-[#93e9b8] max-h-[80%]">
+                <TableCell className="flex justify-center items-center mt-1 h-full">
+                  <p className="boder border-dark-green bg-white  w-fit py-1 px-2 rounded-xl text-sm text-green-dark max-h-[80%] border-green-600 border">
                     {payment.booking.booking_status === BookingStatus.Completed
                       ? "Hoàn tất"
                       : "Chờ thanh toán"}

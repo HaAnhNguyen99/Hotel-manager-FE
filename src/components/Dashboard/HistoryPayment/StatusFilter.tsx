@@ -19,7 +19,7 @@ const StatusFilter = () => {
         <Button
           variant={"outline"}
           className={cn(
-            "flex justify-around items-center gap-6 p-1 px-4  border-border border bg-grey-secondaryDark  rounded-xl",
+            "flex justify-around items-center gap-6 p-1 px-4  border-border border bg-grey-secondaryDark  rounded-xl dark:bg-grey-secondaryDark ",
             !status && "text-black"
           )}>
           <LuFilter className=" text-grey-secondaryLight" />
@@ -31,18 +31,18 @@ const StatusFilter = () => {
           <CalendarIcon className=" h-4 w-4 text-grey-secondaryLight" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <div className="flex flex-col gap-2 p-2 border-border border bg-grey-secondaryDark">
+      <PopoverContent className="w-auto p-0 ">
+        <div className="flex flex-col gap-2 p-2 rounded-md dark:bg-[#09090b] dark:text-white text-black">
           <Button
             onClick={() => setStatus(BookingStatus.Completed)}
             variant="ghost"
-            className="border border-gray-500 rounded-lg hover:bg-black hover:text-white transition-all">
+            className="border-green-600 border rounded-lg hover:bg-black hover:text-white transition-all">
             Hoàn tất
           </Button>
           <Button
             onClick={() => setStatus(BookingStatus.Pending)}
             variant="ghost"
-            className="border border-gray-500 rounded-lg hover:bg-black hover:text-white transition-all ">
+            className="border-[#ffdb56] border rounded-lg hover:bg-black hover:text-white transition-all ">
             Chờ thanh toán
           </Button>
         </div>

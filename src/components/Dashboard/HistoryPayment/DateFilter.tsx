@@ -21,7 +21,7 @@ const DateFilter = () => {
           <Button
             variant={"outline"}
             className={cn(
-              "flex justify-around text-grey-secondaryLight items-center gap-6 p-1 px-4  border-border border bg-grey-secondaryDark  rounded-xl",
+              "bg-shadow-mode flex justify-around text-grey-secondaryLight items-center gap-6 p-1 px-4  border-border border bg-grey-secondaryDark dark:bg-grey-secondaryDark  hover:text-white rounded-xl",
               !date && "text-black"
             )}>
             <LuFilter className="text-grey-secondaryLight" />

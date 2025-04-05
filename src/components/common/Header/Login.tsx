@@ -77,7 +77,7 @@ const Login = () => {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="hover:bg-black hover:opacity-80 hover:text-white hover:scale-x-105 transition-all duration-300 ease-in-out">
+          className="hover:bg-black hover:opacity-80 hover:text-white hover:scale-x-105 transition-all duration-300 ease-in-out font-semibold text-black">
           Đăng nhập
         </Button>
       </DialogTrigger>

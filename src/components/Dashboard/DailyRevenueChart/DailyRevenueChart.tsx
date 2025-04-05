@@ -14,7 +14,7 @@ const DailyRevenueChart = ({
   setDate,
 }: DailyRevenueChartProps) => {
   return (
-    <div className="card-shadow flex-1 w-2/4 h-full">
+    <div className="card-shadow flex-1 w-2/4 h-full bg-shadow-mode">
       <div className="rounded-lg p-2 h-full">
         <div className="flex justify-between mb-10">
           <p className="card-header">Doanh thu ngày</p>
