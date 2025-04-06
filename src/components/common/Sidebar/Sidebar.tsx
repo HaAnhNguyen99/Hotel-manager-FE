@@ -98,8 +98,11 @@ const AppSidebar = () => {
   }, []);
 
   return (
-    <Sidebar variant="inset" collapsible="icon" className="sidebar-shadow">
-      <SidebarHeader className="flex md:flex-row gap-2 items-center justify-center">
+    <Sidebar
+      variant="inset"
+      collapsible="icon"
+      className="sidebar-shadow bg-sidebar dark:bg-[#1e1e1e]">
+      <SidebarHeader className="flex md:flex-row gap-2 items-center justify-center dark:bg-[#1e1e1e]">
         {loading ? (
           <SkeletonSidebarHeader />
         ) : (
@@ -122,7 +125,7 @@ const AppSidebar = () => {
           </>
         )}
       </SidebarHeader>
-      <SidebarContent className="transition-all duration-500 ease-in-out">
+      <SidebarContent className="dark:bg-[#1e1e1e]">
         <SidebarGroup>
           <SidebarGroupLabel>Điều hướng</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -134,7 +137,7 @@ const AppSidebar = () => {
                     className={({ isActive }) =>
                       isActive
                         ? "text-white font-semibold flex items-center gap-2 bg-yellow rounded-lg"
-                        : "flex items-center gap-2 rounded-lg "
+                        : "flex items-center gap-2 rounded-lg text-black dark:text-grey-tertiary"
                     }>
                     <SidebarMenuButton className="hover:bg-neutral-500 hover:rounded-lg hover:text-white">
                       <item.icon className="w-3 h-3" />
@@ -147,22 +150,24 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="dark:bg-[#1e1e1e]">
         <ToggleTheme />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <CircleUser color="black" />
+            <Button
+              variant="outline"
+              className="dark:bg-transparent dark:border dark:border-gray-100">
+              <CircleUser className="dark:text-grey-tertiary" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="center"
-            className="translate-x-14">
-            <DropdownMenuItem onClick={logoutUser} className="flex gap-2">
+          <DropdownMenuContent align="center" className="translate-x-14">
+            <DropdownMenuItem
+              onClick={logoutUser}
+              className="flex gap-2 bg-transparent">
               <LogOut />
               Đăng xuất
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2">
+            <DropdownMenuItem className="flex gap-2 ">
               <RefreshCcw />
               Đổi mật khẩu
             </DropdownMenuItem>

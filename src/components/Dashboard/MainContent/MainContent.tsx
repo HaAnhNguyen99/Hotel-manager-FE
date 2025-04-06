@@ -49,12 +49,21 @@ const MainContent = ({
     loadCardData();
   }, []);
 
+  const handleDeleteCardItem = (title: string) => {
+    const newCardData = cardData.filter((item) => item.title !== title);
+    console.log(newCardData);
+    setCardData(newCardData);
+  };
   return (
     <main>
       <section>
-        <div className="mt-10 flex flex-wrap justify-between gap-20">
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 justify-between gap-5">
           {cardData.map((data, index) => (
-            <DashboardCard key={index} CardData={data} />
+            <DashboardCard
+              key={index}
+              CardData={data}
+              handleDeleteCardItem={handleDeleteCardItem}
+            />
           ))}
         </div>
         <div className="mt-10 flex justify-between gap-8 max-h-fit">

@@ -4,7 +4,6 @@ import {
   useState,
   ReactNode,
   useCallback,
-  useEffect,
 } from "react";
 
 type User = {

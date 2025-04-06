@@ -21,11 +21,15 @@ interface PaymentMethodChartProps {
 }
 function calculatePaymentRatio(cash: number, banking: number) {
   const total = cash + banking;
+
+  const format = (value: number) => Number(value.toFixed(2));
+
   return {
-    cashRatio: total === 0 ? 0 : (cash / total) * 100,
-    bankingRatio: total === 0 ? 0 : (banking / total) * 100,
+    cashRatio: total === 0 ? 0 : format((cash / total) * 100),
+    bankingRatio: total === 0 ? 0 : format((banking / total) * 100),
   };
 }
+
 const PaymentMethodChart = ({ Data }: PaymentMethodChartProps) => {
   const total = (Data.cash + Data.banking).toLocaleString("USD");
 
@@ -33,7 +37,7 @@ const PaymentMethodChart = ({ Data }: PaymentMethodChartProps) => {
 
   // Chart configuration
   const data = {
-    labels: ["Cash", "Banking"],
+    labels: ["Tiền mặt", "Chuyển khoản"],
     datasets: [
       {
         label: "Financial Distribution",
@@ -71,18 +75,18 @@ const PaymentMethodChart = ({ Data }: PaymentMethodChartProps) => {
   };
 
   return (
-    <div className="card-shadow w-1/4 flex-shrink-0 h-full">
+    <div className="card-shadow w-1/4 flex-shrink-0 h-full bg-shadow-mode">
       <div className="mb-10 card-header">Phương thức thanh toán</div>
       <div className="relative">
         <p className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 font-extrabold text-sm leading-6">
-          ${total}
+          ${Number(total) === 0 ? "Không có dữ liệu" : total}
         </p>
         <Doughnut data={data} options={options} className="w-64" />
       </div>
       <div className="space-y-2 mt-2">
         <div className="flex justify-between items-center ">
           <div className="flex gap-2 h-full items-center">
-            <div className="bar flex-shrink-0 w-1 bg-slate-400 min-h-12"></div>
+            <div className="bar flex-shrink-0 w-1 bg-[#ffe99a] min-h-12"></div>
             <div>
               <p className="text-sm text-gray-500">Tiền mặt</p>
               <p className="font-bold">{convertMoney(Data.cash)}</p>
@@ -96,7 +100,7 @@ const PaymentMethodChart = ({ Data }: PaymentMethodChartProps) => {
 
         <div className="flex justify-between items-center">
           <div className="flex gap-2 h-full items-center">
-            <div className="bar flex-shrink-0 w-1 bg-slate-400 min-h-12"></div>
+            <div className="bar flex-shrink-0 w-1  min-h-12 bg-[#b490ac]"></div>
             <div>
               <p className="text-sm text-gray-500">Chuyển khoản</p>
               <p className="font-bold">{convertMoney(Data.banking)}</p>

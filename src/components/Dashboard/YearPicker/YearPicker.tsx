@@ -24,7 +24,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="p-2 px-4 -tracking-tighter flex gap-5 font-normal  text-[#1B1B1B] bg-[#f5f5f5] justify-center rounded-xl">
+          className="p-2 px-4 -tracking-tighter flex gap-5 font-normal  text-[#1B1B1B] bg-grey-secondaryDark justify-center rounded-xl dark:bg-[#f5f5f5]">
           {selectedYear !== currentYear ? selectedYear : currentYear}
           <ChevronDown width={20} />
         </Button>

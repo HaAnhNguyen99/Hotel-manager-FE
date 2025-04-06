@@ -17,21 +17,21 @@ export function ToggleTheme() {
         <Button
           variant="outline"
           size="icon"
-          className="relative"
+          className="relative dark:bg-transparent dark:border dark:border-gray-100"
           tabIndex={-1}>
           <Sun
-            className={`h-[1.2rem] text-black w-[1.2rem] transition-transform duration-300 ease-in-out ${
+            className={`h-[1.2rem] text-black dark:text-grey-tertiary w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "light" ? "rotate-0 scale-100" : "rotate-90 scale-0"
             }`}
           />
           <Moon
-            className={`absolute text-black h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out ${
+            className={`absolute text-black dark:text-grey-tertiary h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "dark" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
             }`}
           />
 
           <LaptopMinimal
-            className={`absolute text-black h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out ${
+            className={`absolute text-black dark:text-grey-tertiary h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "system" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
             }`}
           />

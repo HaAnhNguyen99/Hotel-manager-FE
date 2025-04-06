@@ -1,18 +1,26 @@
 type StatCardProps = {
   title: string;
   value: number;
-  icon?: string | React.ReactNode;
-  color?: string;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  isSelected?: boolean;
 };
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color = 'primary' }) => (
-  <div className={`p-4 rounded-lg bg-card shadow-sm`}>
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-muted-foreground">{title}</p>
-        <p className={`text-2xl font-bold text-${color}`}>{value}</p>
-      </div>
-      {icon && <div className={`text-${color} text-xl`}>{icon}</div>}
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  onClick,
+  isSelected = false,
+}) => (
+  <div
+    onClick={onClick}
+    className={`py-2 px-4 rounded-lg cursor-pointer shadow-md transition border border-border hover:opacity-80 
+      ${isSelected ? " border bg-yellow-secondary" : "bg-card"}`}>
+    <div className="text-neutral-600 flex items-center justify-between gap-2">
+      <div className="text-[#ff7c7c]">{icon}</div>
+      <p className="font-semibold">{title}</p>
+      <p className="text-grey-foreground">({value})</p>
     </div>
   </div>
 );

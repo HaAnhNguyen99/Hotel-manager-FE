@@ -152,7 +152,7 @@ export const CreateRoomBtn = ({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
-          className="bg-primary text-white font-bold hover:bg-[#986ab7]/40"
+          className="bg-primary dark:bg-primary text-white font-bold hover:opacity-80"
           variant="outline"
           onClick={() => {
             onClick();
