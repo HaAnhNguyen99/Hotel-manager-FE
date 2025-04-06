@@ -14,6 +14,7 @@ module.exports = {
           secondaryLight: "var(--grey-secondary-light)",
           tertiary: "var(--grey-tertiary)",
           dark: "var(--grey-dark)",
+          foreground: "var(--grey-foreground)",
         },
         blue: {
           DEFAULT: "var(--blue)",
@@ -25,6 +26,7 @@ module.exports = {
         yellow: {
           DEFAULT: "var(--yellow)",
           secondary: "var(--yellow-secondary)",
+          dark: "var(--yellow-light)",
         },
         pink: {
           DEFAULT: "var(--pink)",

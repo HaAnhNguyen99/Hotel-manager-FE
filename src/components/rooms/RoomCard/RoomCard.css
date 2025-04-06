@@ -18,6 +18,10 @@
   transform: scale(1.05);
 }
 
-.rooms-card:hover #img-overlay {
+.rooms-card:hover #img-overlay-img {
+  opacity: 1;
+}
+
+.rooms-card:hover #img-overlay-text {
   opacity: 1;
 }
