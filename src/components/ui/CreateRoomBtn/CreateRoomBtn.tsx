@@ -1,47 +1,28 @@
-import { Dialog } from "../dialog";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Room } from "@/types/hotel";
-import { SelectService } from "../SelectService/SelectService";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
-import {
-  cancelBooking,
-  getRoomBooking,
-  updateRoomStatusAvailable,
-  updateRoomStatusOccupied,
-} from "@/services/hotelService";
-import { Spinner } from "@/components/common/Spinner/Spinner";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { toast } from "sonner";
-import { useHotelContext } from "@/context/HotelContext";
-import { RoomStatus } from "@/types/room";
-import { GuestFormSection } from "@/components/rooms/GuestFormSection/GuestFormSection";
-import { RoomDetails } from "@/components/rooms/RoomDetail/RoomDetail";
-import { BookingFormData } from "@/types/booking";
-import { convertToISO } from "@/utils/ConvertToISO";
-import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
-import Payment from "@/components/rooms/Payment/Payment";
+import { Dialog } from '../dialog';
+import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Room } from '@/types/hotel';
+import { SelectService } from '../SelectService/SelectService';
+import { Separator } from '@/components/ui/separator';
+import { useState } from 'react';
+import { cancelBooking, getRoomBooking, updateRoomStatusAvailable, updateRoomStatusOccupied } from '@/services/hotelService';
+import { Spinner } from '@/components/common/Spinner/Spinner';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { toast } from 'sonner';
+import { useHotelContext } from '@/context/HotelContext';
+import { RoomStatus } from '@/types/room';
+import { GuestFormSection } from '@/components/rooms/GuestFormSection/GuestFormSection';
+import { RoomDetails } from '@/components/rooms/RoomDetail/RoomDetail';
+import { BookingFormData } from '@/types/booking';
+import { convertToISO } from '@/utils/ConvertToISO';
+import CancelPopover from '@/components/rooms/CancelPopover/CancelPopover';
+import Payment from '@/components/rooms/Payment/Payment';
 
-export const CreateRoomBtn = ({
-  room,
-  onClick,
-}: {
-  room: Room;
-  onClick: () => void;
-}) => {
+export const CreateRoomBtn = ({ room, onClick }: { room: Room; onClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [bookingID, setBookingID] = useState<string>("");
+  const [bookingID, setBookingID] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const { reloadRooms, bookingForm, handleUpdateBooking, handleCreateBooking } =
-    useHotelContext();
+  const { reloadRooms, bookingForm, handleUpdateBooking, handleCreateBooking } = useHotelContext();
   const { setValue, control, handleSubmit, reset, getValues } = bookingForm;
 
   const handleBooking = async (room: Room) => {
@@ -50,15 +31,12 @@ export const CreateRoomBtn = ({
     if (roomBooking) {
       setBookingID(roomBooking.documentId);
       setIsOpen(true);
-      setValue("checkinDate", roomBooking.checkin);
-      setValue("guestName", roomBooking.guest_name);
-      setValue("prepayment", roomBooking.prepayment);
-      setValue("reduction", roomBooking.reduction);
-      setValue("type", roomBooking.type);
-      setValue(
-        "checkoutDate",
-        roomBooking.checkout ? convertToISO(roomBooking.checkout) : null
-      );
+      setValue('checkinDate', roomBooking.checkin);
+      setValue('guestName', roomBooking.guest_name);
+      setValue('prepayment', roomBooking.prepayment);
+      setValue('reduction', roomBooking.reduction);
+      setValue('type', roomBooking.type);
+      setValue('checkoutDate', roomBooking.checkout ? convertToISO(roomBooking.checkout) : null);
       setIsLoading(false);
     } else {
       onCreateBooking(room);
@@ -70,9 +48,9 @@ export const CreateRoomBtn = ({
       const bookingId = await handleCreateBooking(room.documentId);
       setBookingID(bookingId);
 
-      toast.success("Đã đặt phòng thành công");
+      toast.success('Đã đặt phòng thành công');
     } catch (error) {
-      console.error("Error creating booking:", error);
+      console.error('Error creating booking:', error);
     } finally {
       setIsLoading(false);
       await updateRoomStatusOccupied(room.documentId);
@@ -84,20 +62,20 @@ export const CreateRoomBtn = ({
       await updateRoomStatusOccupied(room.documentId);
       setIsOpen(false);
     } catch (error) {
-      console.error("Error updating room status:", error);
+      console.error('Error updating room status:', error);
     }
   };
 
   const onUpdate = async (data: BookingFormData) => {
     const bookingData = {
       room: room.documentId,
-      checkin: getValues("checkinDate"),
-      checkout: getValues("checkoutDate"),
+      checkin: getValues('checkinDate'),
+      checkout: getValues('checkoutDate'),
       guest_name: data.guestName,
       prepayment: Number(data.prepayment),
       reduction: Number(data.reduction),
       cccd: data.cccd,
-      type: getValues("type"),
+      type: getValues('type'),
     };
 
     const payload = {
@@ -109,9 +87,9 @@ export const CreateRoomBtn = ({
       await handleUpdateRoomStatus(room);
       await handleUpdateBooking(bookingID, payload);
 
-      toast.success("Đã cập nhật phòng !");
+      toast.success('Đã cập nhật phòng !');
     } catch (error) {
-      console.error("Error creating booking:", error);
+      console.error('Error creating booking:', error);
     } finally {
       setIsLoading(false);
       await reloadRooms();
@@ -126,7 +104,7 @@ export const CreateRoomBtn = ({
       try {
         await reloadRooms();
       } catch (error) {
-        console.error("Error canceling booking:", error);
+        console.error('Error canceling booking:', error);
       } finally {
         setIsLoading(false);
       }
@@ -136,13 +114,13 @@ export const CreateRoomBtn = ({
   const handleCancelBooking = async () => {
     try {
       setIsLoading(true);
-      setBookingID("");
+      setBookingID('');
       await cancelBooking(bookingID);
       await updateRoomStatusAvailable(room.documentId);
       await reloadRooms();
       reset();
     } catch (error) {
-      console.error("Error canceling booking:", error);
+      console.error('Error canceling booking:', error);
     } finally {
       setIsOpen(false);
     }
@@ -158,12 +136,10 @@ export const CreateRoomBtn = ({
             onClick();
             handleBooking(room);
           }}>
-          {room.room_status === RoomStatus.Occupied
-            ? "Xem chi tiết"
-            : "Đặt phòng"}
+          {room.room_status === RoomStatus.Occupied ? 'Xem chi tiết' : 'Đặt phòng'}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar bg-background">
+      <DialogContent className="sm:max-w-[425px] md:max-w-[900px] max-h-[90vh] overflow-y-scroll scrollbar-hide no-scrollbar bg-background dark:bg-sidebar dark:border dark:border-border">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold sticky -top-5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] left-0 bg-[rgb(2,0,36)] bg-[linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(240,128,128,1) 35%, rgba(0,212,255,0) 100%);] z-10 p-2 rounded-lg ">
             Phòng {room.room_number}
@@ -207,17 +183,9 @@ export const CreateRoomBtn = ({
                   />
                 </DialogClose>
                 <Button type="submit" form={bookingID} disabled={isLoading}>
-                  {room.room_status === RoomStatus.Occupied
-                    ? "Cập nhật"
-                    : "Đặt phòng"}
+                  {room.room_status === RoomStatus.Occupied ? 'Cập nhật' : 'Đặt phòng'}
                 </Button>
-                {room.room_status === RoomStatus.Occupied && (
-                  <Payment
-                    bookingId={bookingID}
-                    room={room}
-                    setCardOpen={handleOpenChange}
-                  />
-                )}
+                {room.room_status === RoomStatus.Occupied && <Payment bookingId={bookingID} room={room} setCardOpen={handleOpenChange} />}
               </DialogFooter>
             </div>
           </div>
