@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ServiceData, UseServiceResult } from '@/types/service';
 import axios from 'axios';
-import { getServices } from '@/services/hotelService';
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
 function useService(): UseServiceResult {
   const [data, setData] = useState<ServiceData[]>([]);
@@ -12,7 +12,10 @@ function useService(): UseServiceResult {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getServices();
+        const response = await axios.get(`/services${POPULATE_ALL}`);
+        if (response.status !== 200) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         setData(response.data.data);
       } catch (err) {
         setError(err instanceof Error ? err : new Error(String(err)));

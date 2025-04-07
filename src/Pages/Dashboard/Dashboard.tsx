@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
-import { compareDaily, yearlyStat } from '@/types/reservation';
-import { getCompareDailyRevenue, getDailyRevenue, getYearlyStat } from '@/services/hotelService';
-import { DateRange } from 'react-day-picker';
-import Header from '@/components/Dashboard/Header/Header';
-import MainContent from '@/components/Dashboard/MainContent/MainContent';
-import { ChartData } from '@/types/dashboard';
-import { useUserContext } from '@/context/UserContext';
-import { Navigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { compareDaily, yearlyStat } from "@/types/reservation";
+import {
+  getCompareDailyRevenue,
+  getDailyRevenue,
+  getYearlyStat,
+} from "@/services/hotelService";
+import { DateRange } from "react-day-picker";
+import Header from "@/components/Dashboard/Header/Header";
+import MainContent from "@/components/Dashboard/MainContent/MainContent";
+import { ChartData } from "@/types/dashboard";
+import { useUserContext } from "@/context/UserContext";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [revenueData, setRevenueData] = useState<ChartData[]>([]);
@@ -62,6 +66,7 @@ const Dashboard = () => {
 
   const { isAuthenticated } = useUserContext();
 
+  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to="/" />;
   }
@@ -69,7 +74,14 @@ const Dashboard = () => {
   return (
     <div className="p-4 px-10">
       <Header compareRevenue={compareRevenue} />
-      <MainContent yearlyStat={yearlyStat} revenueData={revenueData} date={date} setDate={setDate} year={year} setYear={setYear} />
+      <MainContent
+        yearlyStat={yearlyStat}
+        revenueData={revenueData}
+        date={date}
+        setDate={setDate}
+        year={year}
+        setYear={setYear}
+      />
     </div>
   );
 };
