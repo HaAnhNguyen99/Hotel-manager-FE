@@ -1,67 +1,55 @@
-import { useState, useContext } from "react";
-import { HotelContext } from "../../../context/HotelContext";
-import RoomCard from "../RoomCard/RoomCard";
-import { FaBed, FaCheck, FaLock } from "react-icons/fa";
-import StatCard from "@/components/common/StatCard/StatCard";
-import { Room } from "@/types/hotel";
+import { useState, useContext } from 'react';
+import { HotelContext } from '../../../context/HotelContext';
+import RoomCard from '../RoomCard/RoomCard';
+import { FaBed, FaCheck, FaLock } from 'react-icons/fa';
+import StatCard from '@/components/common/StatCard/StatCard';
+import { Room } from '@/types/hotel';
 
 export const RoomList = () => {
   const { rooms, setSelectedRoom, setIsModalOpen } = useContext(HotelContext);
-  const [filter, setFilter] = useState({ status: "all" });
+  const [filter, setFilter] = useState({ status: 'all' });
 
   const stats = {
     total: rooms.length,
-    occupied: rooms.filter((room) => room.room_status === "Occupied").length,
-    available: rooms.filter((room) => room.room_status === "Available").length,
-    cleaning: rooms.filter((room) => room.room_status === "Cleaning").length,
+    occupied: rooms.filter((room) => room.room_status === 'Occupied').length,
+    available: rooms.filter((room) => room.room_status === 'Available').length,
+    cleaning: rooms.filter((room) => room.room_status === 'Cleaning').length,
   };
 
   const statData = [
-    { title: "Tất cả", value: stats.total, icon: <FaBed />, status: "all" },
+    { title: 'Tất cả', value: stats.total, icon: <FaBed />, status: 'all' },
     {
-      title: "Có người",
+      title: 'Có người',
       value: stats.occupied,
       icon: <FaLock />,
-      status: "Occupied",
+      status: 'Occupied',
     },
     {
-      title: "Trống",
+      title: 'Trống',
       value: stats.available,
       icon: <FaCheck />,
-      status: "Available",
+      status: 'Available',
     },
   ];
 
   const filteredRooms: Room[] = rooms.filter((room) => {
-    return filter.status === "all" || room.room_status === filter.status;
+    return filter.status === 'all' || room.room_status === filter.status;
   });
 
-  // console.log(filteredRooms);
-
-  const roomsByFloor: { [key: number]: Room[] } = filteredRooms.reduce(
-    (acc: { [key: number]: Room[] }, room: Room) => {
-      const floor = room.floor;
-      if (!acc[floor]) {
-        acc[floor] = [];
-      }
-      acc[floor].push(room);
-      return acc;
-    },
-    {}
-  );
-
-  console.log(roomsByFloor);
+  const roomsByFloor: { [key: number]: Room[] } = filteredRooms.reduce((acc: { [key: number]: Room[] }, room: Room) => {
+    const floor = room.floor;
+    if (!acc[floor]) {
+      acc[floor] = [];
+    }
+    acc[floor].push(room);
+    return acc;
+  }, {});
 
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 w-fit transition-all duration-300">
         {statData.map((stat, index) => (
-          <StatCard
-            key={index}
-            {...stat}
-            isSelected={filter.status === stat.status}
-            onClick={() => setFilter({ status: stat.status })}
-          />
+          <StatCard key={index} {...stat} isSelected={filter.status === stat.status} onClick={() => setFilter({ status: stat.status })} />
         ))}
       </div>
 
