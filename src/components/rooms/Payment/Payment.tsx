@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -8,28 +8,39 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
+} from "@/components/ui/drawer";
 
-import { Separator } from '@/components/ui/separator';
-import { useEffect, useState } from 'react';
-import { updateBookingStatus, createPayment, updateRoomStatusAvailable, getServiceUsageStatusPayed } from '@/services/hotelService';
-import PaymentDropdown from './PaymentDropdown';
-import { useHotelContext } from '@/context/HotelContext';
-import { calculatePriceDetails } from '@/utils/calculatePriceDetails';
-import RoomInfo from './RoomInfo';
-import BookingDetails from './BookingDetails';
-import { PaymentMethod, PaymentProps, PriceDetails } from './types';
-import { UpdateServiceUsagePayload } from '@/types/service_usage';
+import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+import {
+  updateBookingStatus,
+  createPayment,
+  updateRoomStatusAvailable,
+  getServiceUsageStatusPayed,
+} from "@/services/hotelService";
+import PaymentDropdown from "./PaymentDropdown";
+import { useHotelContext } from "@/context/HotelContext";
+import { calculatePriceDetails } from "@/utils/calculatePriceDetails";
+import RoomInfo from "./RoomInfo";
+import BookingDetails from "./BookingDetails";
+import { PaymentMethod, PaymentProps, PriceDetails } from "./types";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
 
 const Payment = ({ room, bookingId, setCardOpen }: PaymentProps) => {
-  const [serviceUsage, setServiceUsage] = useState<UpdateServiceUsagePayload[]>([]);
+  const [serviceUsage, setServiceUsage] = useState<UpdateServiceUsagePayload[]>(
+    []
+  );
   const [open, setOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(PaymentMethod.Cash);
   const [isLoading, setIsLoading] = useState(false);
   const { bookingForm } = useHotelContext();
   const { getValues } = bookingForm;
 
-  const priceDetails: PriceDetails = calculatePriceDetails(room, serviceUsage, getValues);
+  const priceDetails: PriceDetails = calculatePriceDetails(
+    room,
+    serviceUsage,
+    getValues
+  );
 
   useEffect(() => {
     const fetchServiceUsage = async () => {
@@ -55,7 +66,7 @@ const Payment = ({ room, bookingId, setCardOpen }: PaymentProps) => {
       await updateBookingStatus(bookingId);
       await updateRoomStatusAvailable(room.documentId);
     } catch (error) {
-      console.error('Error handling payment:', error);
+      console.error("Error handling payment:", error);
     } finally {
       setOpen(false);
       setCardOpen(false);
@@ -66,40 +77,52 @@ const Payment = ({ room, bookingId, setCardOpen }: PaymentProps) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="destructive" className="bg-blue-500 dark:bg-bg-blue-700 hover:bg-blue-600">
+        <Button variant="destructive" className="bg-blue-500 hover:bg-blue-600">
           Thanh toán
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="dark:bg-sidebar">
+      <DrawerContent>
         <div className="mx-auto w-full max-w-prose text-black">
-          <DrawerHeader className="flex flex-col gap-2 items-center justify-center dark:text-white">
+          <DrawerHeader className="flex flex-col gap-2 items-center justify-center">
             <DrawerTitle>Thanh toán</DrawerTitle>
             <DrawerDescription>
-              Thanh toán cho phòng <span className="font-bold">{room.room_number}</span>
+              Thanh toán cho phòng{" "}
+              <span className="font-bold">{room.room_number}</span>
             </DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 pb-0 dark:text-white">
+          <div className="p-4 pb-0">
             <div className="flex mb-4">
               <RoomInfo room={room} />
-              <Separator orientation="vertical" className="mx-4 w-[1px] h-[350px] my-auto bg-slate-200" />
+              <Separator
+                orientation="vertical"
+                className="mx-4 w-[1px] h-[350px] my-auto bg-slate-200"
+              />
               <div>
                 <BookingDetails
-                  checkinTime={getValues('checkinDate')}
-                  checkoutTime={getValues('checkoutDate') || new Date().toISOString()}
+                  checkinTime={getValues("checkinDate")}
+                  checkoutTime={
+                    getValues("checkoutDate") || new Date().toISOString()
+                  }
                   {...priceDetails}
                 />
-                <Separator orientation="horizontal" className="my-4 w-full bg-slate-200" />
+                <Separator
+                  orientation="horizontal"
+                  className="my-4 w-full bg-slate-200"
+                />
                 <p className="text-[#737373]">Hình thức thanh toán</p>
-                <PaymentDropdown setSelectedMethod={setSelectedMethod} selectedMethod={selectedMethod} />
+                <PaymentDropdown
+                  setSelectedMethod={setSelectedMethod}
+                  selectedMethod={selectedMethod}
+                />
               </div>
             </div>
           </div>
           <DrawerFooter>
             <Button onClick={handleDonePayment} disabled={isLoading}>
-              {isLoading ? 'Đang xử lý...' : 'Hoàn tất'}
+              {isLoading ? "Đang xử lý..." : "Hoàn tất"}
             </Button>
             <DrawerClose asChild>
-              <Button variant="outline" className="text-black dark:text-white">
+              <Button variant="outline" className="text-black">
                 Huỷ
               </Button>
             </DrawerClose>
