@@ -6,11 +6,14 @@ const Hero = () => {
   const title = "Lorem ipsum dolor sit amet.";
   const des =
     "orem ipsum dolor sit amet, consectetur adipiscing elit. Proin ex dolor,";
-
+  const hero = new URL("@/assets/images/hero.png", import.meta.url).href;
   const { isAuthenticated } = useUserContext();
+  console.log(hero);
 
   return (
-    <div className="min-h-svh bg-gray-300 relative">
+    <div
+      className="min-h-svh bg-cover bg-center relative"
+      style={{ backgroundImage: `url(${hero})` }}>
       <div className="max-w-4xl absolute bottom-36 left-12 leading-10">
         <h1 className="font-bold text-3xl">{title}</h1>
         <p>{des}</p>

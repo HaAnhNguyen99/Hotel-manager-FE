@@ -17,7 +17,7 @@ export function ToggleTheme() {
         <Button
           variant="outline"
           size="icon"
-          className="relative dark:bg-transparent dark:border dark:border-gray-100"
+          className="relativ w-full dark:bg-transparent dark:border dark:border-gray-100"
           tabIndex={-1}>
           <Sun
             className={`h-[1.2rem] text-black dark:text-grey-tertiary w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${

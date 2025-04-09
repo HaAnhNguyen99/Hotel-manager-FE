@@ -12,26 +12,19 @@ import {
 } from "@/components/ui/sidebar";
 import { getHotelProfile } from "@/services/hotelService";
 import {
-  CircleUser,
   Home,
   LayoutDashboard,
   LogOut,
   RefreshCcw,
   Settings,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
-import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/UserContext";
+import ChangePassword from "./ChangePassword";
 
 function SkeletonSidebarHeader() {
   return (
@@ -69,6 +62,7 @@ const AppSidebar = () => {
     phone: "",
   });
   const [loading, setLoading] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   const { logoutUser } = useUserContext();
   const { state, open } = useSidebar();
@@ -119,13 +113,13 @@ const AppSidebar = () => {
             <p
               className={`${
                 state === "collapsed" ? "hidden" : "block"
-              }  text-base font-bold`}>
+              }  text-base font-bold dark:text-grey`}>
               {hotelProfile.name}
             </p>
           </>
         )}
       </SidebarHeader>
-      <SidebarContent className="dark:bg-[#1e1e1e]">
+      <SidebarContent className="dark:bg-[#1e1e1e] dark:text-grey">
         <SidebarGroup>
           <SidebarGroupLabel>Điều hướng</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -151,28 +145,40 @@ const AppSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="dark:bg-[#1e1e1e]">
-        <ToggleTheme />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="dark:bg-transparent dark:border dark:border-gray-100">
-              <CircleUser className="dark:text-grey-tertiary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="translate-x-14">
-            <DropdownMenuItem
-              onClick={logoutUser}
-              className="flex gap-2 bg-transparent">
-              <LogOut />
-              Đăng xuất
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 ">
-              <RefreshCcw />
-              Đổi mật khẩu
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {/* Change Password */}
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                className="cursor-pointer border border-border dark:bg-white dark:hover:bg-transparent">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setOpenChangePassword((prev) => !prev)}>
+                    <RefreshCcw className="w-4 h-4" />
+                  </button>
+                  <ChangePassword
+                    setOpen={setOpenChangePassword}
+                    open={openChangePassword}
+                  />
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            {/* Log out */}
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="border p-2 bg-white rounded-lg overflow-hidden"
+                onClick={logoutUser}>
+                <LogOut />
+                <span>Đăng xuất</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            {/* Toggle theme */}
+            <SidebarMenuItem>
+              <ToggleTheme />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
       </SidebarFooter>
     </Sidebar>
   );

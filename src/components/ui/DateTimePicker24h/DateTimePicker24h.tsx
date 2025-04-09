@@ -10,7 +10,6 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export function DateTimePicker({ date, setDate }: { date: Date | null; setDate: React.Dispatch<React.SetStateAction<Date | null | undefined>> }) {
   const [isOpen, setIsOpen] = React.useState(false);
-  console.log(date);
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const handleDateSelect = (selectedDate: Date | undefined) => {

@@ -44,7 +44,6 @@ const MainContent = ({ yearlyStat, revenueData, date, setDate, year, setYear }: 
 
   const handleDeleteCardItem = (title: string) => {
     const newCardData = cardData.filter((item) => item.title !== title);
-    console.log(newCardData);
     setCardData(newCardData);
   };
   return (

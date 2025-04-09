@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import Ellipsis from '@/assets/svg/ellipsis.svg';
+import dots from '@/assets/svg/ellipsis.svg';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
 
@@ -9,7 +9,7 @@ const PopupCard = ({ handleDeleteCardItem, title }: { handleDeleteCardItem: (tit
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="p-0 hover:bg-transparent active:scale-95 dark:hover:bg-transparent flex-shrink-0">
-          <img src={Ellipsis} alt="eliipsis icon" width={25} className="fill-white dark:fill-white" />
+          <img src={dots} alt="ellipsis icon" width={25} className="text-black dark:text-white dark:fill-white" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">
