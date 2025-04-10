@@ -19,7 +19,6 @@ import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
 import { useUserContext } from "@/context/UserContext";
 import ChangePassword from "./ChangePassword";
-import { Button } from "@/components/ui/button";
 
 function SkeletonSidebarHeader() {
   return (
