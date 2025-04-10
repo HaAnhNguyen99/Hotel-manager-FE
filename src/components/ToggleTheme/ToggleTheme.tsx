@@ -20,18 +20,18 @@ export function ToggleTheme() {
           className="relativ w-full dark:bg-transparent dark:border dark:border-gray-100"
           tabIndex={-1}>
           <Sun
-            className={`h-[1.2rem] text-black dark:text-grey-tertiary w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
+            className={`w-4 h-4 text-black dark:text-grey-tertiary transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "light" ? "rotate-0 scale-100" : "rotate-90 scale-0"
             }`}
           />
           <Moon
-            className={`absolute text-black dark:text-grey-tertiary h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
+            className={`w-4 h-4 absolute text-black dark:text-grey-tertiary  transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "dark" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
             }`}
           />
 
           <LaptopMinimal
-            className={`absolute text-black dark:text-grey-tertiary h-[1.2rem] w-[1.2rem] transition-transform duration-300 ease-in-out text-grey-tertiary${
+            className={`w-4 h-4 absolute text-black dark:text-grey-tertiary  transition-transform duration-300 ease-in-out text-grey-tertiary${
               theme === "system" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
             }`}
           />

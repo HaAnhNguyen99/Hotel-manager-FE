@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -136,16 +136,12 @@ const ChangePassword = ({
       setIsLoading(false);
     }
   };
+  console.log(open);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full text-left justify-start pl-0"
-          tabIndex={-1}>
-          Đổi mật khẩu
-        </Button>
+      <DialogTrigger asChild className="outline-none">
+        <RefreshCcw className="w-4 h-4" tabIndex={-1} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

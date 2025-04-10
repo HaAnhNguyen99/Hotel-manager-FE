@@ -153,23 +153,28 @@ const AppSidebar = () => {
                 asChild
                 className="cursor-pointer border border-border dark:bg-white dark:hover:bg-transparent">
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setOpenChangePassword((prev) => !prev)}>
-                    <RefreshCcw className="w-4 h-4" />
-                  </button>
                   <ChangePassword
                     setOpen={setOpenChangePassword}
                     open={openChangePassword}
                   />
+                  <button
+                    className="w-full text-left"
+                    onClick={() => setOpenChangePassword((prev) => !prev)}>
+                    <span
+                      className="w-full text-left justify-start pl-0"
+                      tabIndex={-1}>
+                      Đổi mật khẩu
+                    </span>
+                  </button>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
             {/* Log out */}
-            <SidebarMenuItem>
+            <SidebarMenuItem className="w-full">
               <SidebarMenuButton
-                className="border p-2 bg-white rounded-lg overflow-hidden"
+                className="w-full border p-2 bg-white rounded-lg overflow-hidden"
                 onClick={logoutUser}>
-                <LogOut />
+                <LogOut className="w-4 h-4" />
                 <span>Đăng xuất</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

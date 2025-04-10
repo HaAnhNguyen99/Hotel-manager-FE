@@ -1,5 +1,5 @@
 import { CreateServiceUsagePayload } from "@/types/service";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import {
   BookingStatus,
   CreateBookingPayload,
@@ -15,10 +15,13 @@ import {
   yearlyStat,
 } from "@/types/reservation";
 import { getTodayISODate } from "@/utils/getTodayISODate";
-import { ChangePasswordError, ChangePasswordParams } from "@/types/login";
+import { ChangePasswordParams } from "@/types/login";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
-// Create a single Axios instance
+/**
+ * Creates a single Axios instance for making HTTP requests to the API.
+ * Configures base URL from environment variables and sets default headers.
+ */
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -26,6 +29,17 @@ const api = axios.create({
   },
 });
 
+/**
+ * Axios request interceptor that adds the authentication token to all API requests.
+ *
+ * This interceptor runs before each API request and:
+ * 1. Retrieves the JWT token from local storage using getAuthToken()
+ * 2. If a token exists, adds it to the request headers as a Bearer token
+ * 3. Returns the modified config to continue the request
+ *
+ * @param {AxiosRequestConfig} config - The Axios request configuration object
+ * @returns {AxiosRequestConfig} The modified request config with auth headers if a token exists
+ */
 api.interceptors.request.use((config) => {
   const token = getAuthToken();
   if (token) {
@@ -33,6 +47,12 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+/**
+ * Retrieves the authentication token (JWT) from localStorage or sessionStorage.
+ *
+ * @returns {string | null} The JWT token if available, otherwise null.
+ */
 
 const getAuthToken = () => {
   try {
@@ -49,16 +69,14 @@ const getAuthToken = () => {
 };
 
 /**
- * Sends a request to change the user's password via the API.
+ * Sends a request to change the user's password.
  *
- * @param {Object} params - The parameters required to change the password.
+ * @param {Object} params - Parameters for changing the password.
  * @param {string} params.currentPassword - The user's current password.
- * @param {string} params.newPassword - The new desired password.
+ * @param {string} params.newPassword - The new password the user wants to set.
  * @param {string} params.confirmNewPassword - Confirmation of the new password.
- *
- * @returns {Promise<any>} The response data if the password change is successful.
- *
- * @throws {Error} Throws an error if the current password is invalid or if the request fails.
+ * @returns {Promise<any>} - The response data from the API if the password change is successful.
+ * @throws {Error} - Throws an error if the current password is invalid or if another error occurs.
  */
 
 export const changePassword = async ({
@@ -72,7 +90,6 @@ export const changePassword = async ({
       password: newPassword,
       passwordConfirmation: confirmNewPassword,
     });
-    console.log(response);
 
     return response.data;
   } catch (err) {
