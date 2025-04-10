@@ -7,6 +7,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
@@ -15,6 +16,8 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
+  MoreHorizontal,
+  Plus,
   RefreshCcw,
   Settings,
 } from "lucide-react";
@@ -25,6 +28,13 @@ import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
 import { useUserContext } from "@/context/UserContext";
 import ChangePassword from "./ChangePassword";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 function SkeletonSidebarHeader() {
   return (
@@ -62,7 +72,6 @@ const AppSidebar = () => {
     phone: "",
   });
   const [loading, setLoading] = useState(false);
-  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   const { logoutUser } = useUserContext();
   const { state, open } = useSidebar();
@@ -147,40 +156,24 @@ const AppSidebar = () => {
       <SidebarFooter className="dark:bg-[#1e1e1e]">
         <SidebarGroupContent>
           <SidebarMenu>
+            {/* Toggle theme */}
+            <SidebarMenuItem>
+              <ToggleTheme />
+            </SidebarMenuItem>
             {/* Change Password */}
             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                className="cursor-pointer border border-border dark:bg-white dark:hover:bg-transparent">
-                <div className="flex items-center gap-2">
-                  <ChangePassword
-                    setOpen={setOpenChangePassword}
-                    open={openChangePassword}
-                  />
-                  <button
-                    className="w-full text-left"
-                    onClick={() => setOpenChangePassword((prev) => !prev)}>
-                    <span
-                      className="w-full text-left justify-start pl-0"
-                      tabIndex={-1}>
-                      Đổi mật khẩu
-                    </span>
-                  </button>
-                </div>
-              </SidebarMenuButton>
+              <ChangePassword />
             </SidebarMenuItem>
             {/* Log out */}
             <SidebarMenuItem className="w-full">
               <SidebarMenuButton
-                className="w-full border p-2 bg-white rounded-lg overflow-hidden"
+                className="dark:text-white dark:border dark:border-gray-100 border-border border bg-white rounded-lg overflow-hidden dark:bg-transparent"
                 onClick={logoutUser}>
-                <LogOut className="w-4 h-4" />
+                <Button variant="ghost" size="icon" tabIndex={-1}>
+                  <LogOut className="w-4 h-4" />
+                </Button>
                 <span>Đăng xuất</span>
               </SidebarMenuButton>
-            </SidebarMenuItem>
-            {/* Toggle theme */}
-            <SidebarMenuItem>
-              <ToggleTheme />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>

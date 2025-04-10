@@ -22,6 +22,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, ControllerRenderProps } from "react-hook-form";
 import { changePassword } from "@/services/hotelService";
+import { SidebarMenuAction, SidebarMenuButton } from "@/components/ui/sidebar";
 
 const changePasswordSchema = z
   .object({
@@ -93,17 +94,12 @@ const PasswordInputField = ({
   );
 };
 
-const ChangePassword = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const ChangePassword = () => {
   const [isPeakOld, setIsPeakOld] = useState(false);
   const [isPeakNew, setIsPeakNew] = useState(false);
   const [isPeakConfirm, setIsPeakConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<USER>({
     resolver: zodResolver(changePasswordSchema),
@@ -136,12 +132,16 @@ const ChangePassword = ({
       setIsLoading(false);
     }
   };
-  console.log(open);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="outline-none">
-        <RefreshCcw className="w-4 h-4" tabIndex={-1} />
+        <SidebarMenuButton className="dark:text-white dark:border dark:border-gray-100 border-border border bg-white rounded-lg overflow-hidden dark:bg-transparent">
+          <Button variant="ghost" size="icon" tabIndex={-1}>
+            <RefreshCcw className="w-4 h-4" />
+          </Button>
+          <span>Đổi mật khẩu</span>
+        </SidebarMenuButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
