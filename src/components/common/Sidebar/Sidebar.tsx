@@ -7,20 +7,11 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getHotelProfile } from "@/services/hotelService";
-import {
-  Home,
-  LayoutDashboard,
-  LogOut,
-  MoreHorizontal,
-  Plus,
-  RefreshCcw,
-  Settings,
-} from "lucide-react";
+import { Home, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,12 +19,6 @@ import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
 import { useUserContext } from "@/context/UserContext";
 import ChangePassword from "./ChangePassword";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
 function SkeletonSidebarHeader() {
@@ -169,9 +154,11 @@ const AppSidebar = () => {
               <SidebarMenuButton
                 className="dark:text-white dark:border dark:border-gray-100 border-border border bg-white rounded-lg overflow-hidden dark:bg-transparent"
                 onClick={logoutUser}>
-                <Button variant="ghost" size="icon" tabIndex={-1}>
+                <div
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-zinc-300 button-press hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 h-9 w-9"
+                  tabIndex={-1}>
                   <LogOut className="w-4 h-4" />
-                </Button>
+                </div>
                 <span>Đăng xuất</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

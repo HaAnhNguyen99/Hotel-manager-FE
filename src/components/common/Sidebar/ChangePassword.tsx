@@ -22,7 +22,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, ControllerRenderProps } from "react-hook-form";
 import { changePassword } from "@/services/hotelService";
-import { SidebarMenuAction, SidebarMenuButton } from "@/components/ui/sidebar";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 
 const changePasswordSchema = z
   .object({
@@ -137,9 +137,11 @@ const ChangePassword = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="outline-none">
         <SidebarMenuButton className="dark:text-white dark:border dark:border-gray-100 border-border border bg-white rounded-lg overflow-hidden dark:bg-transparent">
-          <Button variant="ghost" size="icon" tabIndex={-1}>
+          <div
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-zinc-300 button-press hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 h-9 w-9"
+            tabIndex={-1}>
             <RefreshCcw className="w-4 h-4" />
-          </Button>
+          </div>
           <span>Đổi mật khẩu</span>
         </SidebarMenuButton>
       </DialogTrigger>
