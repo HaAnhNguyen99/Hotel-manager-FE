@@ -1,20 +1,23 @@
+import { useProperty } from "@/hooks/useProperty";
 import { Bath, BedSingle, Car, PawPrint } from "lucide-react";
 
 const Property = () => {
+  const { propertyImgPath } = useProperty();
+
   const title = "Apartment Description";
   const des = "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et.";
   const data = [
     {
       icon: Car,
-      text: "Lorem Ipsum",
+      text: "Điểm đỗ xe",
     },
     {
       icon: BedSingle,
-      text: "Lorem Ipsum",
+      text: "Giường đôi",
     },
     {
       icon: PawPrint,
-      text: "Lorem Ipsum",
+      text: "Động vật được phép",
     },
     {
       icon: Bath,
@@ -38,7 +41,9 @@ const Property = () => {
             </div>
           ))}
         </div>
-        <div className="h-50vw rounded-2xl bg-slate-700 w-1/2"></div>
+        <div className="h-50vw rounded-2xl bg-slate-700 w-1/2 overflow-hidden">
+          <img src={propertyImgPath} alt="property img" loading="lazy" />
+        </div>
       </div>
     </section>
   );

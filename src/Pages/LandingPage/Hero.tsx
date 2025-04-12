@@ -1,22 +1,40 @@
+import Header from "@/components/common/Header/Header";
+import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/UserContext";
+import { useHeroImage } from "@/hooks/useHeroImage";
+import { WeatherApiResponse } from "@/types/landingpage";
 import { MoveLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Hero = () => {
-  const title = "Lorem ipsum dolor sit amet.";
+const Hero = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
+  const { heroImgPath } = useHeroImage();
+
+  const title = "Khách sạn Phương Trang";
   const des =
-    "orem ipsum dolor sit amet, consectetur adipiscing elit. Proin ex dolor,";
+    "Chào mừng đến với không gian nghỉ dưỡng ấm cúng và đậm chất việt ";
+  const btn = "Đặt phòng ngay";
   const hero = new URL("@/assets/images/hero.png", import.meta.url).href;
   const { isAuthenticated } = useUserContext();
-  console.log(hero);
 
   return (
     <div
-      className="min-h-svh bg-cover bg-center relative"
-      style={{ backgroundImage: `url(${hero})` }}>
-      <div className="max-w-4xl absolute bottom-36 left-12 leading-10">
-        <h1 className="font-bold text-3xl">{title}</h1>
-        <p>{des}</p>
+      className="min-h-screen bg-cover bg-center relative text-white pt-5 bg-golden-overlay"
+      style={{ backgroundImage: `url(${heroImgPath ? heroImgPath : hero})` }}>
+      <div className="relative z-50 bg-[#bbbbada1] border border-brown rounded-[3rem] px-5  text-black max-w-screen-xl mx-auto bg-golden-overlay">
+        <Header weather={weather} />
+      </div>
+      <div className="max-w-[811px] absolute top-2/4 left-1/2 -translate-x-1/2 text-center leading-10 space-y-10 z-10">
+        <h1 className="text-[3rem] font-bold uppercase tracking-[3px] leading-[1.2] mb-[10px] ">
+          {title}
+        </h1>
+        <p className="golden-paragraph max-w-[45ch] mx-auto leading-10">
+          {des}
+        </p>
+        <Button
+          className="rounded-[3rem] bg-brown-yellow px-8 py-7 font-bold text-[18px] border border-[#997f7f] text-brown hover:text-black hover:bg-neutral-300"
+          variant="secondary">
+          {btn}
+        </Button>
       </div>
 
       {isAuthenticated && (

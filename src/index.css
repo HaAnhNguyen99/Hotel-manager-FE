@@ -69,6 +69,12 @@
   --gray-primary: #808080;
   --gray-secondary: #bfbfbf;
   --radius: 0.5rem;
+
+  /* Landing page */
+  --text-color-primary: #5346a5;
+  --brown--primary: #493328;
+  --brown--yellow: #b19149;
+  --yellow-primary: #d4af3773;
 }
 
 .dark {
@@ -198,5 +204,32 @@
 
   .card-shadow-mode {
     @apply dark:bg-grey-dark dark:border-none dark:card-shadow dark:text-grey-secondaryDark;
+  }
+
+  .bg-golden-overlay {
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(212, 175, 55, 0.45) 63.5%,
+        #fff 100%
+      ),
+      lightgray 50% / cover no-repeat;
+    background-blend-mode: normal;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .golden-paragraph {
+    color: var(--brown-primary, #493328);
+    text-align: center;
+    text-shadow: 7px 12px 37px rgba(0, 0, 0, 0.44);
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgba(0, 0, 0, 0.24);
+    font-family: "Montserrat", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
   }
 }

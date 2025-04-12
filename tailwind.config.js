@@ -16,6 +16,10 @@ module.exports = {
           dark: "var(--grey-dark)",
           foreground: "var(--grey-foreground)",
         },
+        brown: {
+          DEFAULT: "var(--brown--primary)",
+          yellow: "var(--brown--yellow)",
+        },
         blue: {
           DEFAULT: "var(--blue)",
         },
@@ -27,6 +31,7 @@ module.exports = {
           DEFAULT: "var(--yellow)",
           secondary: "var(--yellow-secondary)",
           dark: "var(--yellow-light)",
+          landingpage: "var(--yellow-primary)",
         },
         pink: {
           DEFAULT: "var(--pink)",
@@ -81,6 +86,9 @@ module.exports = {
           "accent-foreground": "var(--sidebar-accent-foreground)",
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
+        },
+        pupple: {
+          DEFAULT: "var(--text-color-primary)",
         },
       },
       borderRadius: {
