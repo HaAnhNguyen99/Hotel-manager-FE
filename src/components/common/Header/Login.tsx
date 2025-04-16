@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BadgeCheck, Eye, EyeOff } from "lucide-react";
+import { BadgeCheck, Eye, EyeOff, User } from "lucide-react";
 import { useState } from "react";
 import { login } from "@/services/authService";
 import { useUserContext } from "@/context/UserContext";
@@ -77,11 +77,14 @@ const Login = () => {
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="border bg-white border-grey-secondaryDark  rounded-2xl hover:bg-black hover:opacity-80 hover:text-white hover:scale-x-105 transition-all duration-300 ease-in-out font-semibold  dark:border dark:border-white text-[#d4af37]">
-          Đăng nhập
+          className="p-3 bg-landing rounded-lg hover:bg-black hover:opacity-80 hover:text-white hover:scale-x-105 transition-all duration-300 ease-in-out font-semibold dark:border dark:border-white text-[#d4af37] sm:p-2 sm:border sm:!border-landing-bgBlack">
+          <span className="hidden sm:block border-landing-bgBlack text-white">
+            Đăng nhập
+          </span>
+          <User className="sm:hidden w-4 h-4 text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-w-72 rounded-lg bg-landing">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
             Đăng nhập
@@ -101,7 +104,7 @@ const Login = () => {
                 <FormItem>
                   <FormLabel>Tên đăng nhập</FormLabel>
                   <FormControl>
-                    <div className="flex items-center justify-between rounded-lg ring-1 ring-zinc-200 shadow-sm p-2 px-3 transition-all duration-300 ease-in-out hover:ring-zinc-600 hover:opacity-80 hover:scale-x-105">
+                    <div className="flex items-center justify-between rounded-lg ring-1 ring-zinc-200 shadow-sm p-2 px-3 transition-all duration-300 ease-in-out hover:ring-zinc-600 hover:opacity-80 hover:scale-x-105 ">
                       <input
                         {...field}
                         className="w-full focus:outline-none placeholder:text-zinc-400 dark:bg-transparent"

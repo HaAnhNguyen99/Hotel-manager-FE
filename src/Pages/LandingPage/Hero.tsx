@@ -1,41 +1,44 @@
-import Header from "@/components/common/Header/Header";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/UserContext";
 import { useHeroImage } from "@/hooks/useHeroImage";
-import { WeatherApiResponse } from "@/types/landingpage";
-import { MoveLeft } from "lucide-react";
+import { ChevronDown, MoveLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Hero = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
+const Hero = () => {
   const { heroImgPath } = useHeroImage();
 
-  const title = "Khách sạn Phương Trang";
+  const subTitle = "Khách sạn";
+  const title = "Phương Trang";
   const des =
     "Chào mừng đến với không gian nghỉ dưỡng ấm cúng và đậm chất việt ";
-  const btn = "Đặt phòng ngay";
+  const btn = "Đặt phòng";
   const hero = new URL("@/assets/images/hero.png", import.meta.url).href;
   const { isAuthenticated } = useUserContext();
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative text-white pt-5 bg-golden-overlay"
+      className="min-h-[90vh] bg-cover bg-center relative text-white pt-5 bg-golden-overlay text-landing-pureWhite"
       style={{ backgroundImage: `url(${heroImgPath ? heroImgPath : hero})` }}>
-      <div className="relative z-50 bg-[#bbbbada1] border border-brown rounded-[3rem] px-5  text-black max-w-screen-xl mx-auto bg-golden-overlay">
-        <Header weather={weather} />
-      </div>
-      <div className="max-w-[811px] absolute top-2/4 left-1/2 -translate-x-1/2 text-center leading-10 space-y-10 z-10">
-        <h1 className="text-[3rem] font-bold uppercase tracking-[3px] leading-[1.2] mb-[10px] ">
+      <div className="w-3/4 sm:max-w-[811px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center leading-10">
+        <p className="text-landing-light font-bold text-xl">{subTitle}</p>
+        <h1 className="text-6xl font-extrabold text-shadow text-landing-primaryLight tracking-[3px] leading-[91%] mb-[10px] font-playfair">
           {title}
         </h1>
-        <p className="golden-paragraph max-w-[45ch] mx-auto leading-10">
+        <p className="golden-paragraph max-w-[45ch] mt-6 mx-auto text-xl leading-8 md:leading-10">
           {des}
         </p>
         <Button
-          className="rounded-[3rem] bg-brown-yellow px-8 py-7 font-bold text-[18px] border border-[#997f7f] text-brown hover:text-black hover:bg-neutral-300"
-          variant="secondary">
+          className="rounded-lg mt-16 font-bold hover:text-black hover:bg-neutral-300 md:px-8 md:py-6 md:text-[18px] px-3 py-5 tracking-wide bg-landing"
+          variant="ghost">
           {btn}
         </Button>
       </div>
+
+      <a
+        href="#property"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white">
+        <ChevronDown className="w-14 h-14 animate-bounce text-landing-textMute" />
+      </a>
 
       {isAuthenticated && (
         <Link to="/dashboard">

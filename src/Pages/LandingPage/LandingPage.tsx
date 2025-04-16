@@ -6,15 +6,17 @@ import Contact from "./Contact/Contact";
 import Map from "./Map/Map";
 import Footer from "./Footer";
 import useWeather from "@/hooks/useWeather";
-import { useProperty } from "@/hooks/useProperty";
+import Header from "@/components/common/Header/Header";
+import "./LandingPage.css";
 
 const LandingPage = () => {
   const { weather } = useWeather();
 
   return (
-    <div>
+    <div className="font-pops">
+      <Header weather={weather} />
       <main>
-        <Hero weather={weather} />
+        <Hero />
         <Property />
         <Amenities />
         <Rooms />

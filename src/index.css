@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -75,6 +78,12 @@
   --brown--primary: #493328;
   --brown--yellow: #b19149;
   --yellow-primary: #d4af3773;
+  --landing-primary: #dcc69b;
+  --landing-bg-black: #c4af85;
+  --landing-text-mute: #777777;
+  --landing-text-black: #333333;
+  --landing-primary-light: #f0e6d2;
+  --landing-pure-white: #f5f5f5;
 }
 
 .dark {
@@ -220,13 +229,17 @@
     background-position: center;
   }
 
+  .text-shadow {
+    text-shadow: 7px 12px 50px rgba(128, 128, 128, 0.44);
+    -webkit-text-stroke-width: 1px;
+    /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.24); */
+  }
+
   .golden-paragraph {
-    color: var(--brown-primary, #493328);
     text-align: center;
     text-shadow: 7px 12px 37px rgba(0, 0, 0, 0.44);
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: rgba(0, 0, 0, 0.24);
-    font-family: "Montserrat", sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
