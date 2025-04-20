@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
 import { getPropertySectionData } from "@/services/landingpageService";
-import { PropertyResponse } from "@/types/landingpage";
+import { useEffect, useState } from "react";
 
 export const useProperty = () => {
-  const [propertyImgPath, setPropertyImgPath] = useState<PropertyResponse[]>();
+  const [propertyImgPath, setPropertyImgPath] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
 
@@ -12,10 +11,10 @@ export const useProperty = () => {
       try {
         setLoading(true);
         const res = await getPropertySectionData();
-        setPropertyImgPath(res.data.img);
+        setPropertyImgPath(res.data.img.url);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch property image");
+        setError("Failed to fetch amentie images");
       } finally {
         setLoading(false);
       }

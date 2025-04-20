@@ -26,8 +26,8 @@ export const getAmenities = async () => {
     const response = await api.get(`/amenity${POPULATE_ALL}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching rooms:", error);
-    throw new Error("Failed to fetch rooms");
+    console.error("Error amenity:", error);
+    throw new Error("Failed to fetch amenity");
   }
 };
 
@@ -36,8 +36,8 @@ export const getPropertySectionData = async () => {
     const response = await api.get(`/property-section${POPULATE_ALL}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching rooms:", error);
-    throw new Error("Failed to fetch rooms");
+    console.error("Error fetching property section:", error);
+    throw new Error("Failed to property section");
   }
 };
 
@@ -46,8 +46,8 @@ export const getSafetyAndHygieneInfo = async () => {
     const response = await api.get(`/safety-and-hygiene${POPULATE_ALL}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching rooms:", error);
-    throw new Error("Failed to fetch rooms");
+    console.error("Error fetching safety-and-hygiene:", error);
+    throw new Error("Failed to fetch safety-and-hygiene");
   }
 };
 

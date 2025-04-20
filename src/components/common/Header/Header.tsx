@@ -5,10 +5,10 @@ import { useUserContext } from "@/context/UserContext";
 import { WeatherApiResponse } from "@/types/landingpage";
 const Header = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
   const data = [
-    { title: "Chính sách", link: "#" },
-    { title: "Dịch vụ", link: "#" },
-    { title: "Tiện nghi", link: "#" },
-    { title: "Không gian", link: "#" },
+    { title: "Chính sách", link: "#property" },
+    { title: "Tiện nghi", link: "#amenities" },
+    { title: "Không gian", link: "#rooms" },
+    { title: "Liên hệ", link: "#contact" },
   ];
 
   const { isAuthenticated, logoutUser } = useUserContext();

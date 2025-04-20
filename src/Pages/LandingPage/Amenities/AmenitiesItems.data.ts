@@ -4,6 +4,7 @@ import { BiSolidWasher } from "react-icons/bi";
 import { MdOutlineDryCleaning } from "react-icons/md";
 import { FaShieldVirus } from "react-icons/fa";
 import { SiAdguard } from "react-icons/si";
+import { ConciergeBell } from "lucide-react";
 
 export const Amenities = [
   { icon: TbToolsKitchen2, title: "Bếp" },
@@ -11,11 +12,12 @@ export const Amenities = [
   { icon: IoMdTv, title: "TV" },
   { icon: BiSolidWasher, title: "Máy giặt" },
   { icon: IoIosSnow, title: "Máy lạnh" },
+  { icon: ConciergeBell, title: "Lễ tân 24/7" },
 ];
 
 export const Safety = [
   { icon: MdOutlineDryCleaning, title: "Dọn dẹp hàng ngày" },
-  { icon: FaShieldVirus, title: "Khử trùng và Tiệt trùng" },
   { icon: TbFireExtinguisher, title: "Bình chữa cháy" },
+  { icon: FaShieldVirus, title: "Khử trùng và Tiệt trùng" },
   { icon: SiAdguard, title: "Máy dò khói" },
 ];

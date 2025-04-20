@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getPropertySectionData } from "@/services/landingpageService";
+import { getSafetyAndHygieneInfo } from "@/services/landingpageService";
 import { PropertyResponse } from "@/types/landingpage";
 
-export const useProperty = () => {
-  const [propertyImgPath, setPropertyImgPath] = useState<PropertyResponse[]>();
+export const useRoomImage = () => {
+  const [roomImagePath, setRoomImagePath] = useState<PropertyResponse[]>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
 
@@ -11,8 +11,8 @@ export const useProperty = () => {
     const fetchHeroImg = async () => {
       try {
         setLoading(true);
-        const res = await getPropertySectionData();
-        setPropertyImgPath(res.data.img);
+        const res = await getSafetyAndHygieneInfo();
+        setRoomImagePath(res.data.img);
       } catch (err) {
         console.error(err);
         setError("Failed to fetch property image");
@@ -24,5 +24,5 @@ export const useProperty = () => {
     fetchHeroImg();
   }, []);
 
-  return { propertyImgPath, loading, error };
+  return { roomImagePath, loading, error };
 };
