@@ -18,10 +18,10 @@ const Amenities = () => {
       <div className="w-full sm:w-1/2">
         {/* Amenities */}
         <div className="md:w-[80%] lg:w-[80%] mx-auto">
-          <h3 className="font-bold font-playfair text-2xl text-center mb-4 md:mb-2">
+          <h3 className="font-bold font-playfair text-2xl text-center mb-4 md:mb-2 dark:text-black">
             {AmenitiesTitle}
           </h3>
-          <h3 className="mb-12 md:mb-8 text-sm text-center max-w-[45ch] w-full leading-tight m-auto md:w-full lg:w-full">
+          <h3 className="mb-12 md:mb-8 text-sm text-center max-w-[45ch] w-full leading-tight dark:text-gray-700 m-auto md:w-full lg:w-full">
             {AmenitiesDesc}
           </h3>
           <div className="grid grid-cols-3 gap-5 gap-y-5 text-landing">
@@ -35,7 +35,7 @@ const Amenities = () => {
         </div>
         {/* Safety */}
         <div className="md:w-[80%] lg:w-[80%] mx-auto">
-          <h3 className="font-bold font-playfair text-2xl text-center my-10">
+          <h3 className="font-bold font-playfair text-2xl text-center my-10 dark:text-black">
             {SafetyTitle}
           </h3>
           <div className="grid grid-cols-2 gap-5 text-landing">

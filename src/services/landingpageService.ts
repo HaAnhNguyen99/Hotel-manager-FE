@@ -1,3 +1,4 @@
+import { ContactPayload } from "@/types/contact";
 import { WeatherApiResponse } from "@/types/landingpage";
 import axios from "axios";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
@@ -59,5 +60,21 @@ export const getWeather = async (): Promise<WeatherApiResponse | undefined> => {
     return response.data;
   } catch {
     return;
+  }
+};
+
+export const createContact = async ({ name, sdt, message }: ContactPayload) => {
+  try {
+    const response = await api.post(`/contacts`, {
+      data: {
+        name,
+        sdt,
+        message,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error sending contact info:", error);
+    throw new Error("Failed to send contact info");
   }
 };

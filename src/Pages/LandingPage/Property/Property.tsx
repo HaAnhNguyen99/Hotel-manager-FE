@@ -49,10 +49,10 @@ const Property = () => {
               </div>
             </div>
             <div>
-              <p className="text-xl font-bold font-playfair mb-2">
+              <p className="text-xl font-bold font-playfair mb-2 dark:text-black">
                 {item.text}
               </p>
-              <p className="text-sm  px-10">{item.des}</p>
+              <p className="text-sm dark:text-black px-10">{item.des}</p>
             </div>
           </div>
         ))}

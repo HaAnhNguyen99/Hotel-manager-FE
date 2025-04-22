@@ -21,7 +21,7 @@ const Map = () => {
         <div className="hidden lg:block absolute inset-8 bg-red-500 opacity-50 rounded-md pointer-events-none" />
       </div>
 
-      {/* Description Section */}
+      {/* Contact Form */}
       <MapForm />
     </div>
   );

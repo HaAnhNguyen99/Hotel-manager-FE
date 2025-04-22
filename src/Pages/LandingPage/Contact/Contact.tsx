@@ -16,7 +16,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className=" dark:bg-neutral-700 flex gap-4 justify-around p-4 transition-all duration-300">
+    <div className=" dark:bg-transparent flex gap-4 justify-around p-4 transition-all duration-300">
       <div>
         <p className="text-center text-sm font-semibold text-landing lg:hidden">
           {subtitle}

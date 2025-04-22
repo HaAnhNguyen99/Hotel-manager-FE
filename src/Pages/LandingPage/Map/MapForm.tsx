@@ -1,54 +1,147 @@
-const className =
-  "w-full border-b outline-none bg-transparent border-landing-bgBlack focus:outline-none";
+import { FieldErrors, useForm, UseFormRegister } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createContact } from "@/services/landingpageService";
+import { toast } from "sonner";
 
-export const InputForm = ({
-  label,
-  placeholder,
-  type = "string",
-}: {
+const contactSchema = z.object({
+  name: z.string().min(1, "Vui lòng nhập tên"),
+  sdt: z.string().min(8, "Số điện thoại không hợp lệ"),
+  message: z.string().min(1, "Vui lòng nhập nội dung"),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
+const className =
+  "w-full border-b outline-none bg-transparent focus-within:bg-transparent visited:bg-transparent border-landing-bgBlack focus:outline-none";
+
+interface InputFormProps {
   label: string;
+  name: keyof ContactFormData;
   placeholder?: string;
   type?: string;
-}) => {
+  register: UseFormRegister<{
+    name: string;
+    sdt: string;
+    message: string;
+  }>;
+  errors: FieldErrors<{
+    name: string;
+    sdt: string;
+    message: string;
+  }>;
+}
+interface TextAreaFormProps {
+  register: UseFormRegister<{
+    name: string;
+    sdt: string;
+    message: string;
+  }>;
+  errors: FieldErrors<{
+    name: string;
+    sdt: string;
+    message: string;
+  }>;
+}
+export const InputForm = ({
+  label,
+  name,
+  placeholder,
+  type = "string",
+  register,
+  errors,
+}: InputFormProps) => {
   return (
     <div className="mb-2">
       <label htmlFor="name" className="text-brown-yellow mb-2 block">
         {label}
       </label>
       <input
+        {...register(name)}
         className={className}
         type={type}
-        id="name"
+        id={name}
         placeholder={placeholder}
       />
+      {errors[name] && (
+        <p className="text-red-500 text-sm">{errors[name]?.message}</p>
+      )}
+    </div>
+  );
+};
+export const TextAreaForm = ({ register, errors }: TextAreaFormProps) => {
+  return (
+    <div className="mb-2">
+      <label htmlFor="message" className="text-brown-yellow mb-2 block">
+        Lời nhắn
+      </label>
+      <textarea
+        {...register("message")}
+        className={`${className} resize-none`}
+        id="message"
+        rows={4}
+      />
+      {errors.message && (
+        <p className="text-red-500 text-sm">{errors.message.message}</p>
+      )}
     </div>
   );
 };
 
-export const TextAreaForm = () => {
-  return (
-    <>
-      <label
-        htmlFor="message"
-        className="text-brown-yello mb-2 block text-brown-yellow">
-        Lời nhắn
-      </label>
-      <textarea className={`${className} resize-none`} id="message" rows={4} />
-    </>
-  );
-};
-
 const MapForm = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      await createContact(data);
+      toast.success("Gửi thành công!", {
+        description:
+          "Chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.",
+      });
+      reset();
+    } catch (error) {
+      console.error("Lỗi gửi:", error);
+      toast.error("Gửi không thành công!, vui lòng thử lại sau.", {
+        description: "Có lỗi xảy ra.",
+      });
+      alert("Có lỗi xảy ra.");
+    }
+  };
+
   return (
-    <div className="w-full hidden lg:block absolute left-1/4 z-10 shadow-md top-10 right-0 lg:w-4/5 -translate-x-20 bg-landing-primaryLight py-16 -translate-y-8 pl-[27%] pr-10">
-      <form className="lg:flex lg:flex-col lg:items-start lg:justify-start lg:p-0  text-landing lg:*:w-full lg:w-full lg:h-full lg:pl-10 ">
-        <InputForm label="Họ tên" />
-        <InputForm label="Email" type="email" />
-        <TextAreaForm />
+    <div className="w-full hidden lg:block absolute left-1/4 z-10 shadow-md top-10 right-0 lg:w-4/5 -translate-x-20 bg-landing-primaryLight py-16 -translate-y-[11%] pl-[27%] pr-10">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="lg:flex lg:flex-col lg:items-start lg:justify-start lg:p-0  text-landing lg:*:w-full lg:w-full lg:h-full lg:pl-10">
+        <InputForm
+          label="Họ tên"
+          name="name"
+          register={register}
+          errors={errors}
+        />
+        <InputForm
+          label="Số điện thoại"
+          name="sdt"
+          type="tel"
+          register={register}
+          errors={errors}
+        />
+        <TextAreaForm register={register} errors={errors} />
         <div className="px-8 mt-3">
-          <button className="w-full p-2 bg-white text-brown-yellow mt-4 flex justify-between items-center px-8 text-lg">
-            <span>Gửi</span>
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className="w-full shadow-md group active:scale-95 mx-auto py-3 p-2 bg-white text-brown-yellow mt-4 flex justify-center gap-5 items-center px-8 text-lg">
+            <span>{isSubmitting ? "Đang gửi..." : "Gửi"}</span>
             <svg
+              className="group-hover:translate-x-3 transition-all duration-300 ease-in-out"
               xmlns="http://www.w3.org/2000/svg"
               width="101"
               height="16"

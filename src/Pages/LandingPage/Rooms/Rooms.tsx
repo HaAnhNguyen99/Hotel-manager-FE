@@ -11,7 +11,7 @@ const Rooms = () => {
         <p className="tracking-wider font-semibold text-landing md:text-xl ">
           {subTitle}
         </p>
-        <h3 className="w-fit mx-auto font-playfair text-3xl font-extrabold relative after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-1/3 after:h-1 after:bg-black after:rounded-md md:text-4xl">
+        <h3 className="w-fit dark:text-black mx-auto font-playfair text-3xl font-extrabold relative after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-5 after:w-1/3 after:h-1 after:bg-black after:rounded-md md:text-4xl">
           {title}
         </h3>
       </div>

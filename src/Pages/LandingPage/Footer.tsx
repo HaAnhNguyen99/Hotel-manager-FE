@@ -7,16 +7,19 @@ const Footer = () => {
     { title: "Không gian", link: "#rooms" },
     { title: "Liên hệ", link: "#contact" },
   ];
-  const icons = [{ icon: Facebook }, { icon: Youtube }];
+  const icons = [
+    { icon: Facebook, link: "https://www.facebook.com/" },
+    { icon: Youtube, link: "https://www.youtube.com/" },
+  ];
   return (
-    <footer className="text-white space-y-5 h-[20vh] bg-gray-400 p-10">
+    <footer className="space-y-5 h-[20vh] bg-landing-primaryLight p-10 text-landing-textMute">
       <div className="flex gap-2 justify-center md:gap-8 text-center">
         {data.map((x, index) => (
           <div key={index}>
             {
               <a
                 href={x.link}
-                className="font-bold w-fit leading-tight text-sm  hover:text-lg transition-all duration-300 ease-in-out md:text-balance">
+                className="font-bold w-fit leading-tight text-sm transition-all duration-300 ease-in-out md:text-balance after-content after:bg-landing after:scale-x-0 hover:after:scale-x-100 after:transition-all after:duration-300 after:ease-in-out">
                 {x.title}
               </a>
             }
@@ -25,7 +28,9 @@ const Footer = () => {
       </div>
       <div className=" flex justify-center gap-5">
         {icons.map((x, index) => (
-          <x.icon key={index} color="white" className="w-6 h-6 text-blue-500" />
+          <a href={x.link} key={index} className="hover:opacity-80">
+            <x.icon key={index} className="w-6 h-6" />
+          </a>
         ))}
       </div>
       <div className="text-center text-sm">
