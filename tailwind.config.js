@@ -3,8 +3,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["Inter", "sans-serif"],
-        bigShoulders: ["Big Shoulders Stencil", "cursive"],
+        playfair: ["Playfair Display", "serif"],
+        sans: ["Inter", "sans-serif"],
+        pops: ["Manrope", "sans-serif"],
       },
       colors: {
         grey: {
@@ -15,6 +16,10 @@ module.exports = {
           tertiary: "var(--grey-tertiary)",
           dark: "var(--grey-dark)",
           foreground: "var(--grey-foreground)",
+        },
+        brown: {
+          DEFAULT: "var(--brown--primary)",
+          yellow: "var(--brown--yellow)",
         },
         blue: {
           DEFAULT: "var(--blue)",
@@ -27,6 +32,7 @@ module.exports = {
           DEFAULT: "var(--yellow)",
           secondary: "var(--yellow-secondary)",
           dark: "var(--yellow-light)",
+          landingpage: "var(--yellow-primary)",
         },
         pink: {
           DEFAULT: "var(--pink)",
@@ -82,6 +88,18 @@ module.exports = {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        pupple: {
+          DEFAULT: "var(--text-color-primary)",
+        },
+        landing: {
+          DEFAULT: "var(--landing-primary)",
+          bgBlack: "var(--landing-bg-black)",
+          textMute: "var(--landing-text-mute)",
+          textBlack: "var(--landing-text-black)",
+          primaryLight: "var(--landing-primary-light)",
+          pureWhite: "var(--landing-pure-white)",
+          bgLight: "var(--landing-bg-light)",
+        },
       },
       borderRadius: {
         sm: "calc(var(--radius) - 4px)",
@@ -91,12 +109,11 @@ module.exports = {
       boxShadow: {
         sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
       },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
+
       fontSize: {
         heading: "28px",
         body: "16px",
+        extrasm: "12px",
       },
       fontWeight: {
         heading: "600",

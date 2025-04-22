@@ -11,27 +11,14 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getHotelProfile } from "@/services/hotelService";
-import {
-  CircleUser,
-  Home,
-  LayoutDashboard,
-  LogOut,
-  RefreshCcw,
-  Settings,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Home, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavLink } from "react-router-dom";
 import { ToggleTheme } from "@/components/ToggleTheme/ToggleTheme";
-import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/UserContext";
+import ChangePassword from "./ChangePassword";
 
 function SkeletonSidebarHeader() {
   return (
@@ -119,13 +106,13 @@ const AppSidebar = () => {
             <p
               className={`${
                 state === "collapsed" ? "hidden" : "block"
-              }  text-base font-bold`}>
+              }  text-base font-bold dark:text-grey`}>
               {hotelProfile.name}
             </p>
           </>
         )}
       </SidebarHeader>
-      <SidebarContent className="dark:bg-[#1e1e1e]">
+      <SidebarContent className="dark:bg-[#1e1e1e] dark:text-grey">
         <SidebarGroup>
           <SidebarGroupLabel>Điều hướng</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -151,28 +138,31 @@ const AppSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="dark:bg-[#1e1e1e]">
-        <ToggleTheme />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="dark:bg-transparent dark:border dark:border-gray-100">
-              <CircleUser className="dark:text-grey-tertiary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="translate-x-14">
-            <DropdownMenuItem
-              onClick={logoutUser}
-              className="flex gap-2 bg-transparent">
-              <LogOut />
-              Đăng xuất
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 ">
-              <RefreshCcw />
-              Đổi mật khẩu
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {/* Toggle theme */}
+            <SidebarMenuItem>
+              <ToggleTheme />
+            </SidebarMenuItem>
+            {/* Change Password */}
+            <SidebarMenuItem>
+              <ChangePassword />
+            </SidebarMenuItem>
+            {/* Log out */}
+            <SidebarMenuItem className="w-full">
+              <SidebarMenuButton
+                className="dark:text-white dark:border dark:border-gray-100 border-border border bg-white rounded-lg overflow-hidden dark:bg-transparent"
+                onClick={logoutUser}>
+                <div
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 dark:focus-visible:ring-zinc-300 button-press hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 h-9 w-9"
+                  tabIndex={-1}>
+                  <LogOut className="w-4 h-4" />
+                </div>
+                <span>Đăng xuất</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
       </SidebarFooter>
     </Sidebar>
   );

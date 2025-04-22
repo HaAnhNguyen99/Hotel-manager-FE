@@ -1,34 +1,45 @@
-import { CreateServiceUsagePayload } from '@/types/service';
-import axios from 'axios';
-import { BookingStatus, CreateBookingPayload, UpdateBookingData } from '@/types/booking';
-import { UpdateServiceUsagePayload } from '@/types/service_usage';
-import { FetchRoom, RoomBooking, RoomStatus } from '@/types/room';
-import { CreatePaymentPayload } from '@/types/payment';
-import { compareDaily, dailyStat, RevenueData, yearlyStat } from '@/types/reservation';
-import { getTodayISODate } from '@/utils/getTodayISODate';
+import { CreateServiceUsagePayload } from "@/types/service";
+import axios from "axios";
+import {
+  BookingStatus,
+  CreateBookingPayload,
+  UpdateBookingData,
+} from "@/types/booking";
+import { UpdateServiceUsagePayload } from "@/types/service_usage";
+import { FetchRoom, RoomBooking, RoomStatus } from "@/types/room";
+import { CreatePaymentPayload } from "@/types/payment";
+import {
+  compareDaily,
+  dailyStat,
+  RevenueData,
+  yearlyStat,
+} from "@/types/reservation";
+import { getTodayISODate } from "@/utils/getTodayISODate";
+import { ChangePasswordParams } from "@/types/login";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
-// Create a single Axios instance
+/**
+ * Creates a single Axios instance for making HTTP requests to the API.
+ * Configures base URL from environment variables and sets default headers.
+ */
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-const getAuthToken = () => {
-  try {
-    const userData = localStorage.getItem('user') || sessionStorage.getItem('user');
-    if (!userData) return null;
-
-    const user = JSON.parse(userData);
-    return user?.jwt || null;
-  } catch (error) {
-    console.error('Lỗi khi lấy token từ localStorage:', error);
-    return null;
-  }
-};
-
+/**
+ * Axios request interceptor that adds the authentication token to all API requests.
+ *
+ * This interceptor runs before each API request and:
+ * 1. Retrieves the JWT token from local storage using getAuthToken()
+ * 2. If a token exists, adds it to the request headers as a Bearer token
+ * 3. Returns the modified config to continue the request
+ *
+ * @param {AxiosRequestConfig} config - The Axios request configuration object
+ * @returns {AxiosRequestConfig} The modified request config with auth headers if a token exists
+ */
 api.interceptors.request.use((config) => {
   const token = getAuthToken();
   if (token) {
@@ -36,6 +47,67 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+/**
+ * Retrieves the authentication token (JWT) from localStorage or sessionStorage.
+ *
+ * @returns {string | null} The JWT token if available, otherwise null.
+ */
+
+const getAuthToken = () => {
+  try {
+    const userData =
+      localStorage.getItem("user") || sessionStorage.getItem("user");
+    if (!userData) return null;
+
+    const user = JSON.parse(userData);
+    return user?.jwt || null;
+  } catch (error) {
+    console.error("Lỗi khi lấy token từ localStorage:", error);
+    return null;
+  }
+};
+
+/**
+ * Sends a request to change the user's password.
+ *
+ * @param {Object} params - Parameters for changing the password.
+ * @param {string} params.currentPassword - The user's current password.
+ * @param {string} params.newPassword - The new password the user wants to set.
+ * @param {string} params.confirmNewPassword - Confirmation of the new password.
+ * @returns {Promise<any>} - The response data from the API if the password change is successful.
+ * @throws {Error} - Throws an error if the current password is invalid or if another error occurs.
+ */
+
+export const changePassword = async ({
+  currentPassword,
+  newPassword,
+  confirmNewPassword,
+}: ChangePasswordParams) => {
+  try {
+    const response = await api.post("/auth/change-password", {
+      currentPassword,
+      password: newPassword,
+      passwordConfirmation: confirmNewPassword,
+    });
+
+    return response.data;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      if (
+        err?.response?.data?.error?.status === 400 &&
+        err?.response?.data?.error?.message ===
+          "The provided current password is invalid"
+      ) {
+        const message = "Mật khẩu cũ không đúng hoặc sai cú pháp";
+        throw new Error(message);
+      } else {
+        const message = "Lỗi khi đổi mật khẩu";
+        throw new Error(message);
+      }
+    }
+  }
+};
 
 /**
  * Fetches all rooms sorted by room number with related data populated.
@@ -46,11 +118,11 @@ api.interceptors.request.use((config) => {
 
 export const fetchRooms = async (): Promise<FetchRoom> => {
   try {
-    const response = await api.get('/rooms?sort[0]=room_number&populate=*');
+    const response = await api.get("/rooms?sort[0]=room_number&populate=*");
     return response.data;
   } catch (error) {
-    console.error('Error fetching rooms:', error);
-    throw new Error('Failed to fetch rooms');
+    console.error("Error fetching rooms:", error);
+    throw new Error("Failed to fetch rooms");
   }
 };
 
@@ -64,14 +136,16 @@ export const fetchRooms = async (): Promise<FetchRoom> => {
 
 export const getRoomBooking = async (roomId: string): Promise<RoomBooking> => {
   try {
-    const response = await api.get(`/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`);
+    const response = await api.get(
+      `/bookings?filters[room][documentId][$eq]=${roomId}&[booking_status][$eq]=Pending`
+    );
     const data = response.data.data.filter((item: RoomBooking) => {
       return item.booking_status === BookingStatus.Pending;
     });
     return data[0];
   } catch (error) {
-    console.error('Error fetching bookings:', error);
-    throw new Error('Failed to fetch bookings');
+    console.error("Error fetching bookings:", error);
+    throw new Error("Failed to fetch bookings");
   }
 };
 
@@ -94,7 +168,7 @@ export const getServices = async () => {
     const response = await api.get(`services${POPULATE_ALL}`);
     return response;
   } catch (error) {
-    console.error('Error fetching services data:', error);
+    console.error("Error fetching services data:", error);
     throw error;
   }
 };
@@ -107,12 +181,14 @@ export const getServices = async () => {
  * @throws {Error} If the request fails.
  */
 
-export const createServiceUsage = async (payload: CreateServiceUsagePayload) => {
+export const createServiceUsage = async (
+  payload: CreateServiceUsagePayload
+) => {
   try {
-    const response = await api.post('/service-usages', payload);
+    const response = await api.post("/service-usages", payload);
     return response.data;
   } catch (error) {
-    console.error('Error creating service usage:', error);
+    console.error("Error creating service usage:", error);
     throw error;
   }
 };
@@ -130,10 +206,10 @@ export interface CreateBookingType {
 }
 export const createBooking = async (payload: CreateBookingType) => {
   try {
-    const response = await api.post('/bookings', payload);
+    const response = await api.post("/bookings", payload);
     return response.data;
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error("Error creating booking:", error);
     throw error;
   }
 };
@@ -151,7 +227,7 @@ export const cancelBooking = async (bookingId: string) => {
     const response = await api.delete(`/bookings/${bookingId}`);
     return response.data;
   } catch (error) {
-    console.error('Error canceling booking:', error);
+    console.error("Error canceling booking:", error);
     throw error;
   }
 };
@@ -166,10 +242,12 @@ export const cancelBooking = async (bookingId: string) => {
 
 export const getServiceUsage = async (bookingId: string) => {
   try {
-    const response = await api.get(`/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`);
+    const response = await api.get(
+      `/service-usages?filters[booking][documentId][$eq]=${bookingId}&populate=*`
+    );
     return response.data.data;
   } catch (err) {
-    console.error('Error fetching service usage:', err);
+    console.error("Error fetching service usage:", err);
     throw err;
   }
 };
@@ -189,7 +267,7 @@ export const getServiceUsageStatusPayed = async (bookingId: string) => {
     );
     return response.data.data;
   } catch (err) {
-    console.error('Error fetching service usage:', err);
+    console.error("Error fetching service usage:", err);
     throw err;
   }
 };
@@ -203,12 +281,18 @@ export const getServiceUsageStatusPayed = async (bookingId: string) => {
  * @throws {Error} If the request fails.
  */
 
-export const updateServiceUsage = async (serviceUsageId: string, payload: UpdateServiceUsagePayload) => {
+export const updateServiceUsage = async (
+  serviceUsageId: string,
+  payload: UpdateServiceUsagePayload
+) => {
   try {
-    const response = await api.put(`/service-usages/${serviceUsageId}`, payload);
+    const response = await api.put(
+      `/service-usages/${serviceUsageId}`,
+      payload
+    );
     return response.data;
   } catch (error) {
-    console.error('Error updating service usage:', error);
+    console.error("Error updating service usage:", error);
     throw error;
   }
 };
@@ -222,7 +306,10 @@ export const updateServiceUsage = async (serviceUsageId: string, payload: Update
  * @throws {Error} If the request fails.
  */
 
-export const updateServicePayment = async (serviceUsageId: string, service_status: string) => {
+export const updateServicePayment = async (
+  serviceUsageId: string,
+  service_status: string
+) => {
   try {
     await api.put(`/service-usages/${serviceUsageId}`, {
       data: {
@@ -231,7 +318,7 @@ export const updateServicePayment = async (serviceUsageId: string, service_statu
     });
     return;
   } catch (error) {
-    console.error('Error updating service usage:', error);
+    console.error("Error updating service usage:", error);
     throw error;
   }
 };
@@ -249,7 +336,7 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
     const response = await api.delete(`/service-usages/${serviceUsageId}`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting service usage:', error);
+    console.error("Error deleting service usage:", error);
     throw error;
   }
 };
@@ -263,12 +350,15 @@ export const deleteServiceUsage = async (serviceUsageId: string) => {
  * @throws {Error} If the request fails.
  */
 
-export const updateBooking = async (bookingId: string, payload: Partial<UpdateBookingData>) => {
+export const updateBooking = async (
+  bookingId: string,
+  payload: Partial<UpdateBookingData>
+) => {
   try {
     const response = await api.put(`/bookings/${bookingId}`, payload);
     return response.data;
   } catch (error) {
-    console.error('Error updating booking:', error);
+    console.error("Error updating booking:", error);
     throw error;
   }
 };
@@ -290,7 +380,7 @@ export const updateBookingStatus = async (bookingId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating booking status:', error);
+    console.error("Error updating booking status:", error);
     throw error;
   }
 };
@@ -312,7 +402,7 @@ export const updateRoomStatusOccupied = async (roomId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating room status to occupied:', error);
+    console.error("Error updating room status to occupied:", error);
     throw error;
   }
 };
@@ -334,7 +424,7 @@ export const updateRoomStatusAvailable = async (roomId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating room status to available:', error);
+    console.error("Error updating room status to available:", error);
     throw error;
   }
 };
@@ -352,7 +442,7 @@ export const createPayment = async (payload: CreatePaymentPayload) => {
     const response = await api.post(`/reservations`, payload);
     return response.data;
   } catch (error) {
-    console.error('Error creating payment:', error);
+    console.error("Error creating payment:", error);
     throw error;
   }
 };
@@ -369,7 +459,7 @@ export const getHotelProfile = async () => {
     const response = await api.get(`/hotels?populate=*`);
     return response.data.data[0];
   } catch (error) {
-    console.error('Error creating payment:', error);
+    console.error("Error creating payment:", error);
     throw error;
   }
 };
@@ -383,18 +473,21 @@ export const getHotelProfile = async () => {
  * @throws {Error} If the request fails.
  */
 
-export const getReservationsFromDate = async (startDate: string | Date, endDate: string | Date): Promise<RevenueData[]> => {
+export const getReservationsFromDate = async (
+  startDate: string | Date,
+  endDate: string | Date
+): Promise<RevenueData[]> => {
   const params = {
-    'filters[date][$gte]': startDate,
-    'filters[date][$lte]': endDate,
-    populate: '*',
+    "filters[date][$gte]": startDate,
+    "filters[date][$lte]": endDate,
+    populate: "*",
   };
 
   try {
     const response = await api.get(`/reservations`, { params });
     return response.data.data;
   } catch (error) {
-    console.error('Error creating payment:', error);
+    console.error("Error creating payment:", error);
     throw error;
   }
 };
@@ -411,7 +504,7 @@ export const getRevenueData = async () => {
     const response = await api.get(`/reservations?&sort=date:DESC&populate=*`);
     return response;
   } catch (error) {
-    console.error('Error fetching revenue data:', error);
+    console.error("Error fetching revenue data:", error);
     throw error;
   }
 };
@@ -424,14 +517,18 @@ export const getRevenueData = async () => {
  * @throws {Error} If the request fails.
  */
 
-export const getYearlyStat = async (year?: string | number): Promise<yearlyStat[]> => {
+export const getYearlyStat = async (
+  year?: string | number
+): Promise<yearlyStat[]> => {
   try {
     const defaultYear = new Date().getFullYear();
     const yearParams = year ? year : defaultYear;
-    const response = await api.get(`/reservations/yearly-stats?year=${yearParams}`);
+    const response = await api.get(
+      `/reservations/yearly-stats?year=${yearParams}`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching revenue data:', error);
+    console.error("Error fetching revenue data:", error);
     throw error;
   }
 };
@@ -444,12 +541,17 @@ export const getYearlyStat = async (year?: string | number): Promise<yearlyStat[
  * @returns {Promise<dailyStat[]>} The API response containing daily revenue statistics.
  * @throws {Error} If the request fails.
  */
-export const getDailyRevenue = async (startDate: Date | string = '', endDate: Date | string = ''): Promise<dailyStat[]> => {
+export const getDailyRevenue = async (
+  startDate: Date | string = "",
+  endDate: Date | string = ""
+): Promise<dailyStat[]> => {
   try {
-    const response = await api.get(`/reservations/daily-revenue?startDate=${startDate}&endDate=${endDate}`);
+    const response = await api.get(
+      `/reservations/daily-revenue?startDate=${startDate}&endDate=${endDate}`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching revenue data:', error);
+    console.error("Error fetching revenue data:", error);
     throw error;
   }
 };
@@ -466,7 +568,7 @@ export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
     const response = await api.get(`/reservations/compare-daily-revenue`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching revenue data:', error);
+    console.error("Error fetching revenue data:", error);
     throw error;
   }
 };
@@ -481,10 +583,12 @@ export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
 
 export const getSearchData = async (payload: string) => {
   try {
-    const response = await api.get(`/reservations/search?search=${payload}&pagination[start]=0&pagination[limit]=10`);
+    const response = await api.get(
+      `/reservations/search?search=${payload}&pagination[start]=0&pagination[limit]=10`
+    );
     return response;
   } catch (error) {
-    console.error('Error fetching revenue data:', error);
+    console.error("Error fetching revenue data:", error);
     throw error;
   }
 };
@@ -502,7 +606,7 @@ export const deleteReservations = async (id: string) => {
     const response = await api.delete(`/reservations/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting reservations:', error);
+    console.error("Error deleting reservations:", error);
     throw error;
   }
 };
@@ -514,12 +618,17 @@ export const deleteReservations = async (id: string) => {
  * @param limit The number of records to fetch per page.
  * */
 
-export const getReservationsPagination = async (start: number, limit: number) => {
+export const getReservationsPagination = async (
+  start: number,
+  limit: number
+) => {
   try {
-    const response = await api.get(`/reservations?pagination[start]=${start}&pagination[limit]=${limit}&populate=*&sort=date:DESC`);
+    const response = await api.get(
+      `/reservations?pagination[start]=${start}&pagination[limit]=${limit}&populate=*&sort=date:DESC`
+    );
     return response;
   } catch (error) {
-    console.error('Error deleting reservations:', error);
+    console.error("Error deleting reservations:", error);
     throw error;
   }
 };

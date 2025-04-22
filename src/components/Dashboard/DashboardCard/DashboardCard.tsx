@@ -13,7 +13,7 @@ export type DashboardCardProps = {
 };
 
 const DashboardCard = ({ CardData, handleDeleteCardItem }: { CardData: DashboardCardProps; handleDeleteCardItem: (title: string) => void }) => {
-  const { title, value, icon: Icon, color = 'bg-white', foreground = 'bg-yellow-secondary', textColor, iconColor = 'pink' } = CardData;
+  const { title, value, icon: Icon, color = 'bg-white', foreground = 'bg-yellow-secondary', textColor, iconColor = '#c11c84' } = CardData;
 
   return (
     <div className={`stat-card ${color} ${textColor} flex-1 flex-shrink-0 py-6 px-8 flex gap-2 justify-between card-shadow-mode`}>
