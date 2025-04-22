@@ -19,12 +19,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BadgeCheck, Eye, EyeOff, User } from "lucide-react";
 import { useState } from "react";
 import { login } from "@/services/authService";
 import { useUserContext } from "@/context/UserContext";
+import ForgotPassword from "./ForgotPassword";
 
 const userSchema = z.object({
   identifier: z.string().min(1, { message: "Tên đăng nhập là bắt buộc" }),
@@ -84,7 +85,7 @@ const Login = () => {
           <User className="sm:hidden w-4 h-4 text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-w-72 rounded-lg bg-landing">
+      <DialogContent className="sm:max-w-[425px] max-w-72 rounded-lg bg-white dark:bg-landing">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
             Đăng nhập
@@ -107,7 +108,7 @@ const Login = () => {
                     <div className="flex items-center justify-between rounded-lg ring-1 ring-zinc-200 shadow-sm p-2 px-3 transition-all duration-300 ease-in-out hover:ring-zinc-600 hover:opacity-80 hover:scale-x-105 ">
                       <input
                         {...field}
-                        className="w-full focus:outline-none placeholder:text-zinc-400 dark:bg-transparent"
+                        className="w-full bg-transparent focus:outline-none placeholder:text-zinc-400 dark:bg-transparent"
                         placeholder="Nhập tên đăng nhập"
                       />
                       {fieldState.isDirty && !fieldState.error && (
@@ -129,7 +130,7 @@ const Login = () => {
                     <div className="flex items-center justify-between rounded-lg ring-1 ring-zinc-200 shadow-sm p-2 px-3 transition-all duration-300 ease-in-out hover:ring-zinc-600 hover:opacity-80 hover:scale-x-105">
                       <input
                         {...field}
-                        className="w-full focus:outline-none placeholder:text-zinc-400 dark:bg-transparent"
+                        className="w-full bg-transparent focus:outline-none placeholder:text-zinc-400 dark:bg-transparent"
                         placeholder="Nhập mật khẩu"
                         type={isPeak ? "text" : "password"}
                       />
@@ -168,11 +169,7 @@ const Login = () => {
                   Ghi nhớ
                 </label>
               </div>
-              <Link
-                to="/forgot-password"
-                className="relative text-sm font-light after:w-full after:absolute after:content-[''] after:bg-gray-900 after:-bottom-[1.5px] after:left-0 after:h-[1.5px] after:rounded-full after:transition-all after:duration-300 after:ease-in-out hover:after:opacity-40 hover:after:scale-x-105">
-                Quên mật khẩu?
-              </Link>
+              <ForgotPassword />
             </div>
             <DialogFooter>
               <Button

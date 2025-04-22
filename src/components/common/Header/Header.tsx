@@ -34,7 +34,7 @@ const Header = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
             {
               <a
                 href={x.link}
-                className="font-bold w-fit leading-tight text-sm  hover:text-lg transition-all duration-300 ease-in-out md:text-balance">
+                className="font-bold w-fit leading-tight text-sm after-content after:bg-landing after:scale-x-0 hover:after:scale-x-100 after:transition-all after:duration-300 after:ease-in-out transition-all duration-300 ease-in-out md:text-balance">
                 {x.title}
               </a>
             }
@@ -49,7 +49,7 @@ const Header = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
                 <img
                   src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
                   alt="Weather icon"
-                  className="w-12 h-12"
+                  className="w-12 h-12 filter invert sepia saturate-500 hue-rotate-[-50deg]"
                 />
                 <p className="text-sm font-bold">{weather.main.temp}°C</p>
               </>
