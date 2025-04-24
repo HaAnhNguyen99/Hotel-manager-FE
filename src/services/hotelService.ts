@@ -16,6 +16,7 @@ import {
 } from "@/types/reservation";
 import { getTodayISODate } from "@/utils/getTodayISODate";
 import { ChangePasswordParams } from "@/types/login";
+import { ServiceFormData } from "@/Pages/Setting/AddService";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
 /**
@@ -648,4 +649,52 @@ export const getTodayRooms = async () => {
   const TodayData = await getReservationsFromDate(startDate, endDate);
 
   return TodayData;
+};
+
+export const uploadFile = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("files", file);
+
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tải ảnh lên");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const response = await axios.post("/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data[0].id;
+  } catch (err) {
+    console.error("Error uploading file:", err);
+    throw new Error("Lỗi khi tải ảnh lên");
+  }
+};
+
+export const createService = async (data: ServiceFormData, fileId: number) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tạo dịch vụ");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const payload = {
+      data: {
+        name: data.serviceName,
+        price: data.price,
+        img: fileId,
+      },
+    };
+
+    await axios.post("/services", payload);
+    return;
+  } catch (err) {
+    console.error("Error creating service:", err);
+    throw new Error("Lỗi khi tạo dịch vụ");
+  }
 };

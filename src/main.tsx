@@ -10,6 +10,7 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 import { UserProvider } from "./context/UserContext";
 import { Toaster } from "sonner";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import Setting from "./Pages/Setting/Setting";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -43,6 +44,16 @@ createRoot(document.getElementById("root")!).render(
 
             {/* Reset Password */}
             <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Setting */}
+            <Route
+              path="/setting"
+              element={
+                <BaseLayouts>
+                  <Setting />
+                </BaseLayouts>
+              }
+            />
 
             {/* 404 Not Found */}
             <Route path="*" element={<div>404 Not Found</div>} />
