@@ -16,7 +16,7 @@ import {
 } from "@/types/reservation";
 import { getTodayISODate } from "@/utils/getTodayISODate";
 import { ChangePasswordParams } from "@/types/login";
-import { ServiceFormData } from "@/Pages/Setting/AddService";
+import { ServiceFormData } from "@/Pages/Setting/ServiceFormDialog";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
 /**
@@ -748,7 +748,7 @@ export const deleteService = async (id: string) => {
 
 export const updateService = async (
   id: string,
-  data: ServiceFormData,
+  ServiceData: ServiceFormData,
   fileId?: number
 ) => {
   try {
@@ -761,8 +761,8 @@ export const updateService = async (
 
     const payload = {
       data: {
-        name: data.serviceName,
-        price: data.price,
+        name: ServiceData.serviceName,
+        price: ServiceData.price,
         img: fileId,
       },
     };
