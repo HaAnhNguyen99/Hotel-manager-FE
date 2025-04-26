@@ -15,7 +15,7 @@ const RoomCard = ({ room, onClick }: RoomCardProps) => {
   const imageUrl = room.img.url || "/fallback-room-image.jpg";
 
   return (
-    <div className="rooms-card bg-card relative shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 w-[350px] aspect-[5/3] flex flex-col  border-2 border-black rounded-3xl">
+    <div className="rooms-card bg-card relative shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 max-w-[350px] aspect-[5/3] flex flex-col  border-2 border-black rounded-3xl w-full">
       <div className="relative flex-1 w-full h-full overflow-hidden">
         <div
           id="img-overlay-img"
