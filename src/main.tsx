@@ -11,6 +11,7 @@ import { UserProvider } from "./context/UserContext";
 import { Toaster } from "sonner";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Setting from "./Pages/Setting/Setting";
+import { ServiceProvider } from "./context/ServiceContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -49,9 +50,11 @@ createRoot(document.getElementById("root")!).render(
             <Route
               path="/setting"
               element={
-                <BaseLayouts>
-                  <Setting />
-                </BaseLayouts>
+                <ServiceProvider>
+                  <BaseLayouts>
+                    <Setting />
+                  </BaseLayouts>
+                </ServiceProvider>
               }
             />
 

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { z } from "zod";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ interface ImageUploadProps {
     {
       serviceName: string;
       price: number;
-      serviceImage: File;
+      serviceImage?: string | File | undefined;
     },
     "serviceImage"
   >;
@@ -30,6 +30,7 @@ interface ImageUploadProps {
     serviceName: string;
     price: number;
   }>;
+  defaultImageUrl?: string;
 }
 
 const imageSchema = z.object({
@@ -47,22 +48,26 @@ const ImageUpload = ({
   fieldState,
   setError,
   clearErrors,
+  defaultImageUrl,
 }: ImageUploadProps) => {
-  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (defaultImageUrl) {
+      setPreview(defaultImageUrl);
+    }
+  }, [defaultImageUrl]);
 
   // Xử lý file khi chọn hoặc kéo thả
   const handleFileChange = useCallback(
     async (selectedFile: File) => {
       try {
         imageSchema.parse({ file: selectedFile });
-        setFile(selectedFile);
         field.onChange(selectedFile);
         const previewUrl = URL.createObjectURL(selectedFile);
         setPreview(previewUrl);
       } catch {
-        setFile(null);
         setPreview(null);
         field.onChange(null);
       }
@@ -98,7 +103,6 @@ const ImageUpload = ({
   };
 
   const handleClear = () => {
-    setFile(null);
     setPreview(null);
     field.onChange(null);
     if (preview) {
@@ -152,6 +156,9 @@ const ImageUpload = ({
           </div>
         )}
       </div>
+      {fieldState.error && (
+        <p className="text-red-500">{fieldState.error.message}</p>
+      )}
     </div>
   );
 };

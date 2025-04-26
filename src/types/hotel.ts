@@ -1,6 +1,6 @@
-import { BookingType } from './booking';
+import { BookingType } from "./booking";
 
-export type RoomStatus = 'Available' | 'Occupied' | 'Cleaning';
+export type RoomStatus = "Available" | "Occupied" | "Cleaning";
 
 export type RoomImage = {
   data: {
@@ -84,7 +84,7 @@ type ImageFormats = {
   };
 };
 
-type Image = {
+export type Image = {
   id: number;
   documentId: string;
   name: string;
