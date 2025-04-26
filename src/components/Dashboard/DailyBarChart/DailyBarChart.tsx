@@ -42,7 +42,15 @@ export interface DailyBarChartProps {
 export const DailyBarChart: React.FC<DailyBarChartProps> = ({ data }) => {
   const { chartData, options } = chartOption({ data });
 
-  return <Chart type="bar" data={chartData} options={options} />;
+  return (
+    <Chart
+      width={undefined}
+      height={undefined}
+      type="bar"
+      data={chartData}
+      options={options}
+    />
+  );
 };
 
 export default DailyBarChart;
