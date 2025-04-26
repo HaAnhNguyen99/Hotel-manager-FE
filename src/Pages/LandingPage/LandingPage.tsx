@@ -18,6 +18,7 @@ const LandingPage = () => {
       <main>
         <Hero />
         <Property />
+
         <Amenities />
         <Rooms />
         <section

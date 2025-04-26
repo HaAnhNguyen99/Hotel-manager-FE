@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Login from "./Login";
 import { useUserContext } from "@/context/UserContext";
 import { WeatherApiResponse } from "@/types/landingpage";
+import { LogOut } from "lucide-react";
 const Header = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
   const data = [
     { title: "Chính sách", link: "#property" },
@@ -58,7 +59,8 @@ const Header = ({ weather }: { weather: WeatherApiResponse | undefined }) => {
         </div>
         {isAuthenticated ? (
           <Button variant="outline" className="bg-white" onClick={logoutUser}>
-            Đăng xuất
+            <span className="hidden sm:block">Đăng xuất</span>
+            <LogOut className="sm:hidden w-4 h-4" />
           </Button>
         ) : (
           <Login />

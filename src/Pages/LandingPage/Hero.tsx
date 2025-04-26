@@ -42,9 +42,9 @@ const Hero = () => {
 
       {isAuthenticated && (
         <Link to="/dashboard">
-          <a className="flex gap-2 px-5 pt-10 text-background items-center relative">
-            <MoveLeft className="w-4 h-4" />
-            <p>Back to dashboard</p>
+          <a className="flex gap-2 px-5 pt-10 text-background items-center relative w-fit">
+            <MoveLeft className="w-4 h-4 animate-bounce" />
+            <p>Trở về</p>
           </a>
         </Link>
       )}
