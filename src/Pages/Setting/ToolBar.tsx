@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { ArrowUpAZ, ArrowUpZA, ArrowUpDown, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useServiceContext } from "@/context/ServiceContext";
 
-interface ToolBarProps {
-  isLowToHigh: boolean;
-  setIsNameDesc: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsLowToHigh: React.Dispatch<React.SetStateAction<boolean>>;
-  isNameDesc: boolean;
-  handleSearch: () => void;
-}
 const ToolBar = () => {
   const { handleSearch, setSortBy } = useServiceContext();
   const [priceOnClick, setPriceOnClick] = useState(true);

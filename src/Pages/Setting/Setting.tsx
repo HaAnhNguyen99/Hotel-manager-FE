@@ -1,12 +1,8 @@
 import ServiceFormDialog from "./ServiceFormDialog";
-import { useEffect, useState } from "react";
 import ToolBar from "./ToolBar";
 import ServicesTable from "./ServicesTable";
-import { ServiceData } from "@/types/service";
-import { getServices } from "@/services/hotelService";
 import { useServiceContext } from "@/context/ServiceContext";
 import { Loading } from "@/components/common/Loading/Loading";
-import LoadingText from "@/components/common/LoadingText/LoadingText";
 import ErrorPage from "@/components/common/ErrorPage";
 
 const Setting = () => {
