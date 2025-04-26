@@ -16,6 +16,7 @@ import {
 } from "@/types/reservation";
 import { getTodayISODate } from "@/utils/getTodayISODate";
 import { ChangePasswordParams } from "@/types/login";
+import { ServiceFormData } from "@/Pages/Setting/AddService";
 const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
 /**
@@ -648,4 +649,147 @@ export const getTodayRooms = async () => {
   const TodayData = await getReservationsFromDate(startDate, endDate);
 
   return TodayData;
+};
+
+/**
+ * Uploads a file to the server and returns its uploaded file ID.
+ *
+ * This function creates a FormData object containing the file,
+ * attaches the authorization token from localStorage/sessionStorage,
+ * and sends a POST request to the `/upload` endpoint.
+ *
+ * @async
+ * @function uploadFile
+ * @param {File} file - The file to be uploaded.
+ * @returns {Promise<number>} The ID of the uploaded file.
+ * @throws {Error} If no authentication token is found or if the upload fails.
+ */
+export const uploadFile = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("files", file);
+
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tải ảnh lên");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const response = await axios.post("/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data[0].id;
+  } catch (err) {
+    console.error("Error uploading file:", err);
+    throw new Error("Lỗi khi tải ảnh lên");
+  }
+};
+
+/**
+ * Creates a new service with the given name, price, and image.
+ *
+ * Sends a POST request to the `/services` endpoint with the service data,
+ * including the name, price, and the ID of the uploaded image.
+ *
+ * @async
+ * @function createService
+ * @param {ServiceFormData} data - The form data containing the service name and price.
+ * @param {number} fileId - The ID of the uploaded image used as the service thumbnail.
+ * @returns {Promise<void>} Resolves when the service is successfully created, otherwise throws an error.
+ * @throws {Error} If no authentication token is found or if the request fails.
+ */
+export const createService = async (data: ServiceFormData, fileId: number) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tạo dịch vụ");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const payload = {
+      data: {
+        name: data.serviceName,
+        price: data.price,
+        img: fileId,
+      },
+    };
+
+    await axios.post("/services", payload);
+    return;
+  } catch (err) {
+    console.error("Error creating service:", err);
+    throw new Error("Lỗi khi tạo dịch vụ");
+  }
+};
+
+/**
+ * Deletes a service by its ID.
+ *
+ * Sends a DELETE request to the API to remove the specified service.
+ *
+ * @async
+ * @function deleteService
+ * @param {string} id - The ID of the service to delete.
+ * @returns {Promise<Object>} The API response confirming the deletion.
+ * @throws {Error} If the request fails, an error is thrown and logged.
+ */
+export const deleteService = async (id: string) => {
+  try {
+    const response = await api.delete(`/services/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    throw error;
+  }
+};
+
+export const updateService = async (
+  id: string,
+  data: ServiceFormData,
+  fileId?: number
+) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tạo dịch vụ");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const payload = {
+      data: {
+        name: data.serviceName,
+        price: data.price,
+        img: fileId,
+      },
+    };
+
+    await axios.put(`/services/${id}`, payload);
+    return;
+  } catch (err) {
+    console.error("Error updating service:", err);
+    throw new Error("Lỗi khi cập nhật dịch vụ");
+  }
+};
+
+export const searchService = async (name: string) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tạo dịch vụ");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const response = await api.get(
+      "/services?filters[name][$contains]=" + name + "&populate=*"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching services data:", error);
+    throw error;
+  }
 };

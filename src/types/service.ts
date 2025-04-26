@@ -1,3 +1,4 @@
+import { Image } from "./hotel";
 import { ServiceStatus } from "./service_usage";
 
 export interface ServiceData {
@@ -9,7 +10,7 @@ export interface ServiceData {
   updatedAt: string;
   publishedAt: string;
   note: object | null;
-  img: string | null;
+  img: Image;
 }
 
 export interface UseServiceResult {
