@@ -15,7 +15,7 @@ const StatCard: React.FC<StatCardProps> = ({
 }) => (
   <div
     onClick={onClick}
-    className={`py-2 px-4 rounded-lg cursor-pointer shadow-md transition border border-border hover:opacity-80 
+    className={`py-2 px-4 rounded-lg cursor-pointer shadow-md transition border border-border hover:opacity-80 w-full 
       ${isSelected ? " border bg-yellow-secondary" : "bg-card"}`}>
     <div className="text-neutral-600 flex items-center justify-between gap-2">
       <div className="text-[#ff7c7c]">{icon}</div>

@@ -7,7 +7,7 @@ const Map = () => {
   return (
     <div className="flex flex-col lg:flex-row dark:bg-transparent text-white lg:w-1/2 h-[50vh] max-h-[70vh] md:max-h-[50vh]lg:gap-10 relative lg:p-8">
       {/* Map Container */}
-      <div className="relative z-20 w-full lg:w-2/5 h-full lg:aspect-[3/4] shadow-md lg:after:contents-[''] lg:after:w-full lg:after:h-full lg:after:absolute lg:after:opacity-50 lg:after:left-5 lg:after:top-5 lg:after:bg-landing-bgBlack lg:after:z-10">
+      <div className="relative z-20 w-full lg:w-2/5 h-full lg:aspect-[3/4] shadow-md lg:after:contents-[''] lg:after:w-full lg:after:h-full lg:after:absolute lg:after:opacity-50 lg:after:left-5 lg:after:top-5 lg:after:bg-landing-bgBlack lg:after:z-10 lg:h-[22rem]">
         <iframe
           className="absolute inset-0 w-full h-full z-20 overflow-hidden shadow-md"
           src={mapEmbedUrl}
