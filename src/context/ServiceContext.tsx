@@ -1,6 +1,7 @@
 import {
   deleteService,
   getServices,
+  paginationService,
   searchService,
 } from "@/services/hotelService";
 import { ServiceData } from "@/types/service";
@@ -12,6 +13,7 @@ import {
   useMemo,
   useEffect,
 } from "react";
+import { toast } from "sonner";
 
 export type SortOption = "nameAsc" | "nameDesc" | "priceAsc" | "priceDesc";
 
@@ -28,11 +30,20 @@ type ServiceContextType = {
   error: Error | null;
   handleSearch: (name?: string) => Promise<void>;
   getServicesData: () => Promise<void>;
+  pagination: Pagination;
+  handlePaginationService: (page: number) => Promise<void>;
 };
 
 const ServiceContext = createContext<ServiceContextType>(
   {} as ServiceContextType
 );
+
+interface Pagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+}
 
 export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [services, setServices] = useState<ServiceData[]>([]);
@@ -43,9 +54,17 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<Error | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("nameAsc");
   const [prevServices, setPrevServices] = useState<ServiceData[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 0,
+    pageSize: 0,
+    pageCount: 0,
+    total: 0,
+  });
 
   // Sort services
   const sortedServices = useMemo(() => {
+    if (!services || services.length === 0) return [];
+
     switch (sortBy) {
       case "nameAsc":
         return services.sort((a, b) => a.name.localeCompare(b.name));
@@ -62,16 +81,14 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
 
   // Delete service
   const handleDelete = async (documentId: string) => {
-    console.log(documentId);
     const oldService = services;
     const newService = services?.filter(
       (service) => service.documentId !== documentId
     );
-    console.log(newService);
     setServices(newService);
     try {
-      console.log(true);
       await deleteService(documentId);
+      toast.success("Dịch vụ đã xóa thành công!");
     } catch (error) {
       setServices(oldService);
       console.error("Error deleting service:", error);
@@ -82,8 +99,11 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const getServicesData = async () => {
     try {
       const response = await getServices();
-      console.log(response.data.data);
       setServices(response.data.data);
+
+      // Get pagination
+      const pagination = response.data.meta.pagination;
+      setPagination(pagination);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
     } finally {
@@ -91,10 +111,24 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Fetch services on mount
+  // Get services
   useEffect(() => {
     getServicesData();
   }, []);
+
+  // Pagination
+  const handlePaginationService = async (start: number) => {
+    setLoading(true);
+    try {
+      const res = await paginationService(start);
+      setServices(res.data);
+      setPagination(res.meta.pagination);
+    } catch (error) {
+      console.error("Error fetching services data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Search service
   const handleSearch = async (name?: string) => {
@@ -128,6 +162,8 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
         loading,
         error,
         getServicesData,
+        pagination,
+        handlePaginationService,
       }}>
       {children}
     </ServiceContext.Provider>

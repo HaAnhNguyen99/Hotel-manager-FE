@@ -775,6 +775,17 @@ export const updateService = async (
   }
 };
 
+/**
+ * Fetches a list of services whose names contain the given keyword.
+ *
+ * This function retrieves an authentication token, attaches it to the request header,
+ * and sends a GET request to the `/services` endpoint with a name filter.
+ *
+ * @param {string} name - The keyword to search for in service names.
+ * @returns {Promise<any>} A promise that resolves with the fetched service data.
+ * @throws {Error} If no authentication token is available or the API request fails.
+ *
+ */
 export const searchService = async (name: string) => {
   try {
     const token = getAuthToken();
@@ -786,6 +797,26 @@ export const searchService = async (name: string) => {
 
     const response = await api.get(
       "/services?filters[name][$contains]=" + name + "&populate=*"
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching services data:", error);
+    throw error;
+  }
+};
+
+//
+export const paginationService = async (start: number, limit: number = 25) => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      throw new Error("Không có token, không thể tạo dịch vụ");
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const response = await api.get(
+      `/services?pagination[page]=${start}&pagination[pageSize]=${limit}&populate=*`
     );
     return response.data;
   } catch (error) {
