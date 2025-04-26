@@ -116,7 +116,7 @@ const MapForm = () => {
   };
 
   return (
-    <div className="w-full hidden lg:block absolute left-1/4 z-10 shadow-md top-10 right-0 lg:w-4/5 -translate-x-20 bg-landing-primaryLight py-16 -translate-y-[11%] pl-[27%] pr-10">
+    <div className="w-full hidden lg:block absolute left-1/4 z-10 shadow-md top-10 right-0 lg:w-4/5 -translate-x-20 bg-landing-primaryLight py-16 -translate-y-[11%] pl-[27%] pr-10 lg:h-[27.4rem]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="lg:flex lg:flex-col lg:items-start lg:justify-start lg:p-0  text-landing lg:*:w-full lg:w-full lg:h-full lg:pl-10">

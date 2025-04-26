@@ -22,7 +22,7 @@ const LandingPage = () => {
         <Rooms />
         <section
           id="contact"
-          className="flex flex-col lg:flex-row mt-10 pb-10 px-2 md:px5 lg:justify-center gap-10 lg:gap-2 lg:items-center lg:pb-14 lg:h-[27.4rem]">
+          className="flex flex-col lg:flex-row mt-10 pb-10 px-2 md:px5 lg:justify-center gap-10 lg:gap-2 lg:items-center lg:pb-14">
           <Contact />
           <Map />
         </section>
