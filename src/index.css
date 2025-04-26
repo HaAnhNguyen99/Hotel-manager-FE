@@ -254,6 +254,10 @@
     /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.24); */
   }
 
+  .toolbar-btn {
+    @apply font-normal  text-[#1B1B1B] bg-[#f5f5f5] justify-center rounded-xl dark:bg-[#f5f5f5] button-shadow-mode;
+  }
+
   .golden-paragraph {
     text-align: center;
     text-shadow: 7px 12px 37px rgba(0, 0, 0, 0.44);
