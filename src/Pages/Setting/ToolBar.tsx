@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { ArrowUpAZ, ArrowUpZA, Search, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  ArrowUpAZ,
+  ArrowUpZA,
+  Search,
+  ArrowUp,
+  ArrowDown,
+  CircleX,
+} from "lucide-react";
 import { useServiceContext } from "@/context/ServiceContext";
 
 const ToolBar = () => {
   const { handleSearch, setSortBy } = useServiceContext();
   const [priceOnClick, setPriceOnClick] = useState(false);
   const [nameOnClick, setNameOnClick] = useState(false);
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const [searchValue, setSearchValue] = useState("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSearch(searchInputRef.current?.value);
+    handleSearch(searchValue);
   };
 
   return (
@@ -17,12 +24,27 @@ const ToolBar = () => {
       <form
         onSubmit={handleSubmit}
         className="flex pl-6 pr-4 items-center flex-row-reverse w-1/3 gap-2 p-2 rounded-xl border shadow-sm toolbar-btn">
-        <label htmlFor="search">
-          <Search className="text-[var(--border-primary)] w-5 h-5" />
+        <label
+          htmlFor="search"
+          className="flex items-center will-change-auto transition-all duration-300 ease-in-out">
+          {searchValue ? (
+            <button
+              type="button"
+              className="p-0"
+              onClick={() => {
+                handleSearch();
+                setSearchValue("");
+              }}>
+              <CircleX className="text-[var(--border-primary)] w-5 h-5 " />
+            </button>
+          ) : (
+            <Search className="text-[var(--border-primary)] w-5 h-5" />
+          )}
         </label>
         <input
           id="search"
-          ref={searchInputRef}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
           type="text"
           placeholder="Tìm kiếm"
           className="w-full h-full bg-transparent outline-none"
