@@ -4,6 +4,8 @@ import {
   paginationService,
   searchService,
 } from "@/services/hotelService";
+import { getRooms } from "@/services/roomService";
+import { Rooms } from "@/types/room";
 import { ServiceData } from "@/types/service";
 import {
   createContext,
@@ -15,21 +17,27 @@ import {
 } from "react";
 import { toast } from "sonner";
 
-export type SortOption = "nameAsc" | "nameDesc" | "priceAsc" | "priceDesc";
+export type SortOption =
+  | "roomNumberAsc"
+  | "roomNumberDesc"
+  | "pricePerNightAsc"
+  | "pricePerNightDesc"
+  | "firstHourPriceAsc"
+  | "firstHourPriceDesc";
 
 type RoomsContextType = {
-  services: ServiceData[];
-  setServices: (services: ServiceData[]) => void;
-  selectedService?: ServiceData | null;
-  setSelectedService: (service: ServiceData | null) => void;
+  rooms: Rooms[];
+  setRooms: (rooms: Rooms[]) => void;
+  selectedRooms?: Rooms | null;
+  setSelectedRooms: (rooms: Rooms | null) => void;
   sortBy: SortOption;
   setSortBy: (option: SortOption) => void;
-  sortedServices: ServiceData[];
-  handleDelete: (documentId: string) => Promise<void>;
+  sortedRooms: Rooms[];
+  handleDelete: (documentId?: string) => Promise<void>;
   loading: boolean;
   error: Error | null;
   handleSearch: (name?: string) => Promise<void>;
-  getServicesData: () => Promise<void>;
+  getRoomsData: () => Promise<void>;
   pagination: Pagination;
   handlePaginationService: (page: number) => Promise<void>;
 };
@@ -44,14 +52,12 @@ interface Pagination {
 }
 
 export const RoomsProvider = ({ children }: { children: ReactNode }) => {
-  const [services, setServices] = useState<ServiceData[]>([]);
-  const [selectedService, setSelectedService] = useState<ServiceData | null>(
-    null
-  );
+  const [rooms, setRooms] = useState<Rooms[]>([]);
+  const [selectedRooms, setSelectedRooms] = useState<Rooms | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>("nameAsc");
-  const [prevServices, setPrevServices] = useState<ServiceData[]>([]);
+  const [sortBy, setSortBy] = useState<SortOption>("roomNumberAsc");
+  const [prevRooms, setPrevRooms] = useState<Rooms[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 0,
     pageSize: 0,
@@ -59,48 +65,63 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     total: 0,
   });
 
-  // Sort services
-  const sortedServices = useMemo(() => {
-    if (!services || services.length === 0) return [];
+  // Sort rooms
+  const sortedRooms = useMemo(() => {
+    if (!rooms || rooms.length === 0) return [];
 
     switch (sortBy) {
-      case "nameAsc":
-        return services.sort((a, b) => a.name.localeCompare(b.name));
-      case "nameDesc":
-        return services.sort((a, b) => b.name.localeCompare(a.name));
-      case "priceAsc":
-        return services.sort((a, b) => Number(a.price) - Number(b.price));
-      case "priceDesc":
-        return services.sort((a, b) => Number(b.price) - Number(a.price));
+      case "roomNumberAsc":
+        return rooms.sort((a, b) => a.room_number.localeCompare(b.room_number));
+      case "roomNumberDesc":
+        return rooms.sort((a, b) => b.room_number.localeCompare(a.room_number));
+      case "pricePerNightAsc":
+        return rooms.sort(
+          (a, b) => Number(a.price_per_night) - Number(b.price_per_night)
+        );
+      case "pricePerNightDesc":
+        return rooms.sort(
+          (a, b) => Number(b.price_per_night) - Number(a.price_per_night)
+        );
+      case "firstHourPriceAsc":
+        return rooms.sort(
+          (a, b) => Number(a.first_hourly_price) - Number(b.first_hourly_price)
+        );
+      case "firstHourPriceDesc":
+        return rooms.sort(
+          (a, b) => Number(b.first_hourly_price) - Number(a.first_hourly_price)
+        );
       default:
-        return services;
+        return rooms;
     }
-  }, [services, sortBy]);
+  }, [rooms, sortBy]);
 
-  // Delete service
-  const handleDelete = async (documentId: string) => {
-    const oldService = services;
-    const newService = services?.filter(
+  // Delete room
+  const handleDelete = async (documentId?: string) => {
+    if (!documentId) return;
+
+    const oldService = rooms;
+    const newService = rooms?.filter(
       (service) => service.documentId !== documentId
     );
-    setServices(newService);
+    setRooms(newService);
     try {
       await deleteService(documentId);
-      toast.success("Dịch vụ đã xóa thành công!");
+      toast.success("Phòng đã xóa thành công!");
     } catch (error) {
-      setServices(oldService);
+      setRooms(oldService);
       console.error("Error deleting service:", error);
     }
   };
 
-  // Get services
-  const getServicesData = async () => {
+  // Get rooms
+  const getRoomsData = async () => {
     try {
-      const response = await getServices();
-      setServices(response.data.data);
+      const response = await getRooms();
+      console.log(response);
+      setRooms(response.data);
 
       // Get pagination
-      const pagination = response.data.meta.pagination;
+      const pagination = response.meta.pagination;
       setPagination(pagination);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
@@ -109,9 +130,9 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Get services
+  // Get rooms
   useEffect(() => {
-    getServicesData();
+    getRoomsData();
   }, []);
 
   // Pagination
@@ -119,7 +140,7 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const res = await paginationService(start);
-      setServices(res.data);
+      setRooms(res.data);
       setPagination(res.meta.pagination);
     } catch (error) {
       console.error("Error fetching services data:", error);
@@ -128,18 +149,18 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Search service
+  // Search room
   const handleSearch = async (name?: string) => {
-    setPrevServices(services);
+    setPrevRooms(rooms);
 
     try {
       if (!name) {
-        setServices(prevServices);
+        setRooms(prevRooms);
         return;
       }
 
       const response = await searchService(name);
-      setServices(response.data);
+      setRooms(response.data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
     }
@@ -148,18 +169,18 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <RoomsContext.Provider
       value={{
-        services,
-        setServices,
-        selectedService,
-        setSelectedService,
+        rooms,
+        setRooms,
+        selectedRooms,
+        setSelectedRooms,
         sortBy,
         setSortBy,
-        sortedServices,
+        sortedRooms,
         handleDelete,
         handleSearch,
         loading,
         error,
-        getServicesData,
+        getRoomsData,
         pagination,
         handlePaginationService,
       }}>

@@ -136,7 +136,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       if (!name) {
-        setServices(prevServices);
+        await getServicesData();
         return;
       }
 

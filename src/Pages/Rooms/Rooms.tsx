@@ -1,6 +1,10 @@
+import ErrorPage from "@/components/common/ErrorPage";
 import { Loading } from "@/components/common/Loading/Loading";
+import { useRoomsContext } from "@/context/RoomContext";
+import RoomsTable from "./RoomsTable";
 
 const Rooms = () => {
+  const { loading, error } = useRoomsContext();
   if (loading)
     return (
       <>
@@ -17,14 +21,10 @@ const Rooms = () => {
         <h3 className="text-3xl font-bold font-playfair after-content after:bg-primary after:w-[50%] after:-bottom-2">
           Quản lý dịch vụ
         </h3>
-        <ServiceFormDialog />
       </header>
 
-      {/* Toolbar */}
-      <ToolBar />
-
       {/* Table service */}
-      <ServicesTable ServiceData={services} />
+      <RoomsTable />
     </section>
   );
 };

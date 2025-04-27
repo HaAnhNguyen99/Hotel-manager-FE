@@ -13,6 +13,7 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Services from "./Pages/Setting/Services";
 import { ServiceProvider } from "./context/ServiceContext";
 import Rooms from "./Pages/Rooms/Rooms";
+import { RoomsProvider } from "./context/RoomContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -64,7 +65,9 @@ createRoot(document.getElementById("root")!).render(
               path="/rooms"
               element={
                 <BaseLayouts>
-                  <Rooms />
+                  <RoomsProvider>
+                    <Rooms />
+                  </RoomsProvider>
                 </BaseLayouts>
               }
             />

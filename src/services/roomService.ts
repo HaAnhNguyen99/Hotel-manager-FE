@@ -1,13 +1,13 @@
 import { RoomStatus } from "../types/room";
 import axios from "axios";
-const POPULATE_ALL = process.env.VITE_POPULATE_ALL;
+const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
 
 /**
  * Creates a single Axios instance for making HTTP requests to the API.
  * Configures base URL from environment variables and sets default headers.
  */
 export const api = axios.create({
-  baseURL: process.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -55,6 +55,7 @@ const getAuthToken = () => {
 export const getRooms = async () => {
   try {
     const response = await api.get(`/rooms${POPULATE_ALL}`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching rooms data:", error);
