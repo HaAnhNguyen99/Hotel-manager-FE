@@ -1,5 +1,5 @@
 import { RoomType } from "./booking";
-import { Meta, Room } from "./hotel";
+import { Image, Meta, Room } from "./hotel";
 
 export enum RoomStatus {
   Available = "Available",
@@ -29,3 +29,31 @@ export interface RoomBooking {
   type: RoomType;
 }
 
+export interface Rooms {
+  id: number;
+  documentId: string;
+  room_number: string;
+  room_status: RoomStatus;
+  floor: number;
+  price_per_night: string;
+  first_hourly_price: string;
+  after_hour_price: string;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  img: Image;
+}
+
+export interface RoomsPayload {
+  data: {
+    id: string;
+    room_number: number;
+    room_status: RoomStatus;
+    floor: number;
+    price_per_night: number;
+    first_hourly_price: number;
+    after_hour_price: number;
+    note?: string | null;
+  };
+}
