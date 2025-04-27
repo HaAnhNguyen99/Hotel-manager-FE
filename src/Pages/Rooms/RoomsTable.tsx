@@ -133,11 +133,11 @@ const RoomsTable = () => {
               <TableCell className="font-medium">{room.room_number}</TableCell>
               <TableCell className="font-medium">
                 {room.room_status === RoomStatus.Available ? (
-                  <div className="rounded-full w-fit px-3 mx-auto bg-green-400 border">
+                  <div className="rounded-full w-fit px-3 mx-auto text-green-800 bg-green-400 py-1 border">
                     Sẵn sàng
                   </div>
                 ) : (
-                  <div className="rounded-full w-fit px-3 mx-auto bg-red-400 border">
+                  <div className="rounded-full w-fit px-3 mx-auto text-red-800 bg-red-300 py-1 border">
                     Có người
                   </div>
                 )}
