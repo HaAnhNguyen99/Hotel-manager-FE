@@ -18,7 +18,7 @@ const Services = () => {
   if (error) return <ErrorPage error={error.message} />;
 
   return (
-    <section className="max-w-[90%] mx-auto font-pops">
+    <section className="max-w-[90%] select-none mx-auto font-pops">
       {/* Header */}
       <header className="flex mb-10 justify-between bg-yellow text-black p-10 rounded-2xl">
         <h3 className="text-3xl font-bold font-playfair after-content after:bg-primary after:w-[50%] after:-bottom-2">

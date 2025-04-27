@@ -73,7 +73,6 @@ const ServiceFormDialog = ({ services }: ServiceProps) => {
 
   const onSubmit = async (data: ServiceFormData) => {
     setIsLoading(true);
-    console.log(data);
     try {
       const file = data.serviceImage;
 
@@ -127,7 +126,6 @@ const ServiceFormDialog = ({ services }: ServiceProps) => {
         {services ? (
           <button className="bg-white border text-neutral-500 px-4 py-2 rounded-lg flex gap-1 items-center h-10">
             <Pen className="h-4 w-4" />
-            Sửa
           </button>
         ) : (
           <Button variant="default">
