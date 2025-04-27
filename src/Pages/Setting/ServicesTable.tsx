@@ -12,6 +12,7 @@ import ServiceFormDialog from "./ServiceFormDialog";
 import { Button } from "@/components/ui/button";
 import { useServiceContext } from "@/context/ServiceContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { formatDateTime } from "@/utils/FormatDate";
 
 interface ServicesTableProps {
   ServiceData: ServiceData[] | undefined;
@@ -23,13 +24,14 @@ const ServicesTable = ({ ServiceData }: ServicesTableProps) => {
   return (
     <div className="border rounded-2xl border-neutral-200 shadow-md p-2 mt-10 px-7">
       <Table className="mt-10">
-        <TableHeader>
+        <TableHeader className="bg-[#f9fafb] h-10">
           <TableRow>
             <TableHead className="text-center">Id</TableHead>
             <TableHead className="text-center">Hình ảnh</TableHead>
             <TableHead className="text-center">Tên dịch vụ</TableHead>
             <TableHead className="text-center">Giá</TableHead>
-            <TableHead className="text-center">...</TableHead>
+            <TableHead className="text-center">Lần sửa gần nhất</TableHead>
+            <TableHead className="text-center">Hành động</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-center">
@@ -45,6 +47,7 @@ const ServicesTable = ({ ServiceData }: ServicesTableProps) => {
               </TableCell>
               <TableCell className="font-medium">{service.name}</TableCell>
               <TableCell>{service.price}</TableCell>
+              <TableCell>{formatDateTime(service.updatedAt)}</TableCell>
               <TableCell className="m-auto h-full">
                 <div className="flex gap-2 justify-center">
                   <ServiceFormDialog services={service} />

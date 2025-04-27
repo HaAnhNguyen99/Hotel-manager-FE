@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getHotelProfile } from "@/services/hotelService";
-import { Home, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { Bed, HandPlatter, Home, LayoutDashboard, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,9 +40,14 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Settings",
-    url: "/setting",
-    icon: Settings,
+    title: "Dịch vụ",
+    url: "/services",
+    icon: HandPlatter,
+  },
+  {
+    title: "Phòng",
+    url: "/rooms",
+    icon: Bed,
   },
 ];
 const AppSidebar = () => {

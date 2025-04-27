@@ -22,7 +22,6 @@ const DeleteConfirm = ({ service }: { service: ServiceData }) => {
       <DialogTrigger>
         <button className="bg-red-500 text-white  px-4 py-2 rounded-lg flex gap-1 items-center h-10">
           <Trash2 className="h-4 w-4" />
-          Xoá
         </button>
       </DialogTrigger>
       <DialogContent className="p-8">

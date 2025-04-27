@@ -37,7 +37,7 @@ type USER = z.infer<typeof userSchema>;
 const Login = () => {
   const [isPeak, setIsPeak] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const navigate = useNavigate();
   const { loginUser } = useUserContext();
 
@@ -85,7 +85,7 @@ const Login = () => {
           <User className="sm:hidden w-4 h-4 text-white" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-w-72 rounded-lg bg-white dark:bg-landing">
+      <DialogContent className="sm:max-w-[425px] max-w-72 rounded-lg bg-white dark:bg-slate-800">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
             Đăng nhập
