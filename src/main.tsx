@@ -10,8 +10,9 @@ import LandingPage from "./Pages/LandingPage/LandingPage";
 import { UserProvider } from "./context/UserContext";
 import { Toaster } from "sonner";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
-import Setting from "./Pages/Setting/Setting";
+import Services from "./Pages/Setting/Services";
 import { ServiceProvider } from "./context/ServiceContext";
+import Rooms from "./Pages/Rooms/Rooms";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -46,15 +47,25 @@ createRoot(document.getElementById("root")!).render(
             {/* Reset Password */}
             <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* Setting */}
+            {/* Services */}
             <Route
-              path="/setting"
+              path="/services"
               element={
                 <ServiceProvider>
                   <BaseLayouts>
-                    <Setting />
+                    <Services />
                   </BaseLayouts>
                 </ServiceProvider>
+              }
+            />
+
+            {/* Rooms */}
+            <Route
+              path="/rooms"
+              element={
+                <BaseLayouts>
+                  <Rooms />
+                </BaseLayouts>
               }
             />
 

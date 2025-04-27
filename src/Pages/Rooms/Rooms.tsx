@@ -1,13 +1,6 @@
-import ServiceFormDialog from "./ServiceFormDialog";
-import ToolBar from "./ToolBar";
-import ServicesTable from "./ServicesTable";
-import { useServiceContext } from "@/context/ServiceContext";
 import { Loading } from "@/components/common/Loading/Loading";
-import ErrorPage from "@/components/common/ErrorPage";
 
-const Setting = () => {
-  const { services, loading, error } = useServiceContext();
-
+const Rooms = () => {
   if (loading)
     return (
       <>
@@ -36,4 +29,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Rooms;

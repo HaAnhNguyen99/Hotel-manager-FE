@@ -805,7 +805,14 @@ export const searchService = async (name: string) => {
   }
 };
 
-//
+/**
+ * Fetches paginated service data from the API.
+ *
+ * @param {number} start - The page number to start fetching from.
+ * @param {number} [limit=25] - The number of items to fetch per page. Defaults to 25 if not provided.
+ * @returns {Promise<any>} A promise that resolves to the fetched service data.
+ * @throws {Error} Throws an error if the authentication token is missing or the API request fails.
+ */
 export const paginationService = async (start: number, limit: number = 25) => {
   try {
     const token = getAuthToken();
