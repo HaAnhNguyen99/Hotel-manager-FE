@@ -1,4 +1,13 @@
 import {
+  Image,
+  Blinds,
+  BookmarkCheck,
+  BookmarkPlus,
+  History,
+  Zap,
+  LucideIcon,
+} from "lucide-react";
+import {
   Table,
   TableBody,
   TableCell,
@@ -7,33 +16,107 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleCheck, MoonStar } from "lucide-react";
 import { formatDateTime } from "@/utils/FormatDate";
 import { useRoomsContext } from "@/context/RoomContext";
 import { formatCurrency } from "@/utils/FormatCurrency";
 import DeleteRoom from "./DeleteRoom";
+import { RoomStatus } from "@/types/room";
+
+interface HeaderCellProps {
+  label: string;
+  icon: LucideIcon | null;
+  className: string;
+  iconClass?: string;
+}
+
+const HeaderCell: React.FC<HeaderCellProps> = ({
+  label,
+  icon: Icon,
+  className,
+  iconClass,
+}) => (
+  <TableHead className={className}>
+    <div className="flex items-center justify-center gap-1">
+      {Icon && <Icon className={`w-5 h-5 ${iconClass || ""}`} />}
+      {label}
+    </div>
+  </TableHead>
+);
+
+interface Column {
+  label: string;
+  icon: LucideIcon | null;
+  className: string;
+  iconClass?: string;
+}
+
+const className =
+  "text-center hover:bg-neutral-500 hover:text-white dark:hover:bg-black  py-5";
+
+const columns: Column[] = [
+  { label: "Id", icon: null, className },
+  { label: "Hình ảnh", icon: Image, className },
+  { label: "Số phòng", icon: Blinds, className },
+  { label: "Trạng thái", icon: CircleCheck, className },
+  {
+    label: "Giá qua đêm",
+    icon: MoonStar,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Giá giờ đầu",
+    icon: BookmarkCheck,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Giá giờ sau",
+    icon: BookmarkPlus,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Lần sửa gần nhất",
+    icon: History,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Hành động",
+    icon: Zap,
+    className,
+    iconClass: "text-border",
+  },
+];
 
 const RoomsTable = () => {
   const { rooms, pagination, handlePaginationService, setSelectedRooms } =
     useRoomsContext();
+
   return (
     <div className="border rounded-2xl border-neutral-200 shadow-md p-2 mt-10 px-7">
       <Table className="mt-10">
-        <TableHeader className="bg-[#f9fafb] h-10">
+        <TableHeader className="bg-[#f9fafb] dark:bg-slate-600">
           <TableRow>
-            <TableHead className="text-center">Id</TableHead>
-            <TableHead className="text-center">Hình ảnh</TableHead>
-            <TableHead className="text-center">Số phòng</TableHead>
-            <TableHead className="text-center">Giá qua đêm</TableHead>
-            <TableHead className="text-center">Giá giờ đầu</TableHead>
-            <TableHead className="text-center">Giá giờ sau</TableHead>
-            <TableHead className="text-center">Lần sửa gần nhất</TableHead>
-            <TableHead className="text-center">Hành động</TableHead>
+            {columns.map((col, index) => (
+              <HeaderCell
+                key={index}
+                label={col.label}
+                icon={col.icon}
+                className={col.className}
+                iconClass={col.iconClass}
+              />
+            ))}
           </TableRow>
         </TableHeader>
-        <TableBody className="text-center">
+        <TableBody className="text-center ">
           {rooms?.map((room) => (
-            <TableRow key={room.id} onClick={() => setSelectedRooms(room)}>
+            <TableRow
+              key={room.id}
+              onClick={() => setSelectedRooms(room)}
+              className="odd:bg-white even:bg-landing-primaryLight dark:odd:bg-gray-900/50 dark:even:bg-gray-950">
               <TableCell className="font-medium">{room.id}</TableCell>
               <TableCell className="flex justify-center">
                 <img
@@ -43,6 +126,17 @@ const RoomsTable = () => {
                 />
               </TableCell>
               <TableCell className="font-medium">{room.room_number}</TableCell>
+              <TableCell className="font-medium">
+                {room.room_status === RoomStatus.Available ? (
+                  <div className="rounded-full w-fit px-3 mx-auto bg-green-400 border">
+                    Sẵn sàng
+                  </div>
+                ) : (
+                  <div className="rounded-full w-fit px-3 mx-auto bg-red-400 border">
+                    Có người
+                  </div>
+                )}
+              </TableCell>
               <TableCell>{formatCurrency(room.price_per_night)}</TableCell>
               <TableCell>{formatCurrency(room.first_hourly_price)}</TableCell>
               <TableCell>{formatCurrency(room.after_hour_price)}</TableCell>

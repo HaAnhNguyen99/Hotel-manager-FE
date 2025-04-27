@@ -55,7 +55,6 @@ const getAuthToken = () => {
 export const getRooms = async () => {
   try {
     const response = await api.get(`/rooms${POPULATE_ALL}`);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching rooms data:", error);

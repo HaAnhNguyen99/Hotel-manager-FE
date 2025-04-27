@@ -268,4 +268,8 @@
     font-weight: 700;
     line-height: 26px;
   }
+
+  .flex-center {
+    @apply flex justify-center items-center gap-2;
+  }
 }
