@@ -1,14 +1,13 @@
-import { Image } from "@/types/hotel";
-import { RoomStatus } from "@/types/room";
+import { RoomStatus } from "../types/room";
 import axios from "axios";
-const POPULATE_ALL = import.meta.env.VITE_POPULATE_ALL;
+const POPULATE_ALL = process.env.VITE_POPULATE_ALL;
 
 /**
  * Creates a single Axios instance for making HTTP requests to the API.
  * Configures base URL from environment variables and sets default headers.
  */
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+export const api = axios.create({
+  baseURL: process.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -67,20 +66,22 @@ interface RoomsPayload {
   room_number: number;
   floor: number;
   room_status: RoomStatus;
-  note: object | null;
   price_per_night: number;
   first_hourly_price: number;
   after_hour_price: number;
-  img: Image;
+  img: number;
 }
 
 export const createRooms = async (data: RoomsPayload) => {
   try {
-    const response = await api.post(`/rooms`, data);
+    const payload = {
+      data,
+    };
+    const response = await api.post(`/rooms`, payload);
     return response.data;
   } catch (error) {
     console.error("Error when  create room:", error);
-    throw error;
+    throw new Error("Error when create room");
   }
 };
 
