@@ -5,6 +5,7 @@ import {
   BookmarkPlus,
   History,
   Zap,
+  LucideIcon,
 } from "lucide-react";
 import {
   Table,
@@ -22,63 +23,92 @@ import { formatCurrency } from "@/utils/FormatCurrency";
 import DeleteRoom from "./DeleteRoom";
 import { RoomStatus } from "@/types/room";
 
+interface HeaderCellProps {
+  label: string;
+  icon: LucideIcon | null;
+  className: string;
+  iconClass?: string;
+}
+
+const HeaderCell: React.FC<HeaderCellProps> = ({
+  label,
+  icon: Icon,
+  className,
+  iconClass,
+}) => (
+  <TableHead className={className}>
+    <div className="flex items-center justify-center gap-1">
+      {Icon && <Icon className={`w-5 h-5 ${iconClass || ""}`} />}
+      {label}
+    </div>
+  </TableHead>
+);
+
+interface Column {
+  label: string;
+  icon: LucideIcon | null;
+  className: string;
+  iconClass?: string;
+}
+
+const className =
+  "text-center hover:bg-neutral-500 hover:text-white dark:hover:bg-black  py-5";
+
+const columns: Column[] = [
+  { label: "Id", icon: null, className },
+  { label: "Hình ảnh", icon: Image, className },
+  { label: "Số phòng", icon: Blinds, className },
+  { label: "Trạng thái", icon: CircleCheck, className },
+  {
+    label: "Giá qua đêm",
+    icon: MoonStar,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Giá giờ đầu",
+    icon: BookmarkCheck,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Giá giờ sau",
+    icon: BookmarkPlus,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Lần sửa gần nhất",
+    icon: History,
+    className,
+    iconClass: "text-border",
+  },
+  {
+    label: "Hành động",
+    icon: Zap,
+    className,
+    iconClass: "text-border",
+  },
+];
+
 const RoomsTable = () => {
   const { rooms, pagination, handlePaginationService, setSelectedRooms } =
     useRoomsContext();
+
   return (
     <div className="border rounded-2xl border-neutral-200 shadow-md p-2 mt-10 px-7">
       <Table className="mt-10">
-        <TableHeader className="bg-[#f9fafb] dark:bg-slate-600 h-10">
+        <TableHeader className="bg-[#f9fafb] dark:bg-slate-600">
           <TableRow>
-            <TableHead className="text-center">Id</TableHead>
-            <TableHead className="text-center">
-              <div className="flex-center">
-                <Image className="w-5 h-5" />
-                Hình ảnh
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex-center">
-                <Blinds className="w-5 h-5" />
-                Số phòng
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex-center">
-                <CircleCheck className="w-5 h-5" />
-                Trạng thái
-              </div>
-            </TableHead>
-            <TableHead className="text-center ">
-              <div className="flex-center">
-                <MoonStar className="text-border w-5 h5" />
-                Giá qua đêm
-              </div>
-            </TableHead>
-            <TableHead className="text-center ">
-              <div className="flex-center">
-                <BookmarkCheck className="text-border w-5 h5" />
-                Giá giờ đầu
-              </div>
-            </TableHead>
-            <TableHead className="text-center ">
-              <div className="flex-center">
-                <BookmarkPlus className="text-border w-5 h5" />
-                Giá giờ sau
-              </div>
-            </TableHead>
-            <TableHead className="text-center ">
-              <div className="flex-center">
-                <History className="text-border w-5 h5" />
-                Lần sửa gần nhất
-              </div>
-            </TableHead>
-            <TableHead className="text-center ">
-              <div className="flex-center">
-                <Zap className="text-border w-5 h5" />
-                Hành động
-              </div>
-            </TableHead>
+            {columns.map((col, index) => (
+              <HeaderCell
+                key={index}
+                label={col.label}
+                icon={col.icon}
+                className={col.className}
+                iconClass={col.iconClass}
+              />
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody className="text-center ">
