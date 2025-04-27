@@ -55,39 +55,44 @@ const className =
   "text-center hover:bg-neutral-500 hover:text-white dark:hover:bg-black  py-5";
 
 const columns: Column[] = [
-  { label: "Id", icon: null, className },
-  { label: "Hình ảnh", icon: Image, className },
-  { label: "Số phòng", icon: Blinds, className },
-  { label: "Trạng thái", icon: CircleCheck, className },
+  { label: "Id", icon: null, className, iconClass: "text-neutral-700" },
+  { label: "Hình ảnh", icon: Image, className, iconClass: "text-neutral-400" },
+  { label: "Số phòng", icon: Blinds, className, iconClass: "text-neutral-400" },
+  {
+    label: "Trạng thái",
+    icon: CircleCheck,
+    className,
+    iconClass: "text-neutral-400",
+  },
   {
     label: "Giá qua đêm",
     icon: MoonStar,
     className,
-    iconClass: "text-border",
+    iconClass: "text-neutral-400",
   },
   {
     label: "Giá giờ đầu",
     icon: BookmarkCheck,
     className,
-    iconClass: "text-border",
+    iconClass: "text-neutral-400",
   },
   {
     label: "Giá giờ sau",
     icon: BookmarkPlus,
     className,
-    iconClass: "text-border",
+    iconClass: "text-neutral-400",
   },
   {
     label: "Lần sửa gần nhất",
     icon: History,
     className,
-    iconClass: "text-border",
+    iconClass: "text-neutral-400",
   },
   {
     label: "Hành động",
     icon: Zap,
     className,
-    iconClass: "text-border",
+    iconClass: "text-neutral-400",
   },
 ];
 
@@ -116,7 +121,7 @@ const RoomsTable = () => {
             <TableRow
               key={room.id}
               onClick={() => setSelectedRooms(room)}
-              className="odd:bg-white even:bg-landing-primaryLight dark:odd:bg-gray-900/50 dark:even:bg-gray-950">
+              className="odd:bg-white even:bg-landing-bgLight dark:odd:bg-gray-900/50 dark:even:bg-gray-950">
               <TableCell className="font-medium">{room.id}</TableCell>
               <TableCell className="flex justify-center">
                 <img
