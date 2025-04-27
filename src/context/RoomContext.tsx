@@ -1,12 +1,10 @@
 import {
   deleteService,
-  getServices,
   paginationService,
   searchService,
 } from "@/services/hotelService";
 import { getRooms } from "@/services/roomService";
 import { Rooms } from "@/types/room";
-import { ServiceData } from "@/types/service";
 import {
   createContext,
   useContext,

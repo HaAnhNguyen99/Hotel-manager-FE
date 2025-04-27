@@ -1,4 +1,12 @@
 import {
+  Image,
+  Blinds,
+  BookmarkCheck,
+  BookmarkPlus,
+  History,
+  Zap,
+} from "lucide-react";
+import {
   Table,
   TableBody,
   TableCell,
@@ -7,11 +15,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleCheck, MoonStar } from "lucide-react";
 import { formatDateTime } from "@/utils/FormatDate";
 import { useRoomsContext } from "@/context/RoomContext";
 import { formatCurrency } from "@/utils/FormatCurrency";
 import DeleteRoom from "./DeleteRoom";
+import { RoomStatus } from "@/types/room";
 
 const RoomsTable = () => {
   const { rooms, pagination, handlePaginationService, setSelectedRooms } =
@@ -19,21 +28,65 @@ const RoomsTable = () => {
   return (
     <div className="border rounded-2xl border-neutral-200 shadow-md p-2 mt-10 px-7">
       <Table className="mt-10">
-        <TableHeader className="bg-[#f9fafb] h-10">
+        <TableHeader className="bg-[#f9fafb] dark:bg-slate-600 h-10">
           <TableRow>
             <TableHead className="text-center">Id</TableHead>
-            <TableHead className="text-center">Hình ảnh</TableHead>
-            <TableHead className="text-center">Số phòng</TableHead>
-            <TableHead className="text-center">Giá qua đêm</TableHead>
-            <TableHead className="text-center">Giá giờ đầu</TableHead>
-            <TableHead className="text-center">Giá giờ sau</TableHead>
-            <TableHead className="text-center">Lần sửa gần nhất</TableHead>
-            <TableHead className="text-center">Hành động</TableHead>
+            <TableHead className="text-center">
+              <div className="flex-center">
+                <Image className="w-5 h-5" />
+                Hình ảnh
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex-center">
+                <Blinds className="w-5 h-5" />
+                Số phòng
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex-center">
+                <CircleCheck className="w-5 h-5" />
+                Trạng thái
+              </div>
+            </TableHead>
+            <TableHead className="text-center ">
+              <div className="flex-center">
+                <MoonStar className="text-border w-5 h5" />
+                Giá qua đêm
+              </div>
+            </TableHead>
+            <TableHead className="text-center ">
+              <div className="flex-center">
+                <BookmarkCheck className="text-border w-5 h5" />
+                Giá giờ đầu
+              </div>
+            </TableHead>
+            <TableHead className="text-center ">
+              <div className="flex-center">
+                <BookmarkPlus className="text-border w-5 h5" />
+                Giá giờ sau
+              </div>
+            </TableHead>
+            <TableHead className="text-center ">
+              <div className="flex-center">
+                <History className="text-border w-5 h5" />
+                Lần sửa gần nhất
+              </div>
+            </TableHead>
+            <TableHead className="text-center ">
+              <div className="flex-center">
+                <Zap className="text-border w-5 h5" />
+                Hành động
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody className="text-center">
+        <TableBody className="text-center ">
           {rooms?.map((room) => (
-            <TableRow key={room.id} onClick={() => setSelectedRooms(room)}>
+            <TableRow
+              key={room.id}
+              onClick={() => setSelectedRooms(room)}
+              className="odd:bg-white even:bg-landing-primaryLight dark:odd:bg-gray-900/50 dark:even:bg-gray-950">
               <TableCell className="font-medium">{room.id}</TableCell>
               <TableCell className="flex justify-center">
                 <img
@@ -43,6 +96,17 @@ const RoomsTable = () => {
                 />
               </TableCell>
               <TableCell className="font-medium">{room.room_number}</TableCell>
+              <TableCell className="font-medium">
+                {room.room_status === RoomStatus.Available ? (
+                  <div className="rounded-full w-fit px-3 mx-auto bg-green-400 border">
+                    Sẵn sàng
+                  </div>
+                ) : (
+                  <div className="rounded-full w-fit px-3 mx-auto bg-red-400 border">
+                    Có người
+                  </div>
+                )}
+              </TableCell>
               <TableCell>{formatCurrency(room.price_per_night)}</TableCell>
               <TableCell>{formatCurrency(room.first_hourly_price)}</TableCell>
               <TableCell>{formatCurrency(room.after_hour_price)}</TableCell>

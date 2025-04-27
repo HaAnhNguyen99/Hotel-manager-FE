@@ -53,7 +53,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("nameAsc");
-  const [prevServices, setPrevServices] = useState<ServiceData[]>([]);
+
   const [pagination, setPagination] = useState<Pagination>({
     page: 0,
     pageSize: 0,
@@ -132,8 +132,6 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
 
   // Search service
   const handleSearch = async (name?: string) => {
-    setPrevServices(services);
-
     try {
       if (!name) {
         await getServicesData();
