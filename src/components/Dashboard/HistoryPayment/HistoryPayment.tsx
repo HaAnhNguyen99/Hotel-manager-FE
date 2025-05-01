@@ -1,31 +1,37 @@
-import { useCallback, useEffect, useState } from 'react';
-import PaymentTable from '../PaymentTable/PaymentTable';
-import { getReservationsFromDate, getReservationsPagination, getSearchData } from '@/services/hotelService';
-import { RevenueData } from '@/types/reservation';
-import HistoryHeader from './HistoryHeader';
-import { getTodayISODate } from '@/utils/getTodayISODate';
+import { useCallback, useEffect, useState } from "react";
+import PaymentTable from "../PaymentTable/PaymentTable";
+import {
+  getReservationsFromDate,
+  getReservationsPagination,
+  getSearchData,
+} from "@/services/hotelService";
+import { RevenueData } from "@/types/reservation";
+import HistoryHeader from "./HistoryHeader";
+import { getTodayISODate } from "@/utils/getTodayISODate";
 
 const HistoryPayment: React.FC = () => {
   const [paymentData, setPaymentData] = useState<RevenueData[] | undefined>();
   const [searchData, setSearchData] = useState<RevenueData[] | undefined>(); // State cho kết quả tìm kiếm
-  const [prevPaymentData, setPrevPaymentData] = useState<RevenueData[] | undefined>(); // State cho kết quả tìm kiếm
+  const [prevPaymentData, setPrevPaymentData] = useState<
+    RevenueData[] | undefined
+  >(); // State cho kết quả tìm kiếm
 
   const [date, setDate] = useState<Date>();
   const [pagination, setPagination] = useState({
     start: 0,
-    limit: 4,
+    limit: 6,
     total: 0,
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [tempPagination, setTempPagination] = useState({
     start: 0,
-    limit: 4,
+    limit: 6,
     total: 0,
   });
   const resetPagination = {
     start: 0,
-    limit: 4,
-    total: 4,
+    limit: 6,
+    total: 0,
   };
 
   // Hàm xử lý phân trang
@@ -39,7 +45,7 @@ const HistoryPayment: React.FC = () => {
         setPagination(res.data.meta.pagination);
         setTempPagination(res.data.meta.pagination);
       } catch (error) {
-        console.error('Error fetching revenue data:', error);
+        console.error("Error fetching revenue data:", error);
       } finally {
         setLoading(false);
       }
@@ -50,14 +56,13 @@ const HistoryPayment: React.FC = () => {
   // Hàm xử lý tìm kiếm
   const onSubmit = async (data: { search: string }) => {
     setLoading(true);
-    if (data.search.trim() === '') {
+    if (data.search.trim() === "") {
       setSearchData(paymentData);
       setPagination(tempPagination);
     }
     try {
       const response = await getSearchData(data.search);
-      console.log(response);
-      setSearchData(response.data);
+      setSearchData(response);
       setPagination(resetPagination);
 
       if (date) {
@@ -68,7 +73,7 @@ const HistoryPayment: React.FC = () => {
         console.log(filtered);
       }
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
     } finally {
       setLoading(false);
     }
@@ -87,8 +92,12 @@ const HistoryPayment: React.FC = () => {
       }
       if (date) {
         const { startDate, endDate } = getTodayISODate(date);
-        const paymentData = await getReservationsFromDate(startDate, endDate);
-        setPaymentData(paymentData);
+        const paymentDataRes = await getReservationsFromDate(
+          startDate,
+          endDate
+        );
+
+        setPaymentData(paymentDataRes);
         setPagination(resetPagination);
       }
     };

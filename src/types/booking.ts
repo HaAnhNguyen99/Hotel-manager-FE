@@ -1,6 +1,8 @@
+import { RoomBooking } from "./room";
+
 export interface BookingType {
   documentId: string;
-  room: string;
+  room?: RoomBooking;
   guest_name: string | null;
   booking_date: string;
   reduction: number | null;
@@ -56,7 +58,7 @@ export interface BookingFormData {
 }
 
 export interface CreateBookingPayload {
-  room: string ;
+  room: string;
   guest_name: string | null;
   cccd?: string | null;
   prepayment?: number | null;

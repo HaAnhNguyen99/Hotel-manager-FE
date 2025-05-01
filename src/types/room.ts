@@ -14,6 +14,7 @@ export interface FetchRoom {
 
 export interface RoomBooking {
   id: number;
+  room_number: string;
   documentId: string;
   checkin: string;
   checkout: string | null;
