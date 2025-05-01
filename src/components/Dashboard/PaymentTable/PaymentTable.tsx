@@ -1,28 +1,38 @@
 // components/PaymentTable.tsx
-import { InlineLoading } from '@/components/common/InlineLoading/InlineLoading';
-import CancelPopover from '@/components/rooms/CancelPopover/CancelPopover';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { deleteReservations } from '@/services/hotelService';
-import { BookingStatus } from '@/types/booking';
-import { PaymentMethod } from '@/types/payment';
-import { RevenueData } from '@/types/reservation';
-import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
-import { toast } from 'sonner';
+import { InlineLoading } from "@/components/common/InlineLoading/InlineLoading";
+import CancelPopover from "@/components/rooms/CancelPopover/CancelPopover";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { deleteReservations } from "@/services/hotelService";
+import { BookingStatus } from "@/types/booking";
+import { PaymentMethod } from "@/types/payment";
+import { RevenueData } from "@/types/reservation";
+import { ChevronLeft, ChevronRight, CircleX } from "lucide-react";
+import { toast } from "sonner";
 
 // Hàm định dạng ngày
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleString('vi-VN', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  });
+const formatDate = (dateString: string | null | undefined) => {
+  if (dateString) {
+    return new Date(dateString).toLocaleString("vi-VN", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+  }
+  return "";
 };
 
 // Hàm định dạng số tiền
 const formatAmount = (amount: string) => {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
   }).format(parseInt(amount));
 };
 
@@ -34,27 +44,38 @@ interface paginationOptions {
 
 export interface PaymentTableProp {
   paymentData: RevenueData[] | undefined;
-  setPaymentData: React.Dispatch<React.SetStateAction<RevenueData[] | undefined>>;
+  setPaymentData: React.Dispatch<
+    React.SetStateAction<RevenueData[] | undefined>
+  >;
   pagination: paginationOptions;
   setPagination: React.Dispatch<React.SetStateAction<paginationOptions>>;
   handlePagination: (start: number) => Promise<void>;
   loading: boolean;
 }
 
-const PaymentTable: React.FC<PaymentTableProp> = ({ paymentData, setPaymentData, pagination, setPagination, handlePagination, loading }) => {
+const PaymentTable: React.FC<PaymentTableProp> = ({
+  paymentData,
+  setPaymentData,
+  pagination,
+  setPagination,
+  handlePagination,
+  loading,
+}) => {
   // Handle cancel button click
   const handleCancel = async (id: string) => {
     const prevData = paymentData ? [...paymentData] : undefined;
-    const updatedData = paymentData?.filter((payment) => payment.documentId !== id);
+    const updatedData = paymentData?.filter(
+      (payment) => payment.documentId !== id
+    );
     setPaymentData(updatedData);
     try {
       // Call API to cancel booking
       await deleteReservations(id);
       // Update paymentData
-      toast.success('Xoá thành công');
+      toast.success("Xoá thành công");
     } catch {
       // Handle error
-      toast.error('Có lỗi xảy ra');
+      toast.error("Có lỗi xảy ra");
       setPaymentData(prevData);
     }
   };
@@ -64,8 +85,11 @@ const PaymentTable: React.FC<PaymentTableProp> = ({ paymentData, setPaymentData,
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Ngày</TableHead>
+            <TableHead className="w-[50px]">ID</TableHead>
+            <TableHead className="text-center">Phòng</TableHead>
+            <TableHead className="text-center">Check in</TableHead>
+            <TableHead className="text-center">Check out</TableHead>
+            <TableHead className="text-center">Date</TableHead>
             <TableHead className="w-[200px] text-center">Phương thức</TableHead>
             <TableHead className="text-center">Số tiền</TableHead>
             <TableHead className="text-center">Tên</TableHead>
@@ -89,20 +113,41 @@ const PaymentTable: React.FC<PaymentTableProp> = ({ paymentData, setPaymentData,
               <TableRow
                 key={payment.id}
                 className={`text-center dark:text-white hover:opacity-80 ${
-                  index % 2 === 0 ? 'bg-[#fffaf7] dark:bg-transparent' : 'bg-[#fff6eb] dark:bg-[#9ca3af]'
+                  index % 2 === 0
+                    ? "bg-[#fffaf7] dark:bg-transparent"
+                    : "bg-[#fff6eb] dark:bg-[#9ca3af]"
                 }`}>
-                <TableCell className="font-medium text-left">{payment.id}</TableCell>
-                <TableCell className="text-left">{formatDate(payment.date)}</TableCell>
-                <TableCell className="text-center">{payment.payment_method === PaymentMethod.Cash ? 'Tiền mặt' : 'Chuyển khoản'}</TableCell>
+                <TableCell className="font-medium text-left">
+                  {payment.id}
+                </TableCell>
+                <TableCell className="text-center">
+                  {payment.booking.room?.room_number}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatDate(payment.booking.checkin)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatDate(payment.booking.checkout)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatDate(payment.date)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {payment.payment_method === PaymentMethod.Cash
+                    ? "Tiền mặt"
+                    : "Chuyển khoản"}
+                </TableCell>
                 <TableCell>{formatAmount(payment.amount)}</TableCell>
                 <TableCell>{payment.booking.guest_name}</TableCell>
-                <TableCell>{payment.booking.cccd || 'Không có'}</TableCell>
+                <TableCell>{payment.booking.cccd || "Không có"}</TableCell>
                 <TableCell>{payment.booking.reduction}</TableCell>
                 <TableCell>{payment.booking.type}</TableCell>
-                <TableCell>{payment.note || 'Không có'}</TableCell>
+                <TableCell>{payment.note || "Không có"}</TableCell>
                 <TableCell className="flex justify-center items-center mt-1 h-full">
                   <p className="boder border-dark-green bg-white  w-fit py-1 px-2 rounded-xl text-sm text-green-dark max-h-[80%] border-green-600 border">
-                    {payment.booking.booking_status === BookingStatus.Completed ? 'Hoàn tất' : 'Chờ thanh toán'}
+                    {payment.booking.booking_status === BookingStatus.Completed
+                      ? "Hoàn tất"
+                      : "Chờ thanh toán"}
                   </p>
                 </TableCell>
                 <TableCell>
