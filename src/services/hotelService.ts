@@ -372,11 +372,12 @@ export const updateBooking = async (
  * @throws {Error} If the request fails.
  */
 
-export const updateBookingStatus = async (bookingId: string) => {
+export const updateBookingStatusAndCheckOut = async (bookingId: string) => {
   try {
     const response = await api.put(`/bookings/${bookingId}`, {
       data: {
         booking_status: BookingStatus.Completed,
+        checkout: new Date().toISOString(),
       },
     });
     return response.data;
@@ -481,7 +482,7 @@ export const getReservationsFromDate = async (
   const params = {
     "filters[date][$gte]": startDate,
     "filters[date][$lte]": endDate,
-    populate: "*",
+    "populate[booking][populate]": "room",
   };
 
   try {
@@ -585,9 +586,9 @@ export const getCompareDailyRevenue = async (): Promise<compareDaily> => {
 export const getSearchData = async (payload: string) => {
   try {
     const response = await api.get(
-      `/reservations/search?search=${payload}&pagination[start]=0&pagination[limit]=10`
+      `/reservations/search?search=${payload}&pagination[start]=0&pagination[limit]=10&populate[booking][populate]=room&sort=date:DESC`
     );
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error fetching revenue data:", error);
     throw error;
@@ -625,7 +626,7 @@ export const getReservationsPagination = async (
 ) => {
   try {
     const response = await api.get(
-      `/reservations?pagination[start]=${start}&pagination[limit]=${limit}&populate=*&sort=date:DESC`
+      `/reservations?pagination[start]=${start}&pagination[limit]=${limit}&populate[booking][populate]=room&sort=date:DESC`
     );
     return response;
   } catch (error) {

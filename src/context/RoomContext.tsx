@@ -115,7 +115,6 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
   const getRoomsData = async () => {
     try {
       const response = await getRooms();
-      console.log(response);
       setRooms(response.data);
 
       // Get pagination
