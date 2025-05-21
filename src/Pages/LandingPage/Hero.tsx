@@ -1,12 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/UserContext";
-import { useHeroImage } from "@/hooks/useHeroImage";
 import { ChevronDown, MoveLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Hero = () => {
-  const { heroImgPath } = useHeroImage();
-
+const Hero = ({ heroImgPath }: { heroImgPath: string }) => {
   const subTitle = "Khách sạn";
   const title = "Phương Trang";
   const des =
