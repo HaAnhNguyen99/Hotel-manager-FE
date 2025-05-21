@@ -7,8 +7,8 @@ const Hero = ({ heroImgPath }: { heroImgPath: string }) => {
   const subTitle = "Khách sạn";
   const title = "Phương Trang";
   const des =
-    "Chào mừng đến với không gian nghỉ dưỡng ấm cúng và đậm chất việt ";
-  const btn = "Đặt phòng";
+    "Chào mừng đến với không gian nghỉ dưỡng ấm cúng, tiện nghi, thoải mái và đậm chất việt ";
+  const btn = "Xem phòng ngay";
   const hero = new URL("@/assets/images/hero.png", import.meta.url).href;
   const { isAuthenticated } = useUserContext();
 
@@ -25,7 +25,7 @@ const Hero = ({ heroImgPath }: { heroImgPath: string }) => {
           {des}
         </p>
         <Button
-          className="rounded-lg mt-16 font-bold hover:text-black hover:bg-neutral-300 md:px-8 md:py-6 md:text-[18px] px-3 py-5 tracking-wide bg-landing"
+          className="rounded-lg mt-16 font-bold tracking-wide shadow-[rgba(0,0,0,0.35)_0px_5px_15px] px-3 py-5 md:px-8 md:py-6 md:text-[18px] text-black bg-[#fdf6e3] dark:bg-landing hover:text-brown hover:bg-neutral-300"
           variant="ghost">
           {btn}
         </Button>
