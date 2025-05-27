@@ -16,6 +16,7 @@ const Hero = () => {
   const desRef = useRef<HTMLParagraphElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const subTitleRef = useRef<HTMLParagraphElement>(null);
+  const arrowRef = useRef<HTMLAnchorElement>(null);
   const bgRef = useRef<HTMLImageElement>(null);
 
   const { loading, heroImgPath } = useHeroImage();
@@ -109,6 +110,18 @@ const Hero = () => {
 
         gsap
           .fromTo(
+            arrowRef.current,
+            { x: "-2rem", opacity: 0 },
+            {
+              x: "0",
+              opacity: 1,
+              ease: "power3.out",
+            }
+          )
+          .delay(delayAnimationTime + 1.6);
+
+        gsap
+          .fromTo(
             bgRef.current,
             {
               clearProps: "transform",
@@ -188,6 +201,7 @@ const Hero = () => {
       </div>
 
       <a
+        ref={arrowRef}
         href="#property"
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white"
         aria-label="Scroll to properties">
