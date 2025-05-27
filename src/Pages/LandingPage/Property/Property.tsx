@@ -41,6 +41,10 @@ const Property = () => {
       if (!propertyRef.current) return;
 
       const items = gsap.utils.toArray(".property-item", propertyRef.current);
+      const headers = gsap.utils.toArray(
+        ".property-item-header",
+        propertyRef.current
+      );
 
       gsap.fromTo(
         items,
@@ -54,6 +58,25 @@ const Property = () => {
           duration: 0.6,
           ease: "power2.out",
           stagger: 0.2,
+          scrollTrigger: {
+            trigger: propertyRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        headers,
+        { y: 50, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          stagger: 0.2,
+          delay: 0.2,
           scrollTrigger: {
             trigger: propertyRef.current,
             start: "top 80%",
@@ -87,7 +110,7 @@ const Property = () => {
           <div
             key={index}
             className="property-item flex border border-red-100 gap-2 h-full w-full rounded-lg text-center py-6 p-2 bg-[#f9f7f4] flex-col">
-            <div className="self-center border border-landing-bgBlack p-1 w-fit h-fit rounded-full mb-5">
+            <div className="property-item-header self-center border border-landing-bgBlack p-1 w-fit h-fit rounded-full mb-5">
               <div className="flex justify-center items-center bg-landing-bgBlack p-3 rounded-full">
                 <item.icon className="w-12 h-12 text-landing-primaryLight" />
               </div>
