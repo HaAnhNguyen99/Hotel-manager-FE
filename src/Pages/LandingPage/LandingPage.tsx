@@ -9,20 +9,11 @@ import useWeather from "@/hooks/useWeather";
 import Header from "@/components/common/Header/Header";
 import "./LandingPage.css";
 import { useHeroImage } from "@/hooks/useHeroImage";
-import LoadingText from "@/components/common/LoadingText/LoadingText";
 import ErrorPage from "@/components/common/ErrorPage";
 
 const LandingPage = () => {
   const { weather } = useWeather();
-  const { heroImgPath, loading, error } = useHeroImage();
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <LoadingText />
-      </div>
-    );
-  }
+  const { error } = useHeroImage();
 
   if (error) {
     return (
@@ -36,7 +27,7 @@ const LandingPage = () => {
     <div className="font-pops fade-in">
       <Header weather={weather} />
       <main>
-        <Hero heroImgPath={heroImgPath} />
+        <Hero />
         <Property />
 
         <Amenities />
