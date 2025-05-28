@@ -8,12 +8,23 @@ import Footer from "./Footer";
 import useWeather from "@/hooks/useWeather";
 import Header from "@/components/common/Header/Header";
 import "./LandingPage.css";
+import { useHeroImage } from "@/hooks/useHeroImage";
+import ErrorPage from "@/components/common/ErrorPage";
 
 const LandingPage = () => {
   const { weather } = useWeather();
+  const { error } = useHeroImage();
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 font-bold">
+        <ErrorPage />
+      </div>
+    );
+  }
 
   return (
-    <div className="font-pops">
+    <div className="font-pops fade-in">
       <Header weather={weather} />
       <main>
         <Hero />

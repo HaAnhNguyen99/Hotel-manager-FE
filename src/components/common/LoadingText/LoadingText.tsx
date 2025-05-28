@@ -1,29 +1,20 @@
-import { useState, useEffect } from "react";
-import "./LoadingText.css"; // We'll define this below
+import "./LoadingText.css";
 
 const LoadingText = () => {
-  const fullText = "PHƯƠNG TRANG HOTEL";
-  const [displayText, setDisplayText] = useState("");
-
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < fullText.length) {
-        setDisplayText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(interval); // Stop when full text is displayed
-      }
-    }, 100); // Adjust speed (100ms per character)
-
-    // Cleanup interval on unmount
-    return () => clearInterval(interval);
-  }, []);
+  const topText = "khách sạn";
+  const fullText = "PHƯƠNG TRANG";
 
   return (
-    <div className="loading-text-container">
-      <span className="loading-text">{displayText}</span>
-    </div>
+    <>
+      <div className={`loading-overlay`}>
+        <div className="loading-panel left-panel" />
+        <div className="loading-panel right-panel" />
+        <div className="loading-text-container">
+          <p className="loading-text text-center text-[2rem]">{topText}</p>
+          <p className={`loading-text text-[3rem]`}>{fullText}</p>
+        </div>
+      </div>
+    </>
   );
 };
 
